@@ -7,9 +7,7 @@
 
 ## 当前状态
 
-> **公开仓库目前包含项目介绍、上游差异、图像与 CI 框架。Mod 源码尚未提交，等待对应迁移验收完成。CI 此时只报告 scaffold，没有执行 Mod 编译。**
-
-当前为进行中的迁移或改名后验收阶段。构建通过、接口已导入和历史测试结果均不等于完整移植完成。当前源码提交与产物状态见 [PUBLICATION.md](PUBLICATION.md)；未通过验收的项目暂不提供成品发布。
+本版本已完成当前声明范围的正式 Cleanroom 0.4.0 安装包验收。实际运行包的 SHA-256、检查项和限制见 [验收记录](LEGACY-VERIFICATION.md)。这不表示上游所有扩展或任意整合包组合均已验证。
 
 <!-- legacy-authorship:start -->
 ## 作者与来源 / Authors and upstream
@@ -90,3 +88,86 @@ CI 会准备固定版本的源码依赖，构建完整主源码与测试，并�
 以代表物品或概念表现项目；不作为游戏实机截图，也不改变上游游戏资源的授权。生成记录见 `branding/provenance.json`。
 
 <!-- legacy-overview:end -->
+
+## 详细使用与开发说明
+
+面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.4.0-cleanroom-alpha.1`，最低加载器声明为 **0.4.0**。
+编译与编辑器开发工具链使用 `0.7.14-alpha` userdev；正式 0.4.0 的当前安装包结果见 [验收记录](LEGACY-VERIFICATION.md)。
+基于 [MCMGGF 的 1.12.2 实现](https://github.com/MCMGGF/ponder-for-1.12.2)，保留原有场景、Catnip、ZenScript、JSON 与插件 API；新增游戏内场景和动画编辑器。[来源说明](NOTICE.md)。
+
+## 构建与本地开发
+
+```bash
+# 本机已经准备了 Java 25；其他机器可以使用自己的 Java 25
+export JAVA_HOME=/home/yudream/code/mods/.dev/jdk-25.0.5+8
+./gradlew build
+./gradlew runClient
+# 自动建立测试世界、捕获结构、编辑动画、保存重载并截图后退出
+./gradlew runClient -PponderSmoke
+# 本机快捷入口（自动选择已准备的 Java 25）
+./tools/dev.sh runClient
+```
+
+首次构建需要联网获取 Cleanroom、CraftTweaker、Minecraft 和原版资源。
+本地开发环境使用 MCP 命名，资源与世界保存在工程 `run/client/` 目录。
+默认 Gradle/JDK 配置、运行说明和 API 示例见 [Cleanroom 开发手册](docs/CLEANROOM.md)。
+
+安装时使用 `build/libs/ponder-legacy-1.4.0-cleanroom-alpha.1.jar`，并安装 **CraftTweaker 4.1.20.698**。
+Cleanroom 已提供 MixinBooter 兼容接口。`-mcp`、`-api`、`-sources` 文件用于开发，不要作为重复模组安装。
+Mod ID 保持 `ponder-legacy`；资源空间为 `ponder`。客户端与安装了 Ponder 的服务器需要使用相同版本。
+
+## 编辑器操作
+
+1. 进入创造模式世界，按 **F8** 开启框选工具：左键角 A，右键角 B。画面会显示区域边框。
+2. 按 **F7** 打开编辑器，点击「保存结构」，填写结构 ID（如 `mypack:machine`）。选区方块、状态和方块实体 NBT 会保存到本地。
+3. 在预览中开启「选择区域」，左、右键选取场景局部。点击「快捷动画」，填写位移、旋转和持续 tick。
+4. 拖动时间轴预览；步骤可以拖动排序、修改参数、复制、删除。`Ctrl+Z/Y` 撤销/重做，`Ctrl+S` 保存并重载。
+5. 点击「打开」可编辑已有的 JSON pack。按住预览右键或中键旋转，滚轮缩放。
+
+快捷动画把局部转为独立 section，可同时位移和旋转，并自动插入等待。
+复用已有 section 的句柄，可以继续编排下一段动画。单独动作的 `duration` 不推进故事板游标，`scene.idle` 才推进时间。
+
+| 数据 | 位置（相对于游戏目录） |
+| --- | --- |
+| JSON 场景包 | `scripts/ponder/packs/**/*.ponder.json` |
+| 捕获的结构 | `scripts/ponder/structures/<namespace>/<path>.nbt` |
+| 旧默认示例备份 | `config/ponder/removed-examples/` |
+| 自动客户端报告和截图 | `ponder-smoke/report.json`、`ponder-smoke/screenshots/` |
+
+普通思索入口保留：悬停物品按 **W**，或 `/ponder <物品 ID>`；`/ponder index` 打开索引，`/ponder reload` 重载。
+物品提示框中的按住进度使用铺满文字区宽度的横条，自动适应长物品名称和换行。
+
+## 指引目录与分类
+
+默认不安装八个演示脚本和编辑器示例；目录只收录整合包和其他 Mod 注册的内容。
+升级时，旧版本生成且内容完全未改动的示例会移至 `config/ponder/removed-examples/`，不再加载；修改过的示例和自定义文件会保留。
+示例源仍在源码资源与 `examples/` 中，方便手动参考，不会自动注册到游戏。
+
+`/ponder index` 左侧可切换「模组」或「主题」，点击分类筛选，数字显示符合搜索条件的物品数。
+主题直接沿用 Java / ZenScript / JSON 的 Ponder 标签；同一物品会合并所有场景的主题，未分配可见主题的物品显示在「未分类」。
+右上搜索支持物品名称、模组名和注册 ID，Ctrl+F 聚焦搜索；Enter / Esc 结束输入。
+物品、主题、主题内容及左侧分类均有独立滚动区域，支持滚轮与拖动滚动条；物品网格支持 PgUp / PgDn、Home / End。
+底部工具栏保持固定，缩放窗口及返回上一页时保留并校正浏览位置。多场景物品只显示一次，悬停可查看场景数量。
+
+## 同一物品的多个情景
+
+多个场景使用同一个 `component`，各自保留不同的 `id`；Java / ZenScript 的多个 storyboard 关联同一物品也使用相同入口。
+播放时悬停右上角的场景计数会展开菜单，点击计数可固定展开；点击列表中的标题可直接切换。
+菜单支持滚轮、方向键、Home / End、Page Up / Down 和回车；`Tab` 开关，`Esc` 或点击外部关闭。
+单场景不显示菜单入口。导航按钮在首尾置灰，播放、重放、识别和关闭均有独立图标及悬停说明。
+可直接复制的双场景 JSON 见 [multi-scene.ponder.json](examples/json/multi-scene.ponder.json)。
+
+## JSON 与扩展 API
+
+- JSON 场景格式与原有 1.12.2 实现兼容：[格式说明](docs/JSON-PACKS.md)、[完整操作表](schemas/ponder-operations-v1.json)、[JSON Schema](schemas/ponder-pack-v1.schema.json)。
+- Java 插件：`PonderPlugin`、`SceneBuilder`、`PonderIndex.addPlugin`；支持 ServiceLoader / Forge IMC。
+- 自定义指令：`ScriptInstructionCodec` / `ScriptInstructionCodecs`，在 JSON 使用 `scene.custom`。
+- 编辑器 API：`SceneDocument`、`ScenePackIO`、`CuboidSelection`、`EditorAnimations`、`EditorActions.register`。
+
+## 范围
+
+这是可本地维护的 Alpha 分支。框选目前捕获方块和方块实体，不自动捕获生物或掉落物；实体可以通过动作指令创建。
+远程服务器的选区捕获需要服务器安装相同版本的 Ponder，并具有创造或 OP 权限；编辑器保存到客户端本地，整合包发布时需分发 JSON 与 NBT。
+
+本分支没有集成原仓库的 MMCE 可选模块，也没有声称兼容旧 Forge/Java 8 或现代官方 Ponder 的全部二进制 API。
+旧 Forge 文档及验证工具作为参考保留在 `docs/`、`tools/`、`verification/`，当前入口以本 README 和 Cleanroom 手册为准。

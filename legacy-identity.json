@@ -9,8 +9,10 @@
   "java": 25,
   "ae2_implementation": null,
   "ae2_loader_modid": null,
-  "status": "awaiting-renamed-artifact-verification",
+  "status": "verified-cleanroom-0.4.0",
   "author": "yudream",
   "original_authors": "The Create Team (original Ponder), MCMGGF (1.12.2 base)",
-  "original_repository": "https://github.com/MCMGGF/ponder-for-1.12.2"
+  "original_repository": "https://github.com/MCMGGF/ponder-for-1.12.2",
+  "verification_document": "LEGACY-VERIFICATION.md",
+  "verified_jar_sha256": "82798859f97bf3837a2fb7e07e23a4cc23457f1076f604343e6b50a33ecebc99"
 }

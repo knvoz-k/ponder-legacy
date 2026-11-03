@@ -1,0 +1,8 @@
+{
+  "result": "FAIL_BEFORE_MOD_DISCOVERY",
+  "cleanroom": "0.4.0",
+  "emptyServerSameFailure": true,
+  "failure": "NoClassDefFoundError: net/minecraft/client/entity/EntityPlayerSP at Loader.identifyMods(Loader.java:379)",
+  "ponderSha256": "1a663b4fcb9c9851d42a4d64801cb536047757fee0c644b3479b1751a439ad9b",
+  "note": "The dedicated server did not reach Ponder initialization. This is not a server compatibility pass."
+}

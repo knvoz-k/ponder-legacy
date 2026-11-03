@@ -1,0 +1,139 @@
+{
+  "format": 1,
+  "id": "ponder_editor:examples",
+  "scenes": [
+    {
+      "id": "ponder_editor:animation_demo",
+      "component": "minecraft:book",
+      "title": "Ponder Editor: animate a world selection",
+      "structure": "ponder:demo/basics",
+      "tags": [],
+      "instructions": [
+        {
+          "op": "scene.configure_base_plate",
+          "x": 0,
+          "z": 0,
+          "size": 5
+        },
+        {
+          "op": "scene.show_base_plate"
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 10
+        },
+        {
+          "op": "world.show_section",
+          "selection": {
+            "type": "layers_from",
+            "y": 1
+          },
+          "direction": "down"
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 20
+        },
+        {
+          "op": "world.make_independent",
+          "handle": "assembly",
+          "selection": {
+            "type": "position",
+            "pos": [
+              2,
+              1,
+              2
+            ]
+          }
+        },
+        {
+          "op": "overlay.show_text",
+          "duration": 60,
+          "text": "Open F7 to edit this scene. Pick blocks, then add movement or rotation.",
+          "x": 2.5,
+          "y": 2,
+          "z": 2.5,
+          "color": "white",
+          "near": true,
+          "keyframe": true
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 60
+        },
+        {
+          "op": "world.move_section",
+          "handle": "assembly",
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "duration": 20
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 20
+        },
+        {
+          "op": "world.center_section",
+          "handle": "assembly",
+          "x": 2.5,
+          "y": 1.5,
+          "z": 2.5
+        },
+        {
+          "op": "world.rotate_section",
+          "handle": "assembly",
+          "x": 0,
+          "y": 180,
+          "z": 0,
+          "duration": 40
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 40
+        },
+        {
+          "op": "world.move_section",
+          "handle": "assembly",
+          "x": 0,
+          "y": -1,
+          "z": 0,
+          "duration": 20
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 20
+        },
+        {
+          "op": "overlay.show_outline",
+          "color": "blue",
+          "slot": "target",
+          "selection": {
+            "type": "position",
+            "pos": [
+              2,
+              1,
+              2
+            ]
+          },
+          "duration": 40
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 40
+        },
+        {
+          "op": "scene.rotate_camera",
+          "degrees": 45
+        },
+        {
+          "op": "scene.idle",
+          "ticks": 20
+        },
+        {
+          "op": "scene.finish"
+        }
+      ]
+    }
+  ]
+}

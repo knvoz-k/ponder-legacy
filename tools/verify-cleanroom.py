@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""Verify Ponder on official Cleanroom 0.4.0 or 0.4.0-alpha (Linux x64)."""
+import argparse
+import concurrent.futures
+import hashlib
+import json
+import os
+from pathlib import Path
+import platform
+import shutil
+import subprocess
+import urllib.request
+from zipfile import ZipFile
+
+PROJECT = Path(__file__).resolve().parent.parent
+WORKSPACE = PROJECT.parent.parent
+VERSION = os.environ.get("PONDER_CLEANROOM_VERSION", "0.4.0")
+INSTALLER_HASHES = {
+    "0.4.0": "882435d851a51e14b802e0a9384e4a05cfbb3890fca435c40c494af75e5a166f",
+    "0.4.0-alpha": "10d9500c96ee83e3a5e55af67d0aca404b2ad9295ef54656496f730fabc90515",
+}
+if VERSION not in INSTALLER_HASHES:
+    raise ValueError("PONDER_CLEANROOM_VERSION must be 0.4.0 or 0.4.0-alpha")
+CACHE = WORKSPACE / ".dev" / f"cleanroom-{VERSION}-runtime"
+GRADLE = Path(os.environ.get("GRADLE_USER_HOME", Path.home() / ".gradle"))
+PACK = WORKSPACE / ".dev" / f"cleanroom-{VERSION}-installer.jar"
+PACK_SHA256 = INSTALLER_HASHES[VERSION]
+
+
+def digest(path, algorithm="sha1"):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, algorithm).hexdigest()
+
+
+def download(url, destination, expected, algorithm="sha1", candidates=()):
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.is_file() and digest(destination, algorithm) == expected:
+        return destination
+    for candidate in candidates:
+        if candidate.is_file() and digest(candidate, algorithm) == expected:
+            shutil.copyfile(candidate, destination)
+            return destination
+    urls = [url]
+    if url.startswith("https://repo.cleanroommc.com/releases/"):
+        urls.insert(0, url.replace("https://repo.cleanroommc.com/releases/", "https://maven.cleanroommc.com/"))
+    last_error = None
+    for attempt in range(2):
+        for source in urls:
+            try:
+                request = urllib.request.Request(source, headers={"User-Agent": "Ponder-Cleanroom-verification"})
+                partial = destination.with_name(destination.name + f".{os.getpid()}.part")
+                with urllib.request.urlopen(request, timeout=30) as response, partial.open("wb") as output:
+                    shutil.copyfileobj(response, output, 128 * 1024)
+                if digest(partial, algorithm) != expected:
+                    raise ValueError(f"Hash mismatch: {destination.name}")
+                partial.replace(destination)
+                print("Downloaded", destination.name, flush=True)
+                return destination
+            except (OSError, ValueError) as error:
+                last_error = error
+    raise RuntimeError(f"Could not download {url}: {last_error}")
+
+
+def allowed(library):
+    rules = library.get("rules", [])
+    result = not rules
+    for rule in rules:
+        os_rule = rule.get("os", {})
+        if os_rule.get("name", "linux") == "linux" and os_rule.get("arch", "x86_64") in ("x86_64", "amd64"):
+            result = rule["action"] == "allow"
+    # The historical MMC recipe also lists ARM natives with a plain Linux rule.
+    classifier = library["name"].split(":")[3:]
+    return result and (not classifier or not classifier[0].startswith("natives-") or classifier == ["natives-linux"])
+
+
+def artifact(library):
+    entry = library["downloads"]["artifact"]
+    parts = library["name"].split(":")
+    group, module, version = parts[:3]
+    path = entry.get("path") or f"{group.replace('.', '/')}/{module}/{version}/{entry['url'].rsplit('/', 1)[-1]}"
+    candidates = (GRADLE / "caches/modules-2/files-2.1" / group / module / version).glob(f"*/{Path(path).name}")
+    candidates = list(candidates)
+    if module == "cleanroom":
+        candidates.append(WORKSPACE / ".dev" / f"cleanroom-{VERSION}-universal.jar")
+    # Reuse byte-identical libraries from the old verification cache only after SHA-1 validation.
+    candidates += list((WORKSPACE / ".dev/cleanroom-0.4.0-alpha-runtime/libraries").glob("**/" + Path(path).name))
+    if module == "cleanroom":
+        entry = dict(entry, url=f"https://maven.cleanroommc.com/com/cleanroommc/cleanroom/{VERSION}/cleanroom-{VERSION}-universal.jar")
+    return download(entry["url"], CACHE / "libraries" / path, entry["sha1"], candidates=candidates)
+
+
+def prepare(side):
+    download(f"https://maven.cleanroommc.com/com/cleanroommc/cleanroom/{VERSION}/{PACK.name}", PACK, PACK_SHA256, "sha256")
+    with ZipFile(PACK) as archive:
+        recipe = json.loads(archive.read("version.json"))
+    if recipe["id"] != f"cleanroom-{VERSION}":
+        raise ValueError("Unexpected Cleanroom version in the official installer")
+    metadata = json.loads((GRADLE / "caches/cleanroom_gradle/versions/1.12.2/meta.json").read_text())
+    # Cleanroom replaces vanilla's obsolete LWJGL, Netty, ICU, JNA, logging and utility libraries.
+    # Retain only the vanilla audio, authentication and platform services used by the official recipe.
+    retained = {"com.paulscode", "com.mojang:authlib", "com.mojang:realms", "com.mojang:text2speech", "ca.weblite:java-objc-bridge"}
+    vanilla_libraries = [library for library in metadata["libraries"]
+                        if library["name"].split(":")[0] in retained or ":".join(library["name"].split(":")[:2]) in retained]
+    libraries = {}
+    for group in (recipe["libraries"], vanilla_libraries):
+        for library in group:
+            if allowed(library):
+                libraries.setdefault(library["name"], library)
+                native = library.get("natives", {}).get("linux")
+                if native:
+                    libraries.setdefault(library["name"] + ":" + native, {
+                        "name": library["name"] + ":" + native,
+                        "downloads": {"artifact": library["downloads"]["classifiers"][native]},
+                    })
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+        classpath = list(pool.map(artifact, libraries.values()))
+    main = metadata["downloads"][side]
+    vanilla = GRADLE / f"caches/cleanroom_gradle/versions/1.12.2/{side}.jar"
+    classpath.append(download(main["url"], CACHE / f"minecraft-{side}-1.12.2.jar", main["sha1"], candidates=[vanilla]))
+    natives = CACHE / "natives"
+    natives.mkdir(exist_ok=True)
+    for jar in classpath:
+        if "natives-linux" in jar.name:
+            with ZipFile(jar) as archive:
+                for name in archive.namelist():
+                    if name.endswith(".so"):
+                        target = natives / Path(name).name
+                        data = archive.read(name)
+                        # Another client may already have this library mapped. Never truncate it in place.
+                        if not target.is_file() or target.read_bytes() != data:
+                            partial = target.with_name(target.name + f".{os.getpid()}.part")
+                            partial.write_bytes(data)
+                            partial.replace(target)
+    return classpath, natives
+
+
+
+def main():
+    parser = argparse.ArgumentParser(description=f"Verify Ponder installation jars on Cleanroom {VERSION} (Linux x64).")
+    parser.add_argument("side", choices=["client", "server"])
+    parser.add_argument("--prepare-only", action="store_true")
+    parser.add_argument("--empty", action="store_true", help="Attempt loader-only dedicated server startup")
+    args = parser.parse_args()
+    if platform.system() != "Linux" or platform.machine() not in ("x86_64", "amd64"):
+        parser.error("This development launcher supports Linux x64")
+    classpath, natives = prepare(args.side)
+    if args.prepare_only:
+        return
+    if args.empty and args.side != "server":
+        parser.error("--empty is a dedicated-server probe")
+    run = PROJECT / "run" / f"cleanroom-{VERSION}-legacy" / ("empty-server" if args.empty else args.side)
+    mods = run / "mods"
+    mods.mkdir(parents=True, exist_ok=True)
+    crafttweaker = list((GRADLE / "caches/modules-2/files-2.1/maven.modrinth/crafttweaker/4.1.20.698").glob("*/*.jar"))
+    if len(crafttweaker) != 1:
+        raise RuntimeError("Run tools/dev.sh build to resolve CraftTweaker 4.1.20.698")
+    harness = "ponder-editor-harness-srg.jar" if args.side == "client" else "ponder-server-harness-srg.jar"
+    for obsolete in {"ponder-editor-harness-srg.jar", "ponder-server-harness-srg.jar"} - {harness}:
+        (mods / obsolete).unlink(missing_ok=True)
+    jars = [] if args.empty else [PROJECT / "build/libs/ponder-legacy-1.4.0-cleanroom-alpha.1.jar",
+            PROJECT / "build/dev" / harness, crafttweaker[0]]
+    for jar in jars:
+        if not jar.is_file():
+            raise FileNotFoundError(f"Build first: tools/dev.sh build reobfDevHarnessJar; missing {jar}")
+        shutil.copyfile(jar, mods / jar.name)
+    config = run / "config"
+    config.mkdir(exist_ok=True)
+    (config / "splash.properties").write_text("enabled=false\n")
+    jdk = Path(os.environ.get("PONDER_JAVA_HOME", WORKSPACE / ".dev/jdk-25.0.5+8"))
+    command = [str(jdk / "bin/java"), "-Xmx3G", "-Dfile.encoding=UTF-8", f"-Djava.library.path={natives}",
+               "-cp", os.pathsep.join(map(str, classpath))]
+    if args.side == "client":
+        report = run / "ponder-smoke/report.json"
+        command += ["-Dponder.dev.smoke=true", "top.outlands.foundation.boot.Foundation", "--tweakClass", "net.minecraftforge.fml.common.launcher.FMLTweaker",
+                    "--username", "PonderDeveloper", "--uuid", "b4551621-016f-3568-8ef0-15ec7d7d579b", "--accessToken", "0", "--version", f"Cleanroom-{VERSION}",
+                    "--gameDir", str(run), "--assetsDir", str(GRADLE / "caches/cleanroom_gradle/assets"), "--assetIndex", "1.12", "--width", "1280", "--height", "720"]
+    else:
+        (run / "eula.txt").write_text("eula=true\n")
+        (run / "server.properties").write_text("server-ip=127.0.0.1\nserver-port=25684\nonline-mode=false\nlevel-name=ponder-verification\nlevel-type=FLAT\nview-distance=2\ngenerate-structures=false\n")
+        report = run / "ponder-server-smoke.json"
+        command += ["-Dponder.dev.serverSmoke=true", "net.minecraftforge.fml.relauncher.ServerLaunchWrapper", "nogui"]
+    report.unlink(missing_ok=True)
+    (run / "runtime.json").write_text(json.dumps({"cleanroom": VERSION, "side": args.side,
+        "jars": {jar.name: digest(jar, "sha256") for jar in jars},
+        "libraries": {str(jar): digest(jar) for jar in classpath}}, indent=2) + "\n")
+    print(f"Starting Cleanroom {VERSION} {args.side}; installation jars and SRG harness, no userdev", flush=True)
+    try:
+        result = subprocess.run(command, cwd=run, timeout=45 if args.empty else 300)
+    except subprocess.TimeoutExpired:
+        raise SystemExit(f"Verification timed out; inspect {run}")
+    if args.empty:
+        print(f"Loader-only server exited {result.returncode}; inspect {run} for startup result", flush=True)
+        return
+    if result.returncode or not report.exists():
+        raise SystemExit(f"Verification failed (exit={result.returncode}); inspect {run}")
+    data = json.loads(report.read_text())
+    if data.get("result") != "PASS" or data.get("cleanroom") != VERSION:
+        raise SystemExit(f"Verification failed or wrong loader version: {report}")
+    print("PASS:", report, flush=True)
+
+
+if __name__ == "__main__":
+    main()

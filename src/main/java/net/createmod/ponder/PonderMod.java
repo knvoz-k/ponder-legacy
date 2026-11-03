@@ -1,0 +1,85 @@
+package net.createmod.ponder;
+
+import java.util.Map;
+
+import net.createmod.ponder.compat.PonderOptionalCompat;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkCheckHandler;
+import net.minecraftforge.fml.relauncher.Side;
+
+@Mod(
+    modid = PonderMod.LEGACY_MOD_ID,
+    name = "Ponder Legacy",
+    version = Ponder.VERSION,
+    acceptedMinecraftVersions = "[1.12.2]",
+    dependencies = "required-after:cleanroom@[0.4.0,);required-after:forge@[14.23.5.2847,);required-after:mixinbooter@[9.1,);"
+        + "required-after:crafttweaker@[4.1.20,);after:modularmachinery",
+    guiFactory = "net.createmod.ponder.client.PonderGuiFactory",
+    acceptableRemoteVersions = "*"
+)
+public final class PonderMod {
+    /** Loader identity; resource and saved registry namespaces remain unchanged. */
+    public static final String LEGACY_MOD_ID = "ponder-legacy";
+
+    @Mod.Instance(PonderMod.LEGACY_MOD_ID)
+    public static PonderMod instance;
+
+    @SidedProxy(
+        clientSide = "net.createmod.ponder.client.ClientProxy",
+        serverSide = "net.createmod.ponder.CommonProxy"
+    )
+    public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        java.io.File gameDirectory = event.getModConfigurationDirectory().getParentFile();
+        net.createmod.ponder.script.BuiltinScriptInstaller.retireUnmodifiedExamples(gameDirectory);
+        net.createmod.ponder.foundation.structure.PonderStructureLoader.setExternalRoot(new java.io.File(gameDirectory, "scripts/ponder/structures"));
+        net.createmod.ponder.script.PonderJsonLoader.setRoot(new java.io.File(gameDirectory, "scripts/ponder/packs"));
+        Ponder.LOGGER.info("Starting {} {} for Minecraft 1.12.2", Ponder.MOD_NAME, Ponder.VERSION);
+        proxy.preInit(event);
+        PonderOptionalCompat.preInit();
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.init(event);
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
+        PonderOptionalCompat.postInit();
+    }
+
+    @Mod.EventHandler
+    public void processImc(FMLInterModComms.IMCEvent event) {
+        PonderBootstrap.processImc(event);
+    }
+
+    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        PonderBootstrap.finishRegistration();
+        proxy.loadComplete(event);
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        PonderBootstrap.registerCommands(event);
+    }
+
+    @NetworkCheckHandler
+    public boolean checkRemoteVersions(Map<String, String> remoteVersions, Side remoteSide) {
+        String remoteVersion = remoteVersions.get(Ponder.MOD_ID);
+        if (remoteSide == Side.CLIENT)
+            return Ponder.VERSION.equals(remoteVersion);
+        return remoteVersion == null || Ponder.VERSION.equals(remoteVersion);
+    }
+}

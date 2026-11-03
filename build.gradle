@@ -1,0 +1,199 @@
+plugins {
+    id 'java-library'
+    id 'com.cleanroommc.cleanroomgradle'
+    id 'maven-publish'
+}
+
+group = 'net.createmod.ponder'
+version = '1.4.0-cleanroom-alpha.1'
+base.archivesName = 'ponder-legacy'
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
+    withSourcesJar()
+}
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+}
+dependencies {
+    implementation cleanroom.userdev(cleanroom_version)
+    implementation(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
+    testImplementation 'junit:junit:4.13.2'
+}
+sourceSets {
+    dev {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+    exampleAddon {
+        java.srcDir 'examples/addon/src/main/java'
+        resources.srcDir 'examples/addon/src/main/resources'
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+    test {
+        compileClasspath += sourceSets.exampleAddon.output
+        runtimeClasspath += sourceSets.exampleAddon.output
+    }
+}
+tasks.register('devHarnessJar', Jar) {
+    dependsOn tasks.devClasses
+    archiveFileName = 'ponder-editor-harness.jar'
+    destinationDirectory = layout.buildDirectory.dir('dev')
+    from sourceSets.dev.output
+    exclude 'net/createmod/ponder/server/**'
+}
+tasks.register('serverHarnessJar', Jar) {
+    dependsOn tasks.devClasses
+    archiveFileName = 'ponder-server-harness.jar'
+    destinationDirectory = layout.buildDirectory.dir('dev')
+    from sourceSets.dev.output
+    include 'net/createmod/ponder/server/**'
+}
+extensions.getByType(net.minecraftforge.renamer.gradle.RenamerExtension).classes('reobfDevHarnessJar', tasks.named('devHarnessJar')) {
+    map.from tasks.named('reobfJar').get().map
+    // Renamer reads library archives, not loose class directories. It needs the MCP hierarchy
+    // to rename inherited Minecraft methods on Ponder screens and PonderLevel in the harness.
+    libraries.setFrom(sourceSets.main.compileClasspath, tasks.named('jar'))
+    output = layout.buildDirectory.file('dev/ponder-editor-harness-srg.jar')
+}
+extensions.getByType(net.minecraftforge.renamer.gradle.RenamerExtension).classes('reobfServerHarnessJar', tasks.named('serverHarnessJar')) {
+    map.from tasks.named('reobfJar').get().map
+    libraries.setFrom(sourceSets.main.compileClasspath, tasks.named('jar'))
+    output = layout.buildDirectory.file('dev/ponder-server-harness-srg.jar')
+}
+tasks.register('installDevHarness', Copy) {
+    from tasks.devHarnessJar
+    into layout.projectDirectory.dir('run/client/mods')
+}
+tasks.register('prepareDevClient') {
+    doLast {
+        // Avoid Cleanroom 0.7.14's parallel splash class-loading race on first launch.
+        def splash = layout.projectDirectory.file('run/client/config/splash.properties').asFile
+        if (!splash.exists()) {
+            splash.parentFile.mkdirs()
+            splash.text = 'enabled=false\n'
+        }
+    }
+}
+cleanroom {
+    runs {
+        client {
+            configure {
+                username = 'PonderDeveloper'
+                maxHeapSize = '3G'
+                jvmArgs '-Dfoundation.loadsall=true'
+                dependsOn 'prepareDevClient'
+                if (project.hasProperty('packagedSmoke')) {
+                    dependsOn 'reobfJar'
+                    doFirst {
+                        classpath = classpath.minus(sourceSets.main.output).plus(files(tasks.reobfJar.output))
+                    }
+                } else {
+                    jvmArgs '-Dfml.coreMods.load=net.createmod.ponder.mixin.PonderMixinLoader'
+                }
+                if (project.hasProperty('ponderSmoke')) {
+                    jvmArgs '-Dponder.dev.smoke=true'
+                    args '--width', '1280', '--height', '720'
+                    dependsOn 'installDevHarness'
+                    doFirst { delete layout.projectDirectory.file('run/client/ponder-smoke/report.json') }
+                    doLast {
+                        def reportFile = layout.projectDirectory.file('run/client/ponder-smoke/report.json').asFile
+                        if (!reportFile.exists() || new groovy.json.JsonSlurper().parse(reportFile).result != 'PASS') {
+                            throw new GradleException('Ponder editor smoke failed; see run/client/ponder-smoke/report.json')
+                        }
+                    }
+                } else {
+                    doFirst { delete layout.projectDirectory.file('run/client/mods/ponder-editor-harness.jar') }
+                }
+            }
+        }
+        server {
+            configure {
+                maxHeapSize = '2G'
+                jvmArgs '-Dfoundation.loadsall=true'
+                jvmArgs '-Dfml.coreMods.load=net.createmod.ponder.mixin.PonderMixinLoader'
+            }
+        }
+    }
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+// Mixin string targets need their own MCP -> SRG refmap in installation jars.
+// Java bytecode remapping alone does not rename @Inject / @Accessor values.
+def mixinSrg = layout.buildDirectory.file('generated/mixins/mcp2srg.srg')
+def mixinRefmap = layout.buildDirectory.file('classes/java/main/mixins.ponder.refmap.json')
+tasks.register('generateMixinSrg') {
+    dependsOn 'extractUserdevMcpToSrg'
+    def tsrg = layout.buildDirectory.file('cleanroom_gradle/userdev/mcp2srg.tsrg')
+    inputs.file tsrg
+    outputs.file mixinSrg
+    doLast {
+        def sourceOwner, targetOwner
+        def lines = []
+        tsrg.get().asFile.eachLine { line ->
+            def names = line.trim().split(' +')
+            if (!line.startsWith('\t')) {
+                sourceOwner = names[0]; targetOwner = names[1]
+                lines.add("CL: ${sourceOwner} ${targetOwner}")
+            } else if (names.length == 2) {
+                lines.add("FD: ${sourceOwner}/${names[0]} ${targetOwner}/${names[1]}")
+            } else {
+                lines.add("MD: ${sourceOwner}/${names[0]} ${names[1]} ${targetOwner}/${names[2]} ${names[1]}")
+            }
+        }
+        mixinSrg.get().asFile.parentFile.mkdirs()
+        mixinSrg.get().asFile.text = lines.join('\n') + '\n'
+    }
+}
+tasks.named('compileJava', JavaCompile) {
+    dependsOn 'generateMixinSrg'
+    options.annotationProcessorPath = sourceSets.main.compileClasspath
+    options.compilerArgs += ['-processor',
+        'org.spongepowered.tools.obfuscation.MixinObfuscationProcessorInjection,org.spongepowered.tools.obfuscation.MixinObfuscationProcessorTargets',
+        "-AreobfSrgFile=${mixinSrg.get().asFile}", "-AoutRefMapFile=${mixinRefmap.get().asFile}",
+        '-AdefaultObfuscationEnv=searge']
+    outputs.file mixinRefmap
+}
+tasks.withType(net.minecraftforge.renamer.gradle.RenameJar).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor { spec -> spec.languageVersion.set(JavaLanguageVersion.of(25)) })
+}
+tasks.withType(Test).configureEach {
+    useJUnit()
+    maxHeapSize = '2G'
+}
+processResources {
+    dependsOn tasks.compileJava
+    inputs.property 'version', project.version
+    filesMatching('mcmod.info') {
+        expand version: project.version, mcversion: '1.12.2', mixinBooterRuntimeRange: '[9.1,)'
+    }
+    exclude 'assets/ponder/ponder/debug/**'
+}
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'net.createmod.ponder.mixin.PonderMixinLoader',
+            'FMLCorePluginContainsFMLMod': 'true', 'ForceLoadAsMod': 'true',
+            'Implementation-Version': project.version
+    }
+    from('LICENSE')
+    from('NOTICE.md')
+}
+tasks.register('apiJar', Jar) {
+    archiveClassifier = 'api'
+    from sourceSets.main.output
+    include 'net/createmod/ponder/api/**', 'net/createmod/catnip/**'
+    include 'net/createmod/ponder/Ponder.class', 'net/createmod/ponder/foundation/PonderIndex.class'
+}
+tasks.named('assemble') { dependsOn 'apiJar' }
+publishing {
+    publications {
+        mod(MavenPublication) {
+            from components.java
+            artifact tasks.apiJar
+            artifact(tasks.reobfJar) { classifier = 'srg' }
+        }
+    }
+}

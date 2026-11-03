@@ -1,0 +1,30 @@
+{
+  "format": 1,
+  "id": "example:multi_scene",
+  "scenes": [
+    {
+      "id": "example:compass_building",
+      "component": "minecraft:compass",
+      "title": "基础搭建 / Building",
+      "structure": "ponder:demo/basics",
+      "tags": [],
+      "instructions": [
+        { "op": "world.show_section", "selection": { "type": "everywhere" }, "direction": "down" },
+        { "op": "scene.idle", "ticks": 80 },
+        { "op": "scene.finish" }
+      ]
+    },
+    {
+      "id": "example:compass_storage",
+      "component": "minecraft:compass",
+      "title": "物品存储 / Storage",
+      "structure": "ponder:demo/storage",
+      "tags": [],
+      "instructions": [
+        { "op": "world.show_section", "selection": { "type": "everywhere" }, "direction": "down" },
+        { "op": "scene.idle", "ticks": 80 },
+        { "op": "scene.finish" }
+      ]
+    }
+  ]
+}

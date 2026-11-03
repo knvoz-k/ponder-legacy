@@ -1,0 +1,10 @@
+{
+  "cleanroom": "0.4.0",
+  "result": "FAIL_BEFORE_MOD_DISCOVERY",
+  "sameFailureWithoutMods": true,
+  "error": "NoClassDefFoundError: net/minecraft/client/entity/EntityPlayerSP",
+  "location": "Loader.identifyMods (Loader.java:379)",
+  "ponderSha256": "6c8800d2042bfddbe13bbc6a5465c8dd3a24e8b6eb5f9669581cb0f3afc39a6d",
+  "serverReportPresent": false,
+  "dedicatedServerCompatibilityVerified": false
+}

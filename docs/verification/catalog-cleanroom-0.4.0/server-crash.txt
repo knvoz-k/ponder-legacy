@@ -1,0 +1,69 @@
+---- Minecraft Crash Report ----
+
+WARNING: coremods are present:
+  MixinBooter (cleanroom-0.4.0.jar)
+  PonderMixinLoader (Ponder-Cleanroom-1.12.2-1.4.0-cleanroom-alpha.1.jar)
+Contact their authors BEFORE contacting forge
+
+// My bad.
+
+Time: 11/3/26, 3:32 PM
+Description: Exception in server tick loop
+
+java.lang.NoClassDefFoundError: net/minecraft/client/entity/EntityPlayerSP
+	at net.minecraftforge.fml.common.Loader.identifyMods(Loader.java:379)
+	at net.minecraftforge.fml.common.Loader.loadMods(Loader.java:562)
+	at net.minecraftforge.fml.server.FMLServerHandler.beginServerLoading(FMLServerHandler.java:98)
+	at net.minecraftforge.fml.common.FMLCommonHandler.onServerStart(FMLCommonHandler.java:344)
+	at net.minecraft.server.dedicated.DedicatedServer.func_71197_b(DedicatedServer.java:127)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:486)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: java.lang.ClassNotFoundException: net.minecraft.client.entity.EntityPlayerSP
+	at top.outlands.foundation.boot.ActualClassLoader.findClass(ActualClassLoader.java:264)
+	at top.outlands.foundation.boot.ActualClassLoader.loadClass(ActualClassLoader.java:273)
+	... 7 more
+Caused by: net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerException: Exception in class transformer net.minecraftforge.fml.common.asm.transformers.SideTransformer@9e2ad91 from coremod FMLCorePlugin
+	at net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerWrapper.transform(ASMTransformerWrapper.java:261)
+	at top.outlands.foundation.TransformerDelegate.lambda$fillTransformerHolder$1(TransformerDelegate.java:149)
+	at top.outlands.foundation.boot.ActualClassLoader.runTransformers(ActualClassLoader.java:340)
+	at net.minecraft.launchwrapper.LaunchClassLoader.runTransformers(LaunchClassLoader.java:55)
+	at top.outlands.foundation.boot.ActualClassLoader.findClass(ActualClassLoader.java:241)
+	... 8 more
+Caused by: java.lang.RuntimeException: Attempted to load class bud/net.minecraft.client.entity.EntityPlayerSP for invalid side SERVER
+	at net.minecraftforge.fml.common.asm.transformers.SideTransformer.transform(SideTransformer.java:61)
+	at net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerWrapper.transform(ASMTransformerWrapper.java:257)
+	... 12 more
+No Mixin Metadata is found in the Stacktrace.
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Linux (amd64) version 7.0.0-42-generic
+	Java Version: 25.0.5, Eclipse Adoptium
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium
+	Memory: 140989096 bytes (134 MB) / 281018368 bytes (268 MB) up to 3221225472 bytes (3072 MB)
+	JVM Flags: 1 total; -Xmx3G
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP 9.42 Cleanroom 0.4.0 5 mods loaded, 0 mods active
+States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	| State | ID            | Version | Source              |
+	|:----- |:------------- |:------- |:------------------- |
+	|       | minecraft     | 1.12.2  | minecraft.jar       |
+	|       | mcp           | 9.42    | minecraft.jar       |
+	|       | cleanroom     | 0.4.0   | cleanroom-0.4.0.jar |
+	|       | mixinbooter   | 10.7    | cleanroom-0.4.0.jar |
+	|       | configanytime | 3.0     | cleanroom-0.4.0.jar |
+
+	Cleanroom Version: 0.4.0
+	Loaded coremods (and transformers): 
+MixinBooter (cleanroom-0.4.0.jar)
+  
+PonderMixinLoader (Ponder-Cleanroom-1.12.2-1.4.0-cleanroom-alpha.1.jar)
+  
+	Profiler Position: N/A (disabled)
+	Is Modded: Definitely; Server brand changed to 'fml,forge,cleanroom'
+	Type: Dedicated Server (map_server.txt)
