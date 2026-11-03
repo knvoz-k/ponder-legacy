@@ -1,0 +1,33 @@
+{
+  "project": "Ponder Legacy",
+  "commissioned_by": "yudream",
+  "artwork": "AI-generated project artwork; original upstream logos are not used",
+  "assets": [
+    {
+      "directory": "ponder",
+      "variant": "cover",
+      "file": "cover.png",
+      "sha256": "7ef2ca450901baa6cfff8a170eb1da7ef49db0dabd0c8f73bc9a278236310ee4",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "generation_tool": "image_gen.imagegen",
+      "visual_review": "title and subject checked",
+      "generation_note": "Initial Legacy series style reference: open voxel tutorial book with small diorama, dark navy grid, brass accents; PONDER LEGACY by yudream."
+    },
+    {
+      "directory": "ponder",
+      "variant": "icon",
+      "prompt": "Use case: ads-marketing. Asset type: square Minecraft mod project icon, 1024 by 1024. Create one finished production image. Reference image 1 is a STYLE reference for the coherent Legacy series: crisp polished voxel 3D item illustration, dark navy square-grid background, brass accents, high contrast, generous spacing.  Main subject: an open voxel tutorial book, tiny floating grass and stone diorama, cyan play triangle, brass corners. Palette accents: teal and brass. Square compact composition: large single symbolic item in upper 65 percent, restrained readable block lettering in lower part. Keep a clear silhouette at small size. Text must be exactly 'PONDER' and separate smaller line 'LEGACY' . Line break long titles sensibly; spell every word correctly. Do not copy Ponder's book motif from the style reference unless this project's subject is a tutorial or spellbook. No Minecraft corporate logo, no upstream logos, no watermarks, no additional words, no mockup, no contact sheet. Deliver a single square icon.",
+      "file": "icon.png",
+      "sha256": "936404f21b63b656c6d26fb9da16058db6f5ea21eadecea7e05062cd597ee95f",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "generation_tool": "image_gen.imagegen",
+      "visual_review": "title and subject checked"
+    }
+  ]
+}
