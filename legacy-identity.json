@@ -14,5 +14,6 @@
   "original_authors": "The Create Team (original Ponder), MCMGGF (1.12.2 base)",
   "original_repository": "https://github.com/MCMGGF/ponder-for-1.12.2",
   "verification_document": "LEGACY-VERIFICATION.md",
-  "verified_jar_sha256": "82798859f97bf3837a2fb7e07e23a4cc23457f1076f604343e6b50a33ecebc99"
+  "verified_jar_sha256": "82798859f97bf3837a2fb7e07e23a4cc23457f1076f604343e6b50a33ecebc99",
+  "verified_main_source_sha256": "12bbaae222f97c200468416439bd152ac4f2c7d5646426c6b6d18a5fabdb7e3d"
 }

@@ -117,8 +117,9 @@ def prepare(side):
     main = metadata["downloads"][side]
     vanilla = GRADLE / f"caches/cleanroom_gradle/versions/1.12.2/{side}.jar"
     classpath.append(download(main["url"], CACHE / f"minecraft-{side}-1.12.2.jar", main["sha1"], candidates=[vanilla]))
-    natives = CACHE / "natives"
-    natives.mkdir(exist_ok=True)
+    # Never let concurrent verifiers overwrite ELF files mapped by this JVM.
+    natives = PROJECT / "build/verification-natives" / str(os.getpid())
+    natives.mkdir(parents=True, exist_ok=True)
     for jar in classpath:
         if "natives-linux" in jar.name:
             with ZipFile(jar) as archive:
@@ -140,6 +141,7 @@ def main():
     parser.add_argument("side", choices=["client", "server"])
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--empty", action="store_true", help="Attempt loader-only dedicated server startup")
+    parser.add_argument("--mmce", choices=["present", "absent", "incompatible"], help="Verify optional MMCE using isolated production-jar fixtures")
     args = parser.parse_args()
     if platform.system() != "Linux" or platform.machine() not in ("x86_64", "amd64"):
         parser.error("This development launcher supports Linux x64")
@@ -148,17 +150,33 @@ def main():
         return
     if args.empty and args.side != "server":
         parser.error("--empty is a dedicated-server probe")
+    if args.empty and args.mmce:
+        parser.error("--empty and --mmce are separate fixtures")
     run = PROJECT / "run" / f"cleanroom-{VERSION}-legacy" / ("empty-server" if args.empty else args.side)
+    if args.mmce:
+        run = PROJECT / "run" / f"cleanroom-{VERSION}-mmce" / args.mmce / args.side
     mods = run / "mods"
     mods.mkdir(parents=True, exist_ok=True)
     crafttweaker = list((GRADLE / "caches/modules-2/files-2.1/maven.modrinth/crafttweaker/4.1.20.698").glob("*/*.jar"))
     if len(crafttweaker) != 1:
         raise RuntimeError("Run tools/dev.sh build to resolve CraftTweaker 4.1.20.698")
     harness = "ponder-editor-harness-srg.jar" if args.side == "client" else "ponder-server-harness-srg.jar"
+    if args.mmce:
+        harness = "ponder-mmce-harness-srg.jar"
     for obsolete in {"ponder-editor-harness-srg.jar", "ponder-server-harness-srg.jar"} - {harness}:
         (mods / obsolete).unlink(missing_ok=True)
     jars = [] if args.empty else [PROJECT / "build/libs/ponder-legacy-1.4.0-cleanroom-alpha.1.jar",
             PROJECT / "build/dev" / harness, crafttweaker[0]]
+    if args.mmce in ("present", "incompatible"):
+        mmce = list((GRADLE / "caches/modules-2/files-2.1/curse.maven/modularmachinery-community-edition-817377/7372951").glob("*/*.jar"))
+        if len(mmce) != 1:
+            raise RuntimeError("Run tools/dev.sh build to resolve MMCE 2.3.2")
+        jars.append(mmce[0])
+        fixture = PROJECT / "ponder-mmce/examples/smoke"
+        shutil.copytree(fixture / "config", run / "config", dirs_exist_ok=True)
+        # Examples are installed explicitly in this isolated test instance only.
+        if args.mmce == "present":
+            shutil.copytree(fixture / "scripts", run / "scripts", dirs_exist_ok=True)
     for jar in jars:
         if not jar.is_file():
             raise FileNotFoundError(f"Build first: tools/dev.sh build reobfDevHarnessJar; missing {jar}")
@@ -169,6 +187,10 @@ def main():
     jdk = Path(os.environ.get("PONDER_JAVA_HOME", WORKSPACE / ".dev/jdk-25.0.5+8"))
     command = [str(jdk / "bin/java"), "-Xmx3G", "-Dfile.encoding=UTF-8", f"-Djava.library.path={natives}",
                "-cp", os.pathsep.join(map(str, classpath))]
+    if args.mmce:
+        command += [f"-Dponder.mmce.smoke={args.mmce}", "-Xlog:class+load=info:file=class-load.log"]
+        if args.mmce == "incompatible":
+            command += ["-Dponder.mmce.verification.forceIncompatibleAbi=true"]
     if args.side == "client":
         report = run / "ponder-smoke/report.json"
         command += ["-Dponder.dev.smoke=true", "top.outlands.foundation.boot.Foundation", "--tweakClass", "net.minecraftforge.fml.common.launcher.FMLTweaker",
@@ -179,6 +201,8 @@ def main():
         (run / "server.properties").write_text("server-ip=127.0.0.1\nserver-port=25684\nonline-mode=false\nlevel-name=ponder-verification\nlevel-type=FLAT\nview-distance=2\ngenerate-structures=false\n")
         report = run / "ponder-server-smoke.json"
         command += ["-Dponder.dev.serverSmoke=true", "net.minecraftforge.fml.relauncher.ServerLaunchWrapper", "nogui"]
+    if args.mmce:
+        report = run / "ponder-mmce-report.json"
     report.unlink(missing_ok=True)
     (run / "runtime.json").write_text(json.dumps({"cleanroom": VERSION, "side": args.side,
         "jars": {jar.name: digest(jar, "sha256") for jar in jars},
@@ -196,6 +220,13 @@ def main():
     data = json.loads(report.read_text())
     if data.get("result") != "PASS" or data.get("cleanroom") != VERSION:
         raise SystemExit(f"Verification failed or wrong loader version: {report}")
+    if args.mmce == "absent":
+        loads = (run / "class-load.log").read_text()
+        for forbidden in ("hellfirepvp.modularmachinery.", "github.kasuminova.mmce.",
+                          "net.createmod.ponder.mmce.", "net.createmod.ponder.verification.mmce.MMCEIntegrationChecks"):
+            if forbidden in loads:
+                raise SystemExit(f"Optional MMCE class loaded while absent: {forbidden}")
+        print("PASS: no MMCE implementation classes loaded", flush=True)
     print("PASS:", report, flush=True)
 
 

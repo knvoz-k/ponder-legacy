@@ -69,7 +69,7 @@ Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼�
 
 ## 构建与 CI
 
-源码提交后，使用 Java 25，在项目目录执行：
+在完整源码项目目录使用 Java 25 执行：
 
 ```bash
 python3 tools/bootstrap_legacy.py
@@ -79,6 +79,10 @@ python3 tools/verify_legacy_package.py
 
 CI 会准备固定版本的源码依赖，构建完整主源码与测试，并检查发行 jar 的身份、作者和图标。
 仅有文档的仓库会明确报告 scaffold，不把跳过编译标为 Mod 构建成功。CI 构建不能替代客户端玩法和专服验收。
+
+## 发布平台
+
+CurseForge / Modrinth 的项目资料、文件、依赖和 CI 凭据配置见 [发布说明](docs/PUBLISHING.md)。平台尚未发布的状态见 PUBLICATION.md。
 
 ## 授权与图像
 
