@@ -1,0 +1,51 @@
+name: Legacy build
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Check source publication status
+        id: source
+        shell: bash
+        run: |
+          if test -f build.gradle; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Repository scaffold only. Mod sources await migration acceptance; no build was performed."
+          fi
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        if: steps.source.outputs.available == 'true'
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d # v4
+        if: steps.source.outputs.available == 'true'
+      - name: Prepare pinned source dependencies
+        if: steps.source.outputs.available == 'true'
+        run: python3 tools/bootstrap_legacy.py
+      - name: Build and test complete source set, then reobfuscate
+        if: steps.source.outputs.available == 'true'
+        run: bash gradlew --no-daemon :build :reobfJar --console=plain
+      - name: Verify packaged loader identity
+        if: steps.source.outputs.available == 'true'
+        run: python3 tools/verify_legacy_package.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: steps.source.outputs.available == 'true'
+        with:
+          name: ${{ github.event.repository.name }}-${{ github.sha }}
+          if-no-files-found: error
+          path: |
+            build/libs/*.jar
+            build/reports/tests/

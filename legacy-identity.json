@@ -1,0 +1,16 @@
+{
+  "directory": "ponder",
+  "modid": "ponder-legacy",
+  "name": "Ponder Legacy",
+  "resource_namespace": "ponder",
+  "repository": "mcyudream/ponder-legacy",
+  "minecraft": "1.12.2",
+  "cleanroom_baseline": "0.4.0",
+  "java": 25,
+  "ae2_implementation": null,
+  "ae2_loader_modid": null,
+  "status": "awaiting-renamed-artifact-verification",
+  "author": "yudream",
+  "original_authors": "The Create Team (original Ponder), MCMGGF (1.12.2 base)",
+  "original_repository": "https://github.com/MCMGGF/ponder-for-1.12.2"
+}
