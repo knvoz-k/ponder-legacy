@@ -1,4 +1,45 @@
-# 本地 Cleanroom 验证记录
+# Cleanroom 验证记录
+
+## 2026-11-03：MMCE 软适配（1.4.0-cleanroom-alpha.1）
+
+本轮把保留的上游 MMCE 实现接入 Cleanroom 构建，并修正 CraftTweaker 的可选类加载边界。
+不包含 MMCE 自身，不安装示例，也不生成通用机器教程。使用方法见 [MMCE 接入手册](MMCE.md)。
+以下是本次提交对应生产包的独立验收，CI 发行时须匹配该包 SHA-256。历史包的验收结论保留不变。
+
+| 项目 | Cleanroom 0.4.0-alpha | Cleanroom 0.4.0 |
+| --- | --- | --- |
+| 实际 MMCE 版本 | 2.3.2 / CurseForge 文件 7372951 | 同左 |
+| 安装 MMCE 的客户端 | PASS，34 项，进入世界后播放并截图 | PASS，34 项 |
+| 安装 MMCE 的物理专服 | PASS，29 项，启动、核心解析与正常退出 | PASS，29 项 |
+| 未安装 MMCE | 客户端 6 项、专服 5 项 PASS | 同左 |
+| 模拟 ABI 不兼容 | 客户端 6 项、专服 5 项 PASS；不注册 Provider / Resolver | 同左 |
+| 缺依赖时的类加载 | JVM 日志确认没有 MMCE、本体适配实现或脚本类被加载 | 同左 |
+| 单元测试 | 277 项，0 失败、错误或跳过 | 同一构建 |
+| 发布包检查 | 16 个适配 class；不含 MMCE、旧附属 @Mod 或测试类；refmap 一份 | 同一产物 |
+
+安装 MMCE 的检查覆盖：真实机器 JSON、静态结构、动态重复段与末端、负坐标、preview NBT、
+命名组、稳定 ID / 指纹、旧指纹拒绝、缓存失效、蓝图映射、未编写教程的蓝图不产生入口、
+ZenScript 注册场景、JSON / 编辑器文档编译、播放跳转与重放。两版各 85 项运行检查通过。
+生产测试使用实际 SRG 安装包和独立重混淆 harness，无 userdev / MCP 重映射层。
+
+当前运行包：`build/libs/ponder-legacy-1.4.0-cleanroom-alpha.1.jar`
+
+```text
+9be55d18dff404d74b886521395c47cc6d2c5ec1ff3d22d73fecb1553f9ee4ab
+```
+
+- 0.4.0-alpha：[汇总](verification/mmce-cleanroom-0.4.0-alpha/summary.json)、[客户端](verification/mmce-cleanroom-0.4.0-alpha/present/client/ponder-mmce-report.json)、[专服](verification/mmce-cleanroom-0.4.0-alpha/present/server/ponder-mmce-report.json)、[未安装类加载](verification/mmce-cleanroom-0.4.0-alpha/absent/client/class-load-check.json)
+- 0.4.0：[汇总](verification/mmce-cleanroom-0.4.0/summary.json)、[客户端](verification/mmce-cleanroom-0.4.0/present/client/ponder-mmce-report.json)、[专服](verification/mmce-cleanroom-0.4.0/present/server/ponder-mmce-report.json)、[ABI 拒绝](verification/mmce-cleanroom-0.4.0/incompatible/server/ponder-mmce-report.json)
+- [静态结构截图](verification/mmce-cleanroom-0.4.0-alpha/mmce-static.png)、[动态结构截图](verification/mmce-cleanroom-0.4.0-alpha/mmce-dynamic.png)
+
+每个测试目录保留 report、实际运行库与包校验值、CraftTweaker 日志及压缩启动日志；
+未安装 MMCE 的目录还保留完整压缩类加载日志。各证据文件哈希见对应目录 `SHA256SUMS`。
+
+本轮将现有 Kirino 专服发现调用修复从精确 `0.4.0` 扩展到同样复现该问题的精确 `0.4.0-alpha`。
+仅在这两个版本的物理专服启用；没有把客户端类放到服务端，也没有改动上游加载器 jar。
+测试机的自定义控制器未提供专属模型，MMCE / Forge 的对应模型缺失日志原样保留；
+可视验收覆盖截图中实际出现的 MMCE / 原版方块，不替整合包作者验证其自定义模型资源。
+不宣称其他 MMCE 版本、原版 Modular Machinery、MMCE 附属或大型整合包的全部组合兼容。
 
 ## 2026-11-03：指引滚动、分类与移除默认示例
 

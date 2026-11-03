@@ -26,7 +26,8 @@ Windows 使用 `gradlew.bat`，并把 `JAVA_HOME` 指向 Java 25。
 开发客户端通过 `fml.coreMods.load` 加载 Ponder 的 mixin 引导；发布 jar 通过清单声明加载。
 发布构建通过 Mixin annotation processor 生成 MCP → SRG refmap，并将其包含在安装 jar 中。
 使用多个物品关联同一场景时，可共享同一个 storyboard 实例和结构；不同物品的这些关联不会被诊断为重复场景。
-CR 0.4.0-alpha 与 0.4.0 的客户端安装包验证及专用服务器启动限制见[本项目验证记录](CLEANROOM-VERIFICATION.md)。
+CR 0.4.0-alpha 与 0.4.0 的实际安装包、客户端及专服结果见[本项目验证记录](CLEANROOM-VERIFICATION.md)。
+最新 MMCE 产物已分别通过这两个版本的专服验证；早期加载器发现阶段失败的记录按原哈希保留。
 首次创建客户端配置时关闭 Forge 异步启动画面，以避免此 Cleanroom 版本在当前环境出现的并发类加载异常。
 若已有 `config/splash.properties`，工程不覆盖它；遇到相同异常时可以手动设置 `enabled=false`。
 
@@ -237,7 +238,9 @@ PONDER_CLEANROOM_VERSION=0.4.0-alpha python3 tools/verify-cleanroom.py server --
 ```
 
 脚本使用官方安装器中的精确依赖与校验值，以及重混淆后的安装 jar 和独立测试 jar，
-没有 MCP / userdev 重映射层。报告与截图位于 `run/cleanroom-0.4.0/client/ponder-smoke/`。
+没有 MCP / userdev 重映射层。编辑器报告与截图位于 `run/cleanroom-<版本>-legacy/client/ponder-smoke/`，
+MMCE fixture 位于 `run/cleanroom-<版本>-mmce/<模式>/<端>/`。
 专用服务器结果和加载器自身启动问题需按验证记录判读，不能只以进程退出码零判定成功。
 
-此测试没有覆盖大规模整合包、多名远程玩家、MMCE 集成、全部第三方 TileEntity 或人工输入的所有交互。
+此编辑器测试没有覆盖大规模整合包、多名远程玩家、全部第三方 TileEntity 或人工输入的所有交互。
+MMCE 软适配由单独的生产包 fixture 验证，见 [MMCE 接入手册](MMCE.md)。

@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
-/** Registered exclusively on the official CR 0.4.0 dedicated-server release with this discovery bug. */
+/** Registered exclusively on CR 0.4.0 / 0.4.0-alpha dedicated servers with this discovery bug. */
 public final class Cleanroom040ServerTransformer implements IClassTransformer {
     @Override public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (bytes == null || !"net.minecraftforge.fml.common.Loader".equals(transformedName)) return bytes;

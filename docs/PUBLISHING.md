@@ -1,6 +1,19 @@
-# CurseForge / Modrinth 发布准备
+# GitHub 发行与 CurseForge / Modrinth 发布准备
 
 核查日期：2026-11-03。本文件是发布操作说明；目前未在这两个平台创建项目或上传版本。
+
+## Ponder Legacy 的 GitHub Release
+
+当前 Ponder 版本为 `1.4.0-cleanroom-alpha.1`，最低加载器为 **0.4.0-alpha**；**0.4.0 正式版**独立验收。
+下方跨项目平台资料中的正式基线要求不用于提高 Ponder 的最低版本声明。
+
+1. 将当前代码、README、`legacy-identity.json` 与对应运行证据提交到 `main`，确认普通 CI 的构建、测试及包检查通过。
+2. 核对 CI 生产 jar 的 SHA-256 与 `verified_jar_sha256` 及 [安装包验收](../LEGACY-VERIFICATION.md) 一致。若不同，先定位差异并完成对应运行验证，更新证据后再发布。
+3. 推送与 jar 内版本一致的标签 `v1.4.0-cleanroom-alpha.1`。`ci.yml` 会重新构建并强制核对已验收哈希，再创建 GitHub Release。
+4. 发行资产为生产 jar、`-api.jar`、`-sources.jar` 和 `SHA256SUMS`；发行说明来自 `docs/releases/<version>.md`。Alpha / Beta / RC 标签保持预发行状态。
+5. 从 Release 下载生产 jar 并核对校验值；开发 harness 与测试报告只属于开发证据，不作为运行模组发布。
+
+该流程使用 Actions 自带的 `GITHUB_TOKEN`，只在 release job 授予 `contents: write`；无需个人令牌。普通 push、PR 和手动运行只构建归档，不创建发行版。
 
 ## 本批项目的统一信息
 
@@ -44,16 +57,16 @@
 
 | 项目 | 必需关系 | 可选关系 / 说明 |
 | --- | --- | --- |
-| Ponder Legacy | CraftTweaker 4.1.20.698 | 附属自行依赖 Ponder；不要把开发 API jar 当运行库 |
+| Ponder Legacy | CraftTweaker 4.1.20.698 | MMCE 2.3.2 可选，独立安装；适配已包含在 Ponder 中。附属自行依赖 Ponder；不要把开发 API jar 当运行库 |
 | Hostile Neural Networks Legacy | Cleanroom / Java 要求写入描述 | Ponder Legacy；JEI 用于配方查询 |
 | Powah Legacy | Cleanroom / Java 要求写入描述 | Ponder Legacy；目前没有 energizing JEI 页面 |
 | AE2S Ponder Legacy | **AE2S / Supergiant 1.1.0**，实际 loader ID `ae2` | Ponder Legacy；没有 Ponder 时正常启动但不显示教程 |
 
 平台关系必须选择实际的 Legacy / AE2S 项目 ID，并检查其 1.12.2 文件；不能链接现代同名项目、原版 AE2 或 AE2UEL 代替 AE2S。附属安装 Ponder 时，CraftTweaker 由 Ponder 的必需关系传递安装；手工安装时也须提供它。
 
-## GitHub CI 后续自动发布
+## CurseForge / Modrinth 后续自动发布
 
-现有 `ci.yml` 负责源码构建、测试、重混淆、身份/作者/图标检查及构建产物归档。平台发布需另行配置实际项目 ID 和凭据：
+现有 `ci.yml` 负责源码构建、测试、重混淆、包检查、构建产物归档和 GitHub 标签发行。CurseForge / Modrinth 发布需另行配置实际项目 ID 和凭据：
 
 | 配置 | 存放位置 |
 | --- | --- |

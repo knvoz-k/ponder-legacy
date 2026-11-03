@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "full_log_sha256": "5cf4859638a12c3f49cdb43dc99e7b053298aaa69781c5f3eeaa85c5733a0a1f",
+  "forbidden_loads": {
+    "hellfirepvp.modularmachinery.": 0,
+    "github.kasuminova.mmce.": 0,
+    "net.createmod.ponder.mmce.": 0,
+    "net.createmod.ponder.verification.mmce.MMCEIntegrationChecks": 0
+  }
+}

@@ -33,19 +33,24 @@ CatServer 客户端支持只是实验线，不阻塞 1.3.0 Alpha 1。实时证�
 到默认物品注册名。addon 应通过 `PonderStructureProviders` 与 `PonderSubjectResolvers` 注册，
 不能直接修改 Ponder 内部注册表。
 
-`ponder-mmce` Gradle 子项目继续作为 MMCE 兼容源码、fixture 和 harness 的隔离边界。其运行实现会编译进
-Ponder 主 jar，但主生命周期只通过不含 MMCE 类型的反射入口加载它。未安装 `modularmachinery` 时不会
-解析 MMCE 实现类；安装 MMCE 2.3.2+ 且 ABI 检查通过后，Ponder 自动注册 Provider、Resolver 和
-`mods.ponder.mmce` ZenClass。完整仓库门槛使用：
+Cleanroom 构建把 `ponder-mmce/src/main/java` 中的适配实现编译进主 jar，排除旧附属的
+`PonderMMCEMod` 入口，不打包 MMCE 自身。`ponder-mmce/build.gradle` 是保留的旧 Forge 工程，
+不作为当前子项目启用。主生命周期只通过不含 MMCE 类型的反射入口加载实现；未安装
+`modularmachinery` 时不加载 MMCE 实现和脚本类。检测到 MMCE 且 ABI 检查通过后，手动注册
+Provider、Resolver 与 `mods.ponder.mmce` ZenClass。不能依赖 `@ZenRegister` / `@ModOnly` 组合隔离类加载，
+CraftTweaker 会先解析类再检查条件。当前构建与生产包验证命令：
 
-```powershell
-.\gradlew.bat clean test build compileClientHarnessJava :ponder-mmce:test :ponder-mmce:build
+```bash
+./tools/dev.sh build reobfMmceHarnessJar
+PONDER_CLEANROOM_VERSION=0.4.0-alpha python3 tools/verify-cleanroom.py client --mmce present
+PONDER_CLEANROOM_VERSION=0.4.0-alpha python3 tools/verify-cleanroom.py server --mmce present
 ```
 
-最终用户只安装 `Ponder-1.12.2-1.3.0-alpha.1.jar`，不需要独立 Ponder-MMCE 运行 jar。子项目仍生成
-Smoke Pack 和客户端/服务端 harness，用于验证静态结构、Dynamic Pattern、命名组、preview NBT、
+最终用户安装当前 `ponder-legacy` 运行包，不需要独立 Ponder-MMCE 运行 jar。`src/mmceHarness` 是独立的
+开发 source set，配合显式安装的测试机器 / 脚本验证静态结构、Dynamic Pattern、命名组、preview NBT、
 结构指纹和蓝图 component。若检测到旧 `ponder_mmce` 外部附属，本体会跳过内置注册并让旧附属接管，
 避免重复 Provider/Resolver ID。
+实际验收版本与缺省不安装示例的行为见 [MMCE 接入手册](MMCE.md)。
 
 ## 自定义指令 codec 与协议 v3
 

@@ -1,0 +1,55 @@
+{
+  "cleanroom": "0.4.0",
+  "mmce": "2.3.2",
+  "production": {
+    "production_jar": "ponder-legacy-1.4.0-cleanroom-alpha.1.jar",
+    "sha256": "9be55d18dff404d74b886521395c47cc6d2c5ec1ff3d22d73fecb1553f9ee4ab",
+    "integration_classes": 16,
+    "refmap_copies": 1,
+    "forbidden_entries": []
+  },
+  "unit_tests": {
+    "tests": 277,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "matrix": [
+    {
+      "mode": "present",
+      "side": "client",
+      "result": "PASS",
+      "checks": 34
+    },
+    {
+      "mode": "present",
+      "side": "server",
+      "result": "PASS",
+      "checks": 29
+    },
+    {
+      "mode": "absent",
+      "side": "client",
+      "result": "PASS",
+      "checks": 6
+    },
+    {
+      "mode": "absent",
+      "side": "server",
+      "result": "PASS",
+      "checks": 5
+    },
+    {
+      "mode": "incompatible",
+      "side": "client",
+      "result": "PASS",
+      "checks": 6
+    },
+    {
+      "mode": "incompatible",
+      "side": "server",
+      "result": "PASS",
+      "checks": 5
+    }
+  ]
+}

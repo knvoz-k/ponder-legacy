@@ -14,6 +14,10 @@ java {
 repositories {
     mavenCentral()
     maven {
+        url = 'https://cursemaven.com'
+        content { includeGroup 'curse.maven' }
+    }
+    maven {
         url = 'https://api.modrinth.com/maven'
         content { includeGroup 'maven.modrinth' }
     }
@@ -21,9 +25,16 @@ repositories {
 dependencies {
     implementation cleanroom.userdev(cleanroom_version)
     implementation(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
+    // The integration ships in Ponder, while MMCE remains an independently installed, optional mod.
+    compileOnly(deobf('curse.maven:modularmachinery-community-edition-817377:7372951')) { transitive = false }
+    testImplementation(deobf('curse.maven:modularmachinery-community-edition-817377:7372951')) { transitive = false }
     testImplementation 'junit:junit:4.13.2'
 }
 sourceSets {
+    main {
+        java.srcDir 'ponder-mmce/src/main/java'
+        java.exclude 'net/createmod/ponder/mmce/PonderMMCEMod.java'
+    }
     dev {
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
         runtimeClasspath += output + compileClasspath
@@ -34,7 +45,13 @@ sourceSets {
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
         runtimeClasspath += output + compileClasspath
     }
+    mmceHarness {
+        java.srcDir 'src/mmceHarness/java'
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += output + compileClasspath
+    }
     test {
+        java.srcDir 'ponder-mmce/src/test/java'
         compileClasspath += sourceSets.exampleAddon.output
         runtimeClasspath += sourceSets.exampleAddon.output
     }
@@ -52,6 +69,17 @@ tasks.register('serverHarnessJar', Jar) {
     destinationDirectory = layout.buildDirectory.dir('dev')
     from sourceSets.dev.output
     include 'net/createmod/ponder/server/**'
+}
+tasks.register('mmceHarnessJar', Jar) {
+    dependsOn tasks.mmceHarnessClasses
+    archiveFileName = 'ponder-mmce-harness.jar'
+    destinationDirectory = layout.buildDirectory.dir('dev')
+    from sourceSets.mmceHarness.output
+}
+extensions.getByType(net.minecraftforge.renamer.gradle.RenamerExtension).classes('reobfMmceHarnessJar', tasks.named('mmceHarnessJar')) {
+    map.from tasks.named('reobfJar').get().map
+    libraries.setFrom(sourceSets.main.compileClasspath, tasks.named('jar'))
+    output = layout.buildDirectory.file('dev/ponder-mmce-harness-srg.jar')
 }
 extensions.getByType(net.minecraftforge.renamer.gradle.RenamerExtension).classes('reobfDevHarnessJar', tasks.named('devHarnessJar')) {
     map.from tasks.named('reobfJar').get().map
@@ -185,6 +213,7 @@ tasks.register('apiJar', Jar) {
     archiveClassifier = 'api'
     from sourceSets.main.output
     include 'net/createmod/ponder/api/**', 'net/createmod/catnip/**'
+    include 'net/createmod/ponder/mmce/script/**'
     include 'net/createmod/ponder/Ponder.class', 'net/createmod/ponder/foundation/PonderIndex.class'
 }
 tasks.named('assemble') { dependsOn 'apiJar' }

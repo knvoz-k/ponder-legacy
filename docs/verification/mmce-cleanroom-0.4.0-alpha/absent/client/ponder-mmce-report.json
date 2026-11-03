@@ -1,0 +1,33 @@
+{
+  "cleanroom": "0.4.0-alpha",
+  "mode": "absent",
+  "side": "CLIENT",
+  "mmce": "absent",
+  "checks": [
+    {
+      "check": "expected MMCE installation",
+      "result": "PASS"
+    },
+    {
+      "check": "optional provider registered exactly once or disabled",
+      "result": "PASS"
+    },
+    {
+      "check": "optional blueprint resolver enabled only for supported MMCE",
+      "result": "PASS"
+    },
+    {
+      "check": "optional lifecycle is idempotent",
+      "result": "PASS"
+    },
+    {
+      "check": "no default or MMCE scenes injected",
+      "result": "PASS"
+    },
+    {
+      "check": "client reached main menu",
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS"
+}

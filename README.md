@@ -1,5 +1,8 @@
 # Ponder Legacy
 
+[![构建与发行](https://github.com/mcyudream/ponder-legacy/actions/workflows/ci.yml/badge.svg)](https://github.com/mcyudream/ponder-legacy/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/mcyudream/ponder-legacy?include_prereleases)](https://github.com/mcyudream/ponder-legacy/releases)
+
 ![Ponder Legacy](branding/cover.png)
 
 <!-- legacy-overview:start -->
@@ -7,7 +10,9 @@
 
 ## 当前状态
 
-本版本已完成当前声明范围的正式 Cleanroom 0.4.0 安装包验收。实际运行包的 SHA-256、检查项和限制见 [验收记录](LEGACY-VERIFICATION.md)。这不表示上游所有扩展或任意整合包组合均已验证。
+当前版本为 **`1.4.0-cleanroom-alpha.1`**，包含可选 MMCE 2.3.2 适配。实际安装包已分别通过 **Cleanroom 0.4.0-alpha** 与 **0.4.0 正式版**的客户端和专服验收；277 项单元测试通过，两版各 85 项 MMCE 运行检查通过。覆盖范围、包 SHA-256 和限制见 [验收记录](LEGACY-VERIFICATION.md)。
+
+安装包从 [GitHub Releases](https://github.com/mcyudream/ponder-legacy/releases) 获取，选择无分类后缀的 `ponder-legacy-*.jar`，并独立安装 CraftTweaker。版本保持 **Alpha**；发行进度和平台状态见 [PUBLICATION.md](PUBLICATION.md)。
 
 <!-- legacy-authorship:start -->
 ## 作者与来源 / Authors and upstream
@@ -25,12 +30,12 @@
 | 项目 | 要求 / 标识 |
 | --- | --- |
 | Minecraft | 1.12.2 |
-| 运行基线 | Cleanroom **0.4.0 正式版（不带 `-alpha`）** |
+| 运行基线 | 最低 **0.4.0-alpha**；**0.4.0 正式版**单独验收，两个版本不视为同一版本 |
 | Java | 25 |
 | 加载器 Mod ID | `ponder-legacy` |
 | 资源与原注册命名空间 | `ponder`（保留） |
 
-Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼容结论必须来自上述正式运行基线。
+Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼容结论来自对应版本的实际运行验证。
 加载器身份改名后，安装时应替换本项目旧 jar；原资源命名空间的保留不构成跨实现的存档转换承诺。
 
 ## 功能与迁移范围
@@ -43,12 +48,12 @@ Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼�
 
 | 项目 | 上游基线 | 本 Legacy 版本 |
 | --- | --- | --- |
-| 运行环境 | 既有 1.12.2 / Forge 回迁实现 | 迁至 Java 25 / Cleanroom；正式 0.4.0 是运行验收基线，开发 userdev 版本单独记录。 |
+| 运行环境 | 既有 1.12.2 / Forge 回迁实现 | 迁至 Java 25 / Cleanroom；最低 0.4.0-alpha 与正式 0.4.0 分别运行验收，开发 userdev 版本单独记录。 |
 | 编辑工具 | 原场景与脚本 API | 新增 F7 编辑器、F8 框选、结构保存、局部位移/旋转编排及 JSON pack 编辑。 |
 | 教程导航 | 原有教程入口 | 增加模组/主题筛选、搜索、滚动位置保留及多场景下拉切换。 |
 | 默认内容 | 上游附带演示脚本 | 默认不向整合包注入示例；仅移走内容未改动的旧默认示例，保留用户改过的文件。 |
-| 可选模块 | 上游含 MMCE 可选模块 | 本移植未集成 MMCE 模块，不能据此声明其兼容。 |
-| 服务端 | 正式 0.4.0 模组发现会触发 Kirino 客户端入口 | 加入只对该版本物理专服生效的单处发现调用修复，客户端和其他版本不启用。 |
+| 可选模块 | 上游含 MMCE 可选模块 | 接入可选 MMCE 结构 Provider、蓝图 Resolver、ZenScript / Java API；MMCE 独立安装，具体组合见 [MMCE 接入手册](docs/MMCE.md)。 |
+| 服务端 | 0.4.0 / 0.4.0-alpha 模组发现会触发 Kirino 客户端入口 | 加入只对这两个精确版本物理专服生效的单处发现调用修复，客户端和其他版本不启用。 |
 
 ## 尚未实现与兼容边界
 
@@ -59,6 +64,7 @@ Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼�
 ## 依赖
 
 - 必需：CraftTweaker 4.1.20.698；Cleanroom 提供 MixinBooter 兼容接口。
+- 可选：MMCE 2.3.2，安装后启用机器结构与蓝图入口；无需额外安装 Ponder-MMCE 附属包。
 - 作为其他 Mod 的教程运行库时独立安装；附属应以可选兼容方式接入。
 
 ## 使用方式
@@ -77,12 +83,12 @@ bash gradlew --no-daemon :build :reobfJar --console=plain
 python3 tools/verify_legacy_package.py
 ```
 
-CI 会准备固定版本的源码依赖，构建完整主源码与测试，并检查发行 jar 的身份、作者和图标。
-仅有文档的仓库会明确报告 scaffold，不把跳过编译标为 Mod 构建成功。CI 构建不能替代客户端玩法和专服验收。
+CI 会准备固定版本的源码依赖，构建完整主源码与测试，并检查发行 jar 的身份、作者、图标和可选适配边界。
+推送 `main` 或提交 PR 时执行构建；推送与包版本对应的 `v*` 标签时，还会核对已验收包 SHA-256，成功后自动创建 GitHub Release，上传安装包、API、源码与 `SHA256SUMS`。Alpha 标签发布为预发行版。CI 构建不能替代客户端玩法和专服验收。
 
 ## 发布平台
 
-CurseForge / Modrinth 的项目资料、文件、依赖和 CI 凭据配置见 [发布说明](docs/PUBLISHING.md)。平台尚未发布的状态见 PUBLICATION.md。
+GitHub 发行流程、CurseForge / Modrinth 项目资料和平台凭据配置见 [发布说明](docs/PUBLISHING.md)。平台状态见 [PUBLICATION.md](PUBLICATION.md)。
 
 ## 授权与图像
 
@@ -95,8 +101,8 @@ CurseForge / Modrinth 的项目资料、文件、依赖和 CI 凭据配置见 [�
 
 ## 详细使用与开发说明
 
-面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.4.0-cleanroom-alpha.1`，最低加载器声明为 **0.4.0**。
-编译与编辑器开发工具链使用 `0.7.14-alpha` userdev；正式 0.4.0 的当前安装包结果见 [验收记录](LEGACY-VERIFICATION.md)。
+面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.4.0-cleanroom-alpha.1`，最低加载器声明为 **0.4.0-alpha**。
+编译与编辑器开发工具链使用 `0.7.14-alpha` userdev；当前安装包与历史快照见 [验收记录](LEGACY-VERIFICATION.md)，两个加载器版本的 MMCE 完整证据见 [运行验收](docs/CLEANROOM-VERIFICATION.md)。
 基于 [MCMGGF 的 1.12.2 实现](https://github.com/MCMGGF/ponder-for-1.12.2)，保留原有场景、Catnip、ZenScript、JSON 与插件 API；新增游戏内场景和动画编辑器。[来源说明](NOTICE.md)。
 
 ## 构建与本地开发
@@ -173,5 +179,5 @@ Mod ID 保持 `ponder-legacy`；资源空间为 `ponder`。客户端与安装了
 这是可本地维护的 Alpha 分支。框选目前捕获方块和方块实体，不自动捕获生物或掉落物；实体可以通过动作指令创建。
 远程服务器的选区捕获需要服务器安装相同版本的 Ponder，并具有创造或 OP 权限；编辑器保存到客户端本地，整合包发布时需分发 JSON 与 NBT。
 
-本分支没有集成原仓库的 MMCE 可选模块，也没有声称兼容旧 Forge/Java 8 或现代官方 Ponder 的全部二进制 API。
+MMCE 软适配的使用方式、实测版本和限制见 [MMCE 接入手册](docs/MMCE.md)。本分支不声明兼容旧 Forge/Java 8 或现代官方 Ponder 的全部二进制 API。
 旧 Forge 文档及验证工具作为参考保留在 `docs/`、`tools/`、`verification/`，当前入口以本 README 和 Cleanroom 手册为准。
