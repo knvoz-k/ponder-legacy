@@ -4,12 +4,11 @@
 
 ## Ponder Legacy 的 GitHub Release
 
-当前 Ponder 版本为 `1.4.0-cleanroom-alpha.1`，最低加载器为 **0.4.0-alpha**；**0.4.0 正式版**独立验收。
-下方跨项目平台资料中的正式基线要求不用于提高 Ponder 的最低版本声明。
+当前 Ponder 正式版本为 `1.4.0`，最低加载器为 **0.4.0 正式版（无 `-alpha`）**。历史预发行版本为 `1.4.0-cleanroom-alpha.1`。
 
 1. 将当前代码、README、`legacy-identity.json` 与对应运行证据提交到 `main`，确认普通 CI 的构建、测试及包检查通过。
 2. 核对 CI 生产 jar 的 SHA-256 与 `verified_jar_sha256` 及 [安装包验收](../LEGACY-VERIFICATION.md) 一致。若不同，先定位差异并完成对应运行验证，更新证据后再发布。
-3. 推送与 jar 内版本一致的标签 `v1.4.0-cleanroom-alpha.1`。`ci.yml` 会重新构建并强制核对已验收哈希，再创建 GitHub Release。
+3. 推送与 jar 内版本一致的标签（当前包对应 `v1.4.0`）。`ci.yml` 会重新构建并强制核对已验收哈希，再创建 GitHub Release。
 4. 发行资产为生产 jar、`-api.jar`、`-sources.jar` 和 `SHA256SUMS`；发行说明来自 `docs/releases/<version>.md`。Alpha / Beta / RC 标签保持预发行状态。
 5. 从 Release 下载生产 jar 并核对校验值；开发 harness 与测试报告只属于开发证据，不作为运行模组发布。
 

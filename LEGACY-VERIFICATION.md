@@ -1,6 +1,30 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.4.0-cleanroom-alpha.1（含 MMCE 软适配）
+## 当前：1.4.0 正式版（含 Revo UI 可选适配）
+
+- 验收日期：2026-11-04。
+- Minecraft 1.12.2；**Cleanroom 0.4.0 正式版（无 `-alpha`）**；Java 25.0.5；CraftTweaker 4.1.20.698。
+- 安装包：`ponder-legacy-1.4.0.jar`。
+- SHA-256：`df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a`。
+- 277 项单元测试通过，全部运行验收使用该生产 SRG 安装包与独立开发 harness，不使用 MCP / userdev 重映射。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| Revo UI 0.8.7 + NFR 0.8.0 full + ModularUI 3.2.0-nfr.2 + AE2S / Supergiant 1.1.0 客户端 | PASS | 68 |
+| 未安装 Revo UI、NFR、ModularUI 的客户端 | PASS | 63 |
+| 编辑器、场景播放、目录与多场景菜单客户端 | PASS | 116 |
+| 已安装 Revo UI / NFR / ModularUI 的物理专服 | PASS | 启动、场景注册与执行；不加载 Ponder 的 Revo 客户端适配类 |
+| 未安装 Revo UI 的物理专服 | PASS | 启动、场景注册与执行 |
+| MMCE 2.3.2 客户端 | PASS | 34 |
+| MMCE 2.3.2 物理专服 | PASS | 29 |
+
+Revo UI 像素检查覆盖中文/英文、AE2S 灰色 ME 智能线缆、长标题换行、854 × 480 小窗口、字号 0.75 / 1.5、行距 8 / 10 / 12 / 16、标题图标/稀有度/模型预览、关闭预览、关闭现代提示框及无 Revo 的原版回退。进度条按实际预留行绘制，占满文字区，避开模型，不覆盖标题与提示文字。截图的进度固定为 60%，并核对实际 framebuffer 像素与比例。
+
+独立报告、运行库指纹及原始截图见 [1.4.0 验收证据](docs/verification/release-1.4.0-cleanroom-0.4.0/summary.json)。包未包含 Revo UI、NFR、ModularUI、AE2S、MMCE 本体或开发 harness；不会自动注入测试教程。
+
+NFR 0.8.0 首次生成的默认 TOML 含重复 `[compat]`，会使官方包在初始化时退出；隔离验收实例预置合法最小配置，依赖 jar 保持原样。初次失败记录与实际配置均归档，详见 [Revo UI 适配说明](docs/REVO-UI.md)。渲染使用 Linux llvmpipe 软件 OpenGL，未覆盖全部硬件、其他 Revo 版本、所有整合包与人工输入路径。历史包的 0.4.0-alpha 与 MMCE ABI 模拟验收不自动背书本包。
+
+## 历史：1.4.0-cleanroom-alpha.1（含 MMCE 软适配）
 
 - Minecraft 1.12.2；Java 25.0.5；CraftTweaker 4.1.20.698。
 - **Cleanroom 0.4.0-alpha** 与 **0.4.0 正式版（无 -alpha）**分别验收，两个版本不视为相同版本。

@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import subprocess
 import urllib.request
@@ -142,6 +143,9 @@ def main():
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--empty", action="store_true", help="Attempt loader-only dedicated server startup")
     parser.add_argument("--mmce", choices=["present", "absent", "incompatible"], help="Verify optional MMCE using isolated production-jar fixtures")
+    parser.add_argument("--revo", choices=["present", "absent"], help="Verify tooltip geometry with an isolated Revo UI fixture")
+    parser.add_argument("--revo-dir", type=Path, default=WORKSPACE / ".dev/revo-ui", help="Directory containing the official Revo UI 0.8.7, NFR 0.8.0 and ModularUI 3.2.0-nfr.2 jars")
+    parser.add_argument("--ae2s", type=Path, help="Optional AE2 Supergiant production jar for the gray smart cable tooltip fixture")
     args = parser.parse_args()
     if platform.system() != "Linux" or platform.machine() not in ("x86_64", "amd64"):
         parser.error("This development launcher supports Linux x64")
@@ -150,11 +154,15 @@ def main():
         return
     if args.empty and args.side != "server":
         parser.error("--empty is a dedicated-server probe")
-    if args.empty and args.mmce:
-        parser.error("--empty and --mmce are separate fixtures")
+    if sum((args.empty, bool(args.mmce), bool(args.revo))) > 1:
+        parser.error("--empty, --mmce and --revo are separate fixtures")
+    if args.ae2s and not args.revo:
+        parser.error("--ae2s requires --revo")
     run = PROJECT / "run" / f"cleanroom-{VERSION}-legacy" / ("empty-server" if args.empty else args.side)
     if args.mmce:
         run = PROJECT / "run" / f"cleanroom-{VERSION}-mmce" / args.mmce / args.side
+    if args.revo:
+        run = PROJECT / "run" / f"cleanroom-{VERSION}-revo" / args.revo / args.side
     mods = run / "mods"
     mods.mkdir(parents=True, exist_ok=True)
     crafttweaker = list((GRADLE / "caches/modules-2/files-2.1/maven.modrinth/crafttweaker/4.1.20.698").glob("*/*.jar"))
@@ -163,10 +171,22 @@ def main():
     harness = "ponder-editor-harness-srg.jar" if args.side == "client" else "ponder-server-harness-srg.jar"
     if args.mmce:
         harness = "ponder-mmce-harness-srg.jar"
-    for obsolete in {"ponder-editor-harness-srg.jar", "ponder-server-harness-srg.jar"} - {harness}:
+    if args.revo and args.side == "client":
+        harness = "ponder-revo-harness-srg.jar"
+    for obsolete in {"ponder-editor-harness-srg.jar", "ponder-server-harness-srg.jar", "ponder-mmce-harness-srg.jar", "ponder-revo-harness-srg.jar"} - {harness}:
         (mods / obsolete).unlink(missing_ok=True)
-    jars = [] if args.empty else [PROJECT / "build/libs/ponder-legacy-1.4.0-cleanroom-alpha.1.jar",
+    version = re.search(r"^version = '([^']+)'", (PROJECT / "build.gradle").read_text(), re.MULTILINE).group(1)
+    production = PROJECT / f"build/libs/ponder-legacy-{version}.jar"
+    for obsolete in mods.glob("ponder-legacy-*.jar"):
+        if obsolete.name != production.name:
+            obsolete.unlink()
+    jars = [] if args.empty else [production,
             PROJECT / "build/dev" / harness, crafttweaker[0]]
+    if args.revo == "present":
+        jars += [args.revo_dir / name for name in (
+            "neofontrender-0.8.0-full.jar", "neofontrender-ui-enhancements-0.8.7.jar", "modularui-3.2.0-nfr.2.jar")]
+    if args.ae2s:
+        jars.append(args.ae2s.resolve())
     if args.mmce in ("present", "incompatible"):
         mmce = list((GRADLE / "caches/modules-2/files-2.1/curse.maven/modularmachinery-community-edition-817377/7372951").glob("*/*.jar"))
         if len(mmce) != 1:
@@ -184,6 +204,11 @@ def main():
     config = run / "config"
     config.mkdir(exist_ok=True)
     (config / "splash.properties").write_text("enabled=false\n")
+    if args.revo == "present" and args.side == "client":
+        # This directory belongs to the verifier. Do not modify any dependency jar
+        # to work around NFR 0.8.0's invalid first-run default TOML.
+        (config / "neofontrender.toml").write_text(
+            (PROJECT / "src/revoHarness/fixtures/neofontrender.toml").read_text())
     jdk = Path(os.environ.get("PONDER_JAVA_HOME", WORKSPACE / ".dev/jdk-25.0.5+8"))
     command = [str(jdk / "bin/java"), "-Xmx3G", "-Dfile.encoding=UTF-8", f"-Djava.library.path={natives}",
                "-cp", os.pathsep.join(map(str, classpath))]
@@ -191,6 +216,10 @@ def main():
         command += [f"-Dponder.mmce.smoke={args.mmce}", "-Xlog:class+load=info:file=class-load.log"]
         if args.mmce == "incompatible":
             command += ["-Dponder.mmce.verification.forceIncompatibleAbi=true"]
+    if args.revo:
+        command += [f"-Dponder.revo.smoke={args.revo}", "-Xlog:class+load=info:file=class-load.log"]
+        if args.ae2s:
+            command += ["-Dponder.revo.requireAe2s=true"]
     if args.side == "client":
         report = run / "ponder-smoke/report.json"
         command += ["-Dponder.dev.smoke=true", "top.outlands.foundation.boot.Foundation", "--tweakClass", "net.minecraftforge.fml.common.launcher.FMLTweaker",
@@ -203,6 +232,8 @@ def main():
         command += ["-Dponder.dev.serverSmoke=true", "net.minecraftforge.fml.relauncher.ServerLaunchWrapper", "nogui"]
     if args.mmce:
         report = run / "ponder-mmce-report.json"
+    if args.revo and args.side == "client":
+        report = run / "ponder-revo-smoke/report.json"
     report.unlink(missing_ok=True)
     (run / "runtime.json").write_text(json.dumps({"cleanroom": VERSION, "side": args.side,
         "jars": {jar.name: digest(jar, "sha256") for jar in jars},

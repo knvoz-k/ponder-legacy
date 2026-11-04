@@ -2,7 +2,7 @@
 
 ## 开发基线
 
-- Minecraft 1.12.2，最低加载器声明为 Cleanroom `0.4.0-alpha`；另行检查 `0.4.0`。
+- Minecraft 1.12.2，运行基线及最低加载器声明为 **Cleanroom `0.4.0` 正式版（无 `-alpha`）**。
 - 编译与编辑器开发环境使用 Cleanroom `0.7.14-alpha` userdev；该工具链版本不代表最低运行要求。
 - Java 25（当前工作区提供 Temurin `25.0.5+8`）。
 - CleanroomGradle `0.22.0`，Gradle Wrapper `9.8.1`。
@@ -26,8 +26,8 @@ Windows 使用 `gradlew.bat`，并把 `JAVA_HOME` 指向 Java 25。
 开发客户端通过 `fml.coreMods.load` 加载 Ponder 的 mixin 引导；发布 jar 通过清单声明加载。
 发布构建通过 Mixin annotation processor 生成 MCP → SRG refmap，并将其包含在安装 jar 中。
 使用多个物品关联同一场景时，可共享同一个 storyboard 实例和结构；不同物品的这些关联不会被诊断为重复场景。
-CR 0.4.0-alpha 与 0.4.0 的实际安装包、客户端及专服结果见[本项目验证记录](CLEANROOM-VERIFICATION.md)。
-最新 MMCE 产物已分别通过这两个版本的专服验证；早期加载器发现阶段失败的记录按原哈希保留。
+当前实际安装包、客户端及专服结果见[安装包验收](../LEGACY-VERIFICATION.md)。
+历史 MMCE 产物在 CR 0.4.0-alpha 与 0.4.0 上分别验收，见[历史验证记录](CLEANROOM-VERIFICATION.md)；旧结果按原包哈希保留。
 首次创建客户端配置时关闭 Forge 异步启动画面，以避免此 Cleanroom 版本在当前环境出现的并发类加载异常。
 若已有 `config/splash.properties`，工程不覆盖它；遇到相同异常时可以手动设置 `enabled=false`。
 
@@ -218,23 +218,20 @@ PonderJsonLoader.reload();
 
 ## 验证记录
 
-执行日志、单元测试和客户端验证的本次实际结果见 [`CLEANROOM-VERIFICATION.md`](CLEANROOM-VERIFICATION.md)。
+当前包的单元测试和客户端验证结果见 [安装包验收](../LEGACY-VERIFICATION.md)，历史记录见 [`CLEANROOM-VERIFICATION.md`](CLEANROOM-VERIFICATION.md)。
 
 自动客户端会创建或复用专用世界 `ponder-editor-smoke`，放置方块和箱子，
 请求服务端捕获选区，执行动画表单、预览、撤销重做、保存重载、语言切换和截图。
 报告为 `run/client/ponder-smoke/report.json`，截图在同目录 `screenshots/`。
 开发 harness 独立编译到 `build/dev/`，只有带 `-PponderSmoke` 时安装，普通 `runClient` 会移除它。
 
-验证真实安装环境（Linux x64，分别检查 `0.4.0-alpha` 与 `0.4.0`）：
+验证真实安装环境（Linux x64，使用 **`0.4.0` 正式版**）：
 
 ```bash
 ./tools/dev.sh build reobfDevHarnessJar reobfServerHarnessJar
 python3 tools/verify-cleanroom.py client
 python3 tools/verify-cleanroom.py server
 python3 tools/verify-cleanroom.py server --empty  # 对照：只装加载器
-PONDER_CLEANROOM_VERSION=0.4.0-alpha python3 tools/verify-cleanroom.py client
-PONDER_CLEANROOM_VERSION=0.4.0-alpha python3 tools/verify-cleanroom.py server
-PONDER_CLEANROOM_VERSION=0.4.0-alpha python3 tools/verify-cleanroom.py server --empty
 ```
 
 脚本使用官方安装器中的精确依赖与校验值，以及重混淆后的安装 jar 和独立测试 jar，
@@ -244,3 +241,4 @@ MMCE fixture 位于 `run/cleanroom-<版本>-mmce/<模式>/<端>/`。
 
 此编辑器测试没有覆盖大规模整合包、多名远程玩家、全部第三方 TileEntity 或人工输入的所有交互。
 MMCE 软适配由单独的生产包 fixture 验证，见 [MMCE 接入手册](MMCE.md)。
+Revo UI 的实际物品提示框与像素检查见 [Revo UI 可选适配](REVO-UI.md)。

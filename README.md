@@ -10,9 +10,9 @@
 
 ## 当前状态
 
-当前版本为 **`1.4.0-cleanroom-alpha.1`**，包含可选 MMCE 2.3.2 适配。实际安装包已分别通过 **Cleanroom 0.4.0-alpha** 与 **0.4.0 正式版**的客户端和专服验收；277 项单元测试通过，两版各 85 项 MMCE 运行检查通过。覆盖范围、包 SHA-256 和限制见 [验收记录](LEGACY-VERIFICATION.md)。
+当前正式版本为 **`1.4.0`**，新增 [Revo UI / 焕新 UI 可选适配](docs/REVO-UI.md)，修复现代提示框中的思索进度条覆盖文字、伸入模型预览区的问题；保留可选 MMCE 2.3.2 适配。运行基线为 **Cleanroom 0.4.0 正式版（无 `-alpha`）**。当前包与历史发行包的验收范围、SHA-256 分别记录在 [验收记录](LEGACY-VERIFICATION.md)。
 
-安装包从 [GitHub Releases](https://github.com/mcyudream/ponder-legacy/releases) 获取，选择无分类后缀的 `ponder-legacy-*.jar`，并独立安装 CraftTweaker。版本保持 **Alpha**；发行进度和平台状态见 [PUBLICATION.md](PUBLICATION.md)。
+安装包从 [GitHub Releases](https://github.com/mcyudream/ponder-legacy/releases) 获取，选择无分类后缀的 `ponder-legacy-*.jar`，并独立安装 CraftTweaker。发行状态见 [PUBLICATION.md](PUBLICATION.md)。
 
 <!-- legacy-authorship:start -->
 ## 作者与来源 / Authors and upstream
@@ -30,12 +30,12 @@
 | 项目 | 要求 / 标识 |
 | --- | --- |
 | Minecraft | 1.12.2 |
-| 运行基线 | 最低 **0.4.0-alpha**；**0.4.0 正式版**单独验收，两个版本不视为同一版本 |
+| 运行基线 | **Cleanroom 0.4.0 正式版（无 `-alpha`）** |
 | Java | 25 |
 | 加载器 Mod ID | `ponder-legacy` |
 | 资源与原注册命名空间 | `ponder`（保留） |
 
-Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼容结论来自对应版本的实际运行验证。
+开发 SDK 可以较新，兼容结论来自对应版本的实际运行验证。历史 Mod 的 alpha 版本号与加载器版本无关。
 加载器身份改名后，安装时应替换本项目旧 jar；原资源命名空间的保留不构成跨实现的存档转换承诺。
 
 ## 功能与迁移范围
@@ -48,11 +48,12 @@ Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼�
 
 | 项目 | 上游基线 | 本 Legacy 版本 |
 | --- | --- | --- |
-| 运行环境 | 既有 1.12.2 / Forge 回迁实现 | 迁至 Java 25 / Cleanroom；最低 0.4.0-alpha 与正式 0.4.0 分别运行验收，开发 userdev 版本单独记录。 |
+| 运行环境 | 既有 1.12.2 / Forge 回迁实现 | 迁至 Java 25 / Cleanroom；以 0.4.0 正式版为运行基线，开发 userdev 版本单独记录。历史包的 0.4.0-alpha 验收单独保留。 |
 | 编辑工具 | 原场景与脚本 API | 新增 F7 编辑器、F8 框选、结构保存、局部位移/旋转编排及 JSON pack 编辑。 |
 | 教程导航 | 原有教程入口 | 增加模组/主题筛选、搜索、滚动位置保留及多场景下拉切换。 |
 | 默认内容 | 上游附带演示脚本 | 默认不向整合包注入示例；仅移走内容未改动的旧默认示例，保留用户改过的文件。 |
 | 可选模块 | 上游含 MMCE 可选模块 | 接入可选 MMCE 结构 Provider、蓝图 Resolver、ZenScript / Java API；MMCE 独立安装，具体组合见 [MMCE 接入手册](docs/MMCE.md)。 |
+| 提示框 | 使用原版 Forge 提示框坐标 | Revo UI 安装后按实际行布局定位进度条，兼顾标题换行、模型预览、行距与字号；Revo UI 保持可选。 |
 | 服务端 | 0.4.0 / 0.4.0-alpha 模组发现会触发 Kirino 客户端入口 | 加入只对这两个精确版本物理专服生效的单处发现调用修复，客户端和其他版本不启用。 |
 
 ## 尚未实现与兼容边界
@@ -65,6 +66,7 @@ Mod 的 alpha 版本号与加载器版本无关。开发 SDK 可以较新，兼�
 
 - 必需：CraftTweaker 4.1.20.698；Cleanroom 提供 MixinBooter 兼容接口。
 - 可选：MMCE 2.3.2，安装后启用机器结构与蓝图入口；无需额外安装 Ponder-MMCE 附属包。
+- 可选：Revo UI 0.8.7 / NFR 0.8.0 / ModularUI 3.2.0-nfr.2；按其官方要求独立安装，见 [适配说明](docs/REVO-UI.md)。
 - 作为其他 Mod 的教程运行库时独立安装；附属应以可选兼容方式接入。
 
 ## 使用方式
@@ -101,8 +103,8 @@ GitHub 发行流程、CurseForge / Modrinth 项目资料和平台凭据配置见
 
 ## 详细使用与开发说明
 
-面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.4.0-cleanroom-alpha.1`，最低加载器声明为 **0.4.0-alpha**。
-编译与编辑器开发工具链使用 `0.7.14-alpha` userdev；当前安装包与历史快照见 [验收记录](LEGACY-VERIFICATION.md)，两个加载器版本的 MMCE 完整证据见 [运行验收](docs/CLEANROOM-VERIFICATION.md)。
+面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.4.0`，最低加载器声明为 **0.4.0 正式版**。
+编译与编辑器开发工具链使用 `0.7.14-alpha` userdev；当前安装包与历史快照见 [验收记录](LEGACY-VERIFICATION.md)，Revo UI 组合见 [适配说明](docs/REVO-UI.md)，历史 MMCE 证据见 [运行验收](docs/CLEANROOM-VERIFICATION.md)。
 基于 [MCMGGF 的 1.12.2 实现](https://github.com/MCMGGF/ponder-for-1.12.2)，保留原有场景、Catnip、ZenScript、JSON 与插件 API；新增游戏内场景和动画编辑器。[来源说明](NOTICE.md)。
 
 ## 构建与本地开发
@@ -122,7 +124,7 @@ export JAVA_HOME=/home/yudream/code/mods/.dev/jdk-25.0.5+8
 本地开发环境使用 MCP 命名，资源与世界保存在工程 `run/client/` 目录。
 默认 Gradle/JDK 配置、运行说明和 API 示例见 [Cleanroom 开发手册](docs/CLEANROOM.md)。
 
-安装时使用 `build/libs/ponder-legacy-1.4.0-cleanroom-alpha.1.jar`，并安装 **CraftTweaker 4.1.20.698**。
+安装时使用 `build/libs/ponder-legacy-1.4.0.jar`，并安装 **CraftTweaker 4.1.20.698**。
 Cleanroom 已提供 MixinBooter 兼容接口。`-mcp`、`-api`、`-sources` 文件用于开发，不要作为重复模组安装。
 Mod ID 保持 `ponder-legacy`；资源空间为 `ponder`。客户端与安装了 Ponder 的服务器需要使用相同版本。
 

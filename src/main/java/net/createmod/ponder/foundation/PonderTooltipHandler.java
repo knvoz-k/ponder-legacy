@@ -11,6 +11,7 @@ import net.createmod.ponder.api.subject.PonderSubjectResolvers;
 import net.createmod.ponder.api.subject.ResolvedPonderSubject;
 import net.createmod.ponder.enums.PonderKeybinds;
 import net.createmod.ponder.foundation.ui.PonderUI;
+import net.createmod.ponder.compat.revoui.RevoTooltipLayout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -60,26 +61,35 @@ public final class PonderTooltipHandler {
     }
 
     public static void renderProgress(RenderTooltipEvent.PostText event) {
-        int row = -1;
-        // GuiScreen prepends its gray text style, so match the reserved suffix.
-        for (int i = 0; i < event.getLines().size(); i++)
-            if (event.getLines().get(i).endsWith(PROGRESS_ROW)) { row = i; break; }
+        RevoTooltipLayout.Bounds modern = RevoTooltipLayout.consume(event);
+        int row = progressRow(event.getLines());
         if (row < 0 || tracked.isEmpty()) return;
-        int x = event.getX();
+        int x = modern == null ? event.getX() : modern.x;
         // PostText reports the tooltip's top, including its title gap and any wrapped lines.
-        int y = event.getY() + 2 + row * 10 + 2;
-        int width = Math.max(1, event.getWidth());
+        int y = modern == null ? event.getY() + 2 + row * 10 + 2 : modern.y;
+        int width = modern == null ? Math.max(1, event.getWidth()) : modern.width;
+        int height = modern == null ? 6 : modern.height;
+        if (width < 3 || height < 3) return;
         try (GlStateGuard ignored = GlStateGuard.capture()) {
             GlStateManager.disableDepth();
             GlStateManager.disableLighting();
-            Gui.drawRect(x, y, x + width, y + 6, 0xff526373);
-            Gui.drawRect(x + 1, y + 1, x + width - 1, y + 5, 0xff1c2630);
+            Gui.drawRect(x, y, x + width, y + height, 0xff526373);
+            Gui.drawRect(x + 1, y + 1, x + width - 1, y + height - 1, 0xff1c2630);
             int fill = progressPixels(progress, Math.max(0, width - 2));
             if (fill > 0) {
-                Gui.drawRect(x + 1, y + 1, x + 1 + fill, y + 5, 0xff9fd6d2);
+                Gui.drawRect(x + 1, y + 1, x + 1 + fill, y + height - 1, 0xff9fd6d2);
                 Gui.drawRect(x + 1, y + 1, x + 1 + fill, y + 2, 0xffc6eee5);
             }
         }
+    }
+
+    public static int progressRow(List<String> lines) {
+        // GuiScreen prepends its gray text style, so match the reserved suffix.
+        if (lines != null) for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line != null && line.endsWith(PROGRESS_ROW)) return i;
+        }
+        return -1;
     }
 
     public static void tick() {

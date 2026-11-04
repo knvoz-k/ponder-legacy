@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.createmod.ponder.PonderClient;
 import net.createmod.ponder.foundation.PonderTooltipHandler;
+import net.createmod.ponder.compat.revoui.RevoTooltipLayout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -12,6 +13,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.createmod.ponder.script.ScriptSceneSync;
@@ -55,6 +57,11 @@ public final class PonderClientEvents {
     @SubscribeEvent
     public void onTooltipRendered(RenderTooltipEvent.PostText event) {
         PonderTooltipHandler.renderProgress(event);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onTooltipStart(RenderTooltipEvent.Pre event) {
+        RevoTooltipLayout.clear();
     }
 
     @SubscribeEvent

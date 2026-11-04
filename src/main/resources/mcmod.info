@@ -13,7 +13,7 @@
     "logoFile": "assets/ponder/branding/icon.png",
     "screenshots": [],
     "dependencies": [
-      "required-after:cleanroom@[0.4.0-alpha,)",
+      "required-after:cleanroom@[0.4.0,)",
       "required-after:forge@[14.23.5.2847,)",
       "required-after:mixinbooter@${mixinBooterRuntimeRange}",
       "required-after:crafttweaker@[4.1.20,)",

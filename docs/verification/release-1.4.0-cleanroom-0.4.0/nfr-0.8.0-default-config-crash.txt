@@ -1,0 +1,115 @@
+---- Minecraft Crash Report ----
+
+WARNING: coremods are present:
+  AE2Core (AppliedEnergistics2-Supergiant-1.1.0.jar)
+  ModularUI-Core (modularui-3.2.0-nfr.2.jar)
+  MixinBooter (cleanroom-0.4.0.jar)
+  NeofontrenderMixinLoader (neofontrender-0.8.0-full.jar)
+  PonderMixinLoader (ponder-legacy-1.4.0-cleanroom-alpha.2.jar)
+  NfrUiEnhancementsMixinLoader (neofontrender-ui-enhancements-0.8.7.jar)
+Contact their authors BEFORE contacting forge
+
+// I just don't know what went wrong :(
+
+Time: 2026-11-04 05:43
+Description: There was a severe problem during mod loading that has caused the game to fail
+
+net.minecraftforge.fml.common.LoaderExceptionModCrash: Caught exception from Revo Font (neofontrender)
+Caused by: neofontrender.internal.nightconfig.core.io.ParsingException: Table with path [compat] has been declared twice.
+	at neofontrender.internal.nightconfig.toml.TomlParser.checkContainsOnlySubtables(TomlParser.java:165)
+	at neofontrender.internal.nightconfig.toml.TomlParser.parse(TomlParser.java:115)
+	at neofontrender.internal.nightconfig.toml.TomlParser.parse(TomlParser.java:45)
+	at neofontrender.internal.nightconfig.toml.TomlParser.parse(TomlParser.java:18)
+	at neofontrender.internal.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:99)
+	at neofontrender.internal.nightconfig.core.io.ConfigParser.parse(ConfigParser.java:216)
+	at neofontrender.internal.nightconfig.core.file.AsyncFileConfig.loadNow(AsyncFileConfig.java:185)
+	at neofontrender.internal.nightconfig.core.file.AsyncFileConfig.load(AsyncFileConfig.java:270)
+	at neofontrender.core.config.NeofontrenderConfig.load(NeofontrenderConfig.java:1337)
+	at neofontrender.client.ClientProxy.init(ClientProxy.java:48)
+	at neofontrender.NeoFontRender.init(NeoFontRender.java:41)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at net.minecraftforge.fml.common.FMLModContainer.handleModStateEvent(FMLModContainer.java:663)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:84)
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:141)
+	at com.google.common.eventbus.Subscriber.lambda$dispatchEvent$0(Subscriber.java:70)
+	at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+	at com.google.common.eventbus.Subscriber.dispatchEvent(Subscriber.java:67)
+	at com.google.common.eventbus.Dispatcher$PerThreadQueuedDispatcher.dispatch(Dispatcher.java:112)
+	at com.google.common.eventbus.EventBus.post(EventBus.java:262)
+	at net.minecraftforge.fml.common.LoadController.sendEventToModContainer(LoadController.java:318)
+	at net.minecraftforge.fml.common.LoadController.propogateStateMessage(LoadController.java:296)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:84)
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:141)
+	at com.google.common.eventbus.Subscriber.lambda$dispatchEvent$0(Subscriber.java:70)
+	at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+	at com.google.common.eventbus.Subscriber.dispatchEvent(Subscriber.java:67)
+	at com.google.common.eventbus.Dispatcher$PerThreadQueuedDispatcher.dispatch(Dispatcher.java:112)
+	at com.google.common.eventbus.EventBus.post(EventBus.java:262)
+	at net.minecraftforge.fml.common.LoadController.distributeStateMessage(LoadController.java:232)
+	at net.minecraftforge.fml.common.Loader.initializeMods(Loader.java:749)
+	at net.minecraftforge.fml.client.FMLClientHandler.finishMinecraftLoading(FMLClientHandler.java:343)
+	at net.minecraft.client.Minecraft.func_71384_a(Minecraft.java:531)
+	at net.minecraft.client.Minecraft.func_99999_d(Minecraft.java:374)
+	at net.minecraft.client.main.Main.main(SourceFile:123)
+	at top.outlands.foundation.LaunchHandler.launch(LaunchHandler.java:125)
+	at top.outlands.foundation.boot.Foundation.main(Foundation.java:42)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Linux (amd64) version 7.0.0-42-generic
+	Java Version: 25.0.5, Eclipse Adoptium
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium
+	Memory: 170211256 bytes (162 MB) / 750780416 bytes (716 MB) up to 3221225472 bytes (3072 MB)
+	JVM Flags: 2 total; -Xmx3G -Xlog:class+load=info:file=class-load.log
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP 9.42 Cleanroom 0.4.0 22 mods loaded, 22 mods active
+States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	| State | ID                            | Version                 | Source                                    |
+	|:----- |:----------------------------- |:----------------------- |:----------------------------------------- |
+	| LCHI  | minecraft                     | 1.12.2                  | minecraft.jar                             |
+	| LCHI  | mcp                           | 9.42                    | minecraft.jar                             |
+	| LCHI  | cleanroom                     | 0.4.0                   | cleanroom-0.4.0.jar                       |
+	| LCHI  | mixinbooter                   | 10.7                    | cleanroom-0.4.0.jar                       |
+	| LCHI  | configanytime                 | 3.0                     | cleanroom-0.4.0.jar                       |
+	| LCHI  | kirino_engine                 | epoch-1.a1              | cleanroom-0.4.0.jar                       |
+	| LCHI  | kirino_ecs                    | epoch-1.a1              | cleanroom-0.4.0.jar                       |
+	| LCHI  | kirino_gl                     | epoch-1.a1              | cleanroom-0.4.0.jar                       |
+	| LCHI  | FML                           | 8.0.99.99               | cleanroom-0.4.0.jar                       |
+	| LCHI  | forge                         | 14.23.5.2864            | cleanroom-0.4.0.jar                       |
+	| LCHI  | ae2                           | 1.1.0                   | AppliedEnergistics2-Supergiant-1.1.0.jar  |
+	| LCHI  | crafttweaker                  | 4.1.20                  | crafttweaker-4.1.20.698.jar               |
+	| LCHI  | ctgui                         | 1.0.0                   | crafttweaker-4.1.20.698.jar               |
+	| LCHI  | crafttweakerjei               | 2.0.3                   | crafttweaker-4.1.20.698.jar               |
+	| LCHI  | modularui                     | 3.2.0-nfr.2             | modularui-3.2.0-nfr.2.jar                 |
+	| LCHE  | neofontrender                 | 0.8.0                   | neofontrender-0.8.0-full.jar              |
+	| LCH   | neofontrender_resources       | 0.8.0                   | neofontrender-0.8.0-full.jar              |
+	| LCH   | neofontrender_ui_enhancements | 0.8.7                   | neofontrender-ui-enhancements-0.8.7.jar   |
+	| LCH   | salutation                    | 1.0.0-uie               | neofontrender-ui-enhancements-0.8.7.jar   |
+	| LCH   | tabbychat2                    | 2.0.0-uie               | neofontrender-ui-enhancements-0.8.7.jar   |
+	| LCH   | ponder-legacy                 | 1.4.0-cleanroom-alpha.2 | ponder-legacy-1.4.0-cleanroom-alpha.2.jar |
+	| LCH   | ponder_revo_harness           | 1                       | ponder-revo-harness-srg.jar               |
+
+	Cleanroom Version: 0.4.0
+	Loaded coremods (and transformers): 
+AE2Core (AppliedEnergistics2-Supergiant-1.1.0.jar)
+  
+ModularUI-Core (modularui-3.2.0-nfr.2.jar)
+  com.cleanroommc.modularui.core.ClassTransformer
+MixinBooter (cleanroom-0.4.0.jar)
+  
+NeofontrenderMixinLoader (neofontrender-0.8.0-full.jar)
+  neofontrender.splash.SplashProgressTransformer
+PonderMixinLoader (ponder-legacy-1.4.0-cleanroom-alpha.2.jar)
+  
+NfrUiEnhancementsMixinLoader (neofontrender-ui-enhancements-0.8.7.jar)
+  

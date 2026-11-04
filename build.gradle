@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'net.createmod.ponder'
-version = '1.4.0-cleanroom-alpha.1'
+version = '1.4.0'
 base.archivesName = 'ponder-legacy'
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
@@ -50,6 +50,11 @@ sourceSets {
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
         runtimeClasspath += output + compileClasspath
     }
+    revoHarness {
+        java.srcDir 'src/revoHarness/java'
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += output + compileClasspath
+    }
     test {
         java.srcDir 'ponder-mmce/src/test/java'
         compileClasspath += sourceSets.exampleAddon.output
@@ -75,6 +80,17 @@ tasks.register('mmceHarnessJar', Jar) {
     archiveFileName = 'ponder-mmce-harness.jar'
     destinationDirectory = layout.buildDirectory.dir('dev')
     from sourceSets.mmceHarness.output
+}
+tasks.register('revoHarnessJar', Jar) {
+    dependsOn tasks.revoHarnessClasses
+    archiveFileName = 'ponder-revo-harness.jar'
+    destinationDirectory = layout.buildDirectory.dir('dev')
+    from sourceSets.revoHarness.output
+}
+extensions.getByType(net.minecraftforge.renamer.gradle.RenamerExtension).classes('reobfRevoHarnessJar', tasks.named('revoHarnessJar')) {
+    map.from tasks.named('reobfJar').get().map
+    libraries.setFrom(sourceSets.main.compileClasspath, tasks.named('jar'))
+    output = layout.buildDirectory.file('dev/ponder-revo-harness-srg.jar')
 }
 extensions.getByType(net.minecraftforge.renamer.gradle.RenamerExtension).classes('reobfMmceHarnessJar', tasks.named('mmceHarnessJar')) {
     map.from tasks.named('reobfJar').get().map

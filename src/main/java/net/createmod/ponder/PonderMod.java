@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
     name = "Ponder Legacy",
     version = Ponder.VERSION,
     acceptedMinecraftVersions = "[1.12.2]",
-    dependencies = "required-after:cleanroom@[0.4.0-alpha,);required-after:forge@[14.23.5.2847,);required-after:mixinbooter@[9.1,);"
+    dependencies = "required-after:cleanroom@[0.4.0,);required-after:forge@[14.23.5.2847,);required-after:mixinbooter@[9.1,);"
         + "required-after:crafttweaker@[4.1.20,);after:modularmachinery",
     guiFactory = "net.createmod.ponder.client.PonderGuiFactory",
     acceptableRemoteVersions = "*"

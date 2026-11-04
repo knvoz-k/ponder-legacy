@@ -25,10 +25,12 @@ with ZipFile(jars[0]) as archive:
     assert '${' not in archive.read('mcmod.info').decode(), 'Unexpanded metadata'
     assert not any('/dev/' in name or 'Smoke.class' in name for name in archive.namelist() if name.endswith('.class')), 'Development harness in release'
     classes = [name for name in archive.namelist() if name.endswith('.class')]
-    assert not any(name.startswith(('hellfirepvp/modularmachinery/', 'github/kasuminova/mmce/',
+    assert not any(name.startswith(('hellfirepvp/modularmachinery/', 'github/kasuminova/mmce/', 'neofontrender/',
                                     'net/createmod/ponder/verification/')) for name in classes), 'Dependency or harness bundled in release'
     assert 'net/createmod/ponder/mmce/PonderMMCEMod.class' not in classes, 'Old standalone MMCE entrypoint bundled'
     assert 'net/createmod/ponder/mmce/PonderMMCEEntrypoint.class' in classes, 'MMCE optional integration missing'
+    assert 'net/createmod/ponder/compat/revoui/PonderRevoMixinLoader.class' in classes, 'Optional Revo UI loader missing'
+    assert 'mixins.ponder.revo_ui.json' in archive.namelist(), 'Optional Revo UI mixin config missing'
     assert archive.namelist().count('mixins.ponder.refmap.json') == 1, 'Expected one SRG refmap'
     expected_tag = 'v' + metadata['version']
     assert identity['release_tag'] == expected_tag, 'Release tag differs from packaged version'

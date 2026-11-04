@@ -1,0 +1,58 @@
+{
+  "version": "1.4.0",
+  "minecraft": "1.12.2",
+  "cleanroom": "0.4.0",
+  "java": "25.0.5",
+  "production_jar": "ponder-legacy-1.4.0.jar",
+  "sha256": "df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a",
+  "fixtures": [
+    {
+      "fixture": "revo-present-client",
+      "result": "PASS",
+      "checks": 68,
+      "report": "revo-present-client/report.json"
+    },
+    {
+      "fixture": "revo-absent-client",
+      "result": "PASS",
+      "checks": 63,
+      "report": "revo-absent-client/report.json"
+    },
+    {
+      "fixture": "revo-present-server",
+      "result": "PASS",
+      "checks": 0,
+      "report": "revo-present-server/report.json"
+    },
+    {
+      "fixture": "revo-absent-server",
+      "result": "PASS",
+      "checks": 0,
+      "report": "revo-absent-server/report.json"
+    },
+    {
+      "fixture": "editor-client",
+      "result": "PASS",
+      "checks": 116,
+      "report": "editor-client/report.json"
+    },
+    {
+      "fixture": "mmce-present-client",
+      "result": "PASS",
+      "checks": 34,
+      "report": "mmce-present-client/report.json"
+    },
+    {
+      "fixture": "mmce-present-server",
+      "result": "PASS",
+      "checks": 29,
+      "report": "mmce-present-server/report.json"
+    }
+  ],
+  "unit_tests": {
+    "tests": 277,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}
