@@ -32,6 +32,8 @@ with ZipFile(jars[0]) as archive:
     assert 'net/createmod/ponder/compat/revoui/PonderRevoMixinLoader.class' in classes, 'Optional Revo UI loader missing'
     assert 'mixins.ponder.revo_ui.json' in archive.namelist(), 'Optional Revo UI mixin config missing'
     assert archive.namelist().count('mixins.ponder.refmap.json') == 1, 'Expected one SRG refmap'
+    cleanmix_versions = json.loads(archive.read('cleanmix_version_compatibility.json'))
+    assert list(cleanmix_versions) == sorted(cleanmix_versions), 'CleanMix compatibility metadata must be sorted for reproducible jars'
     expected_tag = 'v' + metadata['version']
     assert identity['release_tag'] == expected_tag, 'Release tag differs from packaged version'
 sha256 = hashlib.sha256(jars[0].read_bytes()).hexdigest()

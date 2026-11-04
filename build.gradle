@@ -200,6 +200,14 @@ tasks.named('compileJava', JavaCompile) {
         "-AreobfSrgFile=${mixinSrg.get().asFile}", "-AoutRefMapFile=${mixinRefmap.get().asFile}",
         '-AdefaultObfuscationEnv=searge']
     outputs.file mixinRefmap
+    doLast {
+        // CleanMix emits this map in annotation-processing order, which can vary
+        // between checkouts. Canonicalize it inside the compiler task so its
+        // tracked output and the runtime-accepted jar are reproducible on CI.
+        def compatibility = destinationDirectory.file('cleanmix_version_compatibility.json').get().asFile
+        def versions = new TreeMap(new groovy.json.JsonSlurper().parse(compatibility, 'UTF-8'))
+        compatibility.setText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(versions)) + '\n', 'UTF-8')
+    }
 }
 tasks.withType(net.minecraftforge.renamer.gradle.RenameJar).configureEach {
     javaLauncher.set(javaToolchains.launcherFor { spec -> spec.languageVersion.set(JavaLanguageVersion.of(25)) })
