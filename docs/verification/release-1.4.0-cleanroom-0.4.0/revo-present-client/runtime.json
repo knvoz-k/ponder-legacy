@@ -2,7 +2,7 @@
   "cleanroom": "0.4.0",
   "side": "client",
   "jars": {
-    "ponder-legacy-1.4.0.jar": "df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a",
+    "ponder-legacy-1.4.0.jar": "4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b",
     "ponder-revo-harness-srg.jar": "2f878402768f4014347d9861b466766db04b9bbb3d15bb46288b5a7e9fb1ec99",
     "crafttweaker-4.1.20.698.jar": "b2e5e443f18d0d5bcfd1364f9ec89565e6a1e2ad4568b899c590aa5507978b27",
     "neofontrender-0.8.0-full.jar": "2062709c479007850c3fbad61ab9ffc97f5dc6a34c67196cf928f442a107806f",

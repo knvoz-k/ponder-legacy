@@ -12,7 +12,7 @@
 本次提交包含 Revo UI 可选适配、README 与正式基线的运行证据。
 Minecraft 1.12.2 / Java 25 环境下，Cleanroom **0.4.0 正式版（无 `-alpha`）**已完成 Revo UI 安装/未安装的客户端及专服验收、编辑器与场景播放回归、MMCE 2.3.2 场景回归；277 项单元测试通过。
 
-生产 jar SHA-256：`df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a`。
+生产 jar SHA-256：`4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b`。
 CI 标签发布时强制核对该值，上传生产 jar、API、源码和 `SHA256SUMS`；测试 harness 不作为发行资产。
 验收覆盖范围和限制见 [安装包验收](LEGACY-VERIFICATION.md) / [Revo UI 适配](docs/REVO-UI.md)。
 

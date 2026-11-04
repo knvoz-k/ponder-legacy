@@ -4,7 +4,7 @@
   "cleanroom": "0.4.0",
   "java": "25.0.5",
   "production_jar": "ponder-legacy-1.4.0.jar",
-  "sha256": "df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a",
+  "sha256": "4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b",
   "fixtures": [
     {
       "fixture": "revo-present-client",

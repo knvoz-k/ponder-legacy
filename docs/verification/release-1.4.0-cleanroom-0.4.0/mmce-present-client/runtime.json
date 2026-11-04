@@ -2,7 +2,7 @@
   "cleanroom": "0.4.0",
   "side": "client",
   "jars": {
-    "ponder-legacy-1.4.0.jar": "df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a",
+    "ponder-legacy-1.4.0.jar": "4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b",
     "ponder-mmce-harness-srg.jar": "d9fe3f4ade1981163dece85e24335c8172f7a071a3de19260b52c8631e265d62",
     "crafttweaker-4.1.20.698.jar": "b2e5e443f18d0d5bcfd1364f9ec89565e6a1e2ad4568b899c590aa5507978b27",
     "modularmachinery-community-edition-817377-7372951.jar": "83676773e8c4f63963a48b4921f05898dcdbfdf777230e53e9830cd8f18177fb"

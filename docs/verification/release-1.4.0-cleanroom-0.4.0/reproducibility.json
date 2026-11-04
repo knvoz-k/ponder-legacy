@@ -1,0 +1,27 @@
+{
+  "cause": "CleanMix generated compatibility metadata used annotation-processing order; canonicalize its JSON keys within compileJava.",
+  "diagnostic_ci": {
+    "run_id": 41821491463,
+    "url": "https://github.com/mcyudream/ponder-legacy/actions/runs/41821491463",
+    "sha256": "ca08da003973e8785ebbb6afee91fb0ac10b02e567b088c1a1849755190653d5"
+  },
+  "payload_comparison": {
+    "entry_count": 909,
+    "unchanged_entries": 908,
+    "unchanged_class_files": 744,
+    "only_changed_entry": "cleanmix_version_compatibility.json",
+    "compatibility_map_values_equal": true
+  },
+  "canonical_ci": {
+    "run_id": 41821976854,
+    "commit": "19e07c7697c956720d21899842d4a242b1d96120",
+    "url": "https://github.com/mcyudream/ponder-legacy/actions/runs/41821976854",
+    "production_jar": "ponder-legacy-1.4.0.jar",
+    "sha256": "4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b"
+  },
+  "local_development_sha256": "4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b",
+  "local_standalone_sha256": "4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b",
+  "local_and_ci_byte_identical": true,
+  "runtime_acceptance": "summary.json",
+  "release_hash_gate": "tools/verify_legacy_package.py --require-verified-hash remains required for release tags"
+}

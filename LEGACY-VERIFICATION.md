@@ -5,7 +5,7 @@
 - 验收日期：2026-11-04。
 - Minecraft 1.12.2；**Cleanroom 0.4.0 正式版（无 `-alpha`）**；Java 25.0.5；CraftTweaker 4.1.20.698。
 - 安装包：`ponder-legacy-1.4.0.jar`。
-- SHA-256：`df38e25380afc7dce06505f6276d7b118bde0bae1cb15875ce7095dc06d4dd3a`。
+- SHA-256：`4c02d70c6f38ddf5305fa4be47a5e410e693c57f2cd8576ed5f78f8b7f32f14b`。
 - 277 项单元测试通过，全部运行验收使用该生产 SRG 安装包与独立开发 harness，不使用 MCP / userdev 重映射。
 
 | 组合 | 结果 | 检查项 |
@@ -21,6 +21,8 @@
 Revo UI 像素检查覆盖中文/英文、AE2S 灰色 ME 智能线缆、长标题换行、854 × 480 小窗口、字号 0.75 / 1.5、行距 8 / 10 / 12 / 16、标题图标/稀有度/模型预览、关闭预览、关闭现代提示框及无 Revo 的原版回退。进度条按实际预留行绘制，占满文字区，避开模型，不覆盖标题与提示文字。截图的进度固定为 60%，并核对实际 framebuffer 像素与比例。
 
 独立报告、运行库指纹及原始截图见 [1.4.0 验收证据](docs/verification/release-1.4.0-cleanroom-0.4.0/summary.json)。包未包含 Revo UI、NFR、ModularUI、AE2S、MMCE 本体或开发 harness；不会自动注入测试教程。
+
+CleanMix 自动生成的兼容信息已按键排序，消除注解处理顺序造成的包哈希差异。修复后的生产包已重新完成上表验收；本地开发目录、独立发布目录与 GitHub Actions 产物逐字节一致，见 [构建一致性记录](docs/verification/release-1.4.0-cleanroom-0.4.0/reproducibility.json)。发行仍强制匹配实际验收包的 SHA-256。
 
 NFR 0.8.0 首次生成的默认 TOML 含重复 `[compat]`，会使官方包在初始化时退出；隔离验收实例预置合法最小配置，依赖 jar 保持原样。初次失败记录与实际配置均归档，详见 [Revo UI 适配说明](docs/REVO-UI.md)。渲染使用 Linux llvmpipe 软件 OpenGL，未覆盖全部硬件、其他 Revo 版本、所有整合包与人工输入路径。历史包的 0.4.0-alpha 与 MMCE ABI 模拟验收不自动背书本包。
 
