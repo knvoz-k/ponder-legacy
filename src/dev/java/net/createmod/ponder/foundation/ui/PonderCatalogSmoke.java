@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import net.createmod.catnip.gui.ScreenOpener;
@@ -77,6 +78,7 @@ public final class PonderCatalogSmoke {
                 check.accept(index.entries.stream().filter(e -> e.id.toString().equals("minecraft:compass")).count() == 1,
                     "twelve scenes produce one catalog entry");
                 check.accept(index.entries.stream().noneMatch(e -> e.id.equals(excluded)), "catalog respects JSON index exclusions");
+                localizedNames(true);
                 bounded(page);
                 capture("catalog-mods-zh.png"); break;
             case 2:
@@ -156,8 +158,17 @@ public final class PonderCatalogSmoke {
                 page.keyTyped('\0', Keyboard.KEY_END); lastVisible(page); bounded(page);
                 capture("catalog-theme-items.png"); break;
             case 13:
-                language("en_us"); resize(854, 480);
-                index = new PonderIndexScreen(); page = index; mc.displayGuiScreen(index); wait = 8; break;
+                // Keep the same screen and namespace selection while its language changes.
+                page = index; mc.displayGuiScreen(index);
+                clickButton(index, 3); chooseCategory("minecraft");
+                typeQuery("minecraft");
+                language("en_us");
+                index.updateScreen();
+                check.accept("minecraft".equals(get(index,"selected")), "language refresh preserves the category namespace selection");
+                check.accept("minecraft".equals(search().getText()), "language refresh preserves the search query");
+                resize(854, 480);
+                chooseCategory(""); localizedNames(false);
+                bounded(page); capture("catalog-mod-names-en.png"); wait = 8; break;
             case 14:
                 clickButton(index, 4); chooseCategory("smoke:category_00");
                 bounded(page); capture("catalog-en-small.png"); break;
@@ -213,6 +224,41 @@ public final class PonderCatalogSmoke {
         for (char c : query.toCharArray()) index.keyTyped(c, Keyboard.KEY_NONE);
     }
 
+    @SuppressWarnings("unchecked")
+    private void localizedNames(boolean chinese) throws Exception {
+        Map<String,String> names=(Map<String,String>)get(index,"modNames");
+        check.accept((chinese?"我的世界":"Minecraft").equals(names.get("minecraft")), "Minecraft category follows the active language");
+        check.accept((chinese?"索引验证模组":PonderModNames.original("ponder_editor_harness")).equals(names.get("ponder_editor_harness")),
+            "resource language supplies a custom mod title and missing English translation falls back to metadata; observed="+names.get("ponder_editor_harness")
+                +", hasKey="+net.minecraft.client.resources.I18n.hasKey("ponder.mod_name.ponder_editor_harness"));
+        check.accept("unknown_catalog_mod".equals(PonderModNames.localized("unknown_catalog_mod")), "unknown mods retain their registry namespace");
+        if(chinese) {
+            check.accept("模组提供的中文名称".equals(PonderModNames.localized("ponder_native_name_fixture")), "mod-provided name translation is accepted without a Ponder override");
+            typeQuery("我的世界"); int minecraft=index.entries.size();
+            check.accept(minecraft>0&&index.entries.stream().allMatch(e->e.id.getNamespace().equals("minecraft")), "Chinese mod name filters catalog items");
+            typeQuery("Minecraft"); check.accept(index.entries.size()==minecraft, "English original mod name remains searchable in Chinese");
+            typeQuery("索引验证模组"); check.accept(index.entries.size()==1, "resource-pack mod name participates in search");
+            typeQuery(PonderModNames.original("ponder_editor_harness")); check.accept(index.entries.size()==1, "metadata name still finds the translated mod");
+            typeQuery("ponder_editor_harness"); check.accept(index.entries.size()==1, "registry namespace remains searchable after localization");
+        }
+        if(names.containsKey("ae2")) {
+            check.accept((chinese?"应用能源 2 超巨星":PonderModNames.original("ae2")).equals(names.get("ae2")), "actual AE2S category uses Chinese in zh_cn and its metadata name in English");
+            if(chinese) {
+                typeQuery("超巨星"); int ae2=index.entries.size();
+                check.accept(ae2>0&&index.entries.stream().allMatch(e->e.id.getNamespace().equals("ae2")), "actual AE2S tutorial subjects are searchable by Chinese mod name");
+                typeQuery(PonderModNames.original("ae2")); check.accept(index.entries.size()==ae2, "actual AE2S English original search matches its localized category");
+            }
+        }
+        if(names.containsKey("appliedpneumatics")) {
+            check.accept((chinese?"应用气动":PonderModNames.original("appliedpneumatics")).equals(names.get("appliedpneumatics")), "actual Applied Pneumatics category follows the active language");
+            var diagnostics=net.createmod.ponder.foundation.PonderIndex.getDiagnosticSnapshot(net.createmod.ponder.api.diagnostic.PonderDiagnosticView.EFFECTIVE);
+            check.accept(diagnostics.getScenes().stream().filter(s->s.getSceneId()!=null&&s.getSceneId().getNamespace().equals("appliedpneumatics"))
+                .flatMap(s->s.getIssues().stream()).noneMatch(issue->issue.getCode().equals("registration.duplicate_scene_id")), "Applied Pneumatics aliases report no duplicate scene ID");
+        }
+        typeQuery("");
+        index.keyTyped('\0', Keyboard.KEY_ESCAPE);
+    }
+
     private void clickButton(GuiScreen screen, int id) throws Exception {
         List<GuiButton> buttons = (List<GuiButton>)ReflectionHelper.findField(GuiScreen.class, "buttonList", "field_146292_n").get(screen);
         GuiButton button = buttons.stream().filter(b -> b.id == id).findFirst().orElseThrow();
@@ -227,9 +273,12 @@ public final class PonderCatalogSmoke {
         fixtureItems.add(new ResourceLocation("ponder_editor_harness:catalog_fixture"));
         excluded = fixtureItems.get(239);
         SceneDocument pack = SceneDocument.create("smoke:catalog_0", fixtureItems.get(0).toString(), "Catalog entry", "ponder:demo/basics");
+        boolean needsCompass=!net.createmod.ponder.foundation.PonderIndex.getSceneAccess().doScenesExistForId(new ResourceLocation("minecraft:compass"));
         pack.edit(json -> {
             for (int i = 1; i < fixtureItems.size(); i++) json.getAsJsonArray("scenes").add(SceneDocument.create("smoke:catalog_" + i,
                 fixtureItems.get(i).toString(), "Catalog entry " + i, "ponder:demo/basics").scene());
+            if(needsCompass)for(int i=0;i<12;i++)json.getAsJsonArray("scenes").add(SceneDocument.create("smoke:catalog_compass_"+i,
+                "minecraft:compass","Compass scene "+i,"ponder:demo/basics").scene());
             JsonArray tags = new JsonArray();
             for (int i = 0; i < 42; i++) {
                 JsonObject tag = new JsonObject(); tag.addProperty("id", String.format("smoke:category_%02d", i));

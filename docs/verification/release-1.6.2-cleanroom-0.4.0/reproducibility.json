@@ -1,0 +1,6 @@
+{
+  "local_development_sha256": "dddf7f51b50dcd4fa7ebb60e61ab0ddb196bcbff173c429e8a3aaf340c00494e",
+  "local_standalone_sha256": "dddf7f51b50dcd4fa7ebb60e61ab0ddb196bcbff173c429e8a3aaf340c00494e",
+  "byte_identical": true,
+  "runtime_acceptance": "summary.json"
+}

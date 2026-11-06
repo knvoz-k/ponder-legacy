@@ -21,3 +21,17 @@ ponder.ui.index_title=教學首頁
 ponder.ponder.shared.sneak_and=潛行 +
 ponder.ponder.shared.ctrl_and=Ctrl +
 key.ponder.ponder=思索
+
+# Index mod categories
+ponder.mod_name.minecraft=我的世界
+ponder.mod_name.ae2=應用能源 2 超巨星
+ponder.mod_name.ponder=思索
+ponder.mod_name.ponder-legacy=思索
+ponder.mod_name.ae2s-ponder-legacy=應用能源 2 超巨星思索教學
+ponder.mod_name.modularmachinery=模組化機械社區版
+ponder.mod_name.ftbquests=FTB 任務
+ponder.mod_name.ftblib=FTB 前置函式庫
+ponder.mod_name.itemfilters=物品過濾器
+ponder.mod_name.media_api=媒體介面
+ponder.mod_name.appliedpneumatics=應用氣動
+ponder.mod_name.pneumaticcraft=氣動工藝：重壓

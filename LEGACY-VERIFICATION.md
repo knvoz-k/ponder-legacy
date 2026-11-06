@@ -1,6 +1,28 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.6.1（Markdown 媒体插入面板）
+## 当前：1.6.2（索引模组名称本地化）
+
+- 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
+- 生产安装包：`ponder-legacy-1.6.2.jar`；SHA-256：`dddf7f51b50dcd4fa7ebb60e61ab0ddb196bcbff173c429e8a3aaf340c00494e`。
+- 314 项单元测试通过；独立发布目录清理后完整重建，生产安装包与本地验收包逐字节一致。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| 无外部 Mod 客户端，完整编辑器／教程／投影回归 | PASS | 240 |
+| 无外部 Mod 专服 | PASS | 10 |
+| AE2S／应用气动／FTBQ／Media／Revo 联合安装，分类本地化专项 | PASS | 81 |
+| 上述可选组合专服 | PASS | 10 |
+
+实机核对中文／英文分类、资源包 `ponder.mod_name.<命名空间>` 与模组 `mod.<命名空间>.name` 翻译、缺省元数据／未知命名空间回退、中文名／英文原名／Mod ID 搜索；语言切换保持搜索词与所选分类。回归长目录滚动、类别与物品独立视口、小窗口、点击场景和返回索引。联合组合使用实际 AE2S 与应用气动教程，检查翻译与应用气动无重复 ID 诊断。
+
+联合组合使用 AE2S / Supergiant `1.1.0+a47dfe029`、AE2S Ponder Legacy 0.2.0、应用气动 `1.0.9-cleanroom.2`、PNC `1.12.2-0.11.15-398`、FTB Quests `1202.10.0-modern.10`、FTB Library `5.5.4-modern.1`、ItemFilters `1.0.4.2`、Media API `1.0.2`，以及 Revo UI `0.8.7` / NFR `0.8.0` / ModularUI `3.2.0-nfr.2`。CraftTweaker 未安装，类加载审计通过。
+
+用户日志中的 `appliedpneumatics:air_network` 重复注册来自应用气动插件在三个注册位置分别创建 storyboard；应用气动修复包复用同一个对象，保持 26 个空气网络物品关联、全部 33 个关联和三个完整时间线。此修复位于应用气动本体，须同时替换其 jar。应用气动另用同一 Ponder 1.6.2 包完成有／无 Ponder 的客户端和专服验收（28／34／9／9 项），全部通过；其验收与源代码随本地分发包保留。
+
+[本版报告、运行指纹、界面截图与构建一致性](docs/verification/release-1.6.2-cleanroom-0.4.0/summary.json)。Linux llvmpipe；Revo 使用专项分类流程及已记录的合法 NFR 最小配置，不扩大到其他页面的后处理问题。本版不重复全部历史可选组合；历史验收仅对应各自安装包。用户整合包日志的 Cleanroom 0.6.13-alpha 与本次 0.4.0 正式版验收分别看待。
+
+
+## 历史：1.6.1（Markdown 媒体插入面板）
 
 - 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
 - 生产安装包：`ponder-legacy-1.6.1.jar`；SHA-256：`4c3f8913b9df79220615e747dd76962b9bf2007c783ec4c0d97ce41f16ce3ed7`。

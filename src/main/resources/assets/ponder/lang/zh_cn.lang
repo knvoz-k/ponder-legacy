@@ -76,6 +76,20 @@ ponder.ui.welcome=欢迎来到思索界面
 ponder.ui.categories=%1$s中包含的条目
 ponder.ui.index_description=点击一个图标来查看相关的物品和方块
 ponder.ui.index_title=思索索引
+
+# Index mod categories. Resource packs can override ponder.mod_name.<registry namespace>.
+ponder.mod_name.minecraft=我的世界
+ponder.mod_name.ae2=应用能源 2 超巨星
+ponder.mod_name.ponder=思索
+ponder.mod_name.ponder-legacy=思索
+ponder.mod_name.ae2s-ponder-legacy=应用能源 2 超巨星思索教程
+ponder.mod_name.modularmachinery=模块化机械社区版
+ponder.mod_name.ftbquests=FTB 任务
+ponder.mod_name.ftblib=FTB 前置库
+ponder.mod_name.itemfilters=物品过滤器
+ponder.mod_name.media_api=媒体接口
+ponder.mod_name.appliedpneumatics=应用气动
+ponder.mod_name.pneumaticcraft=气动工艺：重压
 ponder.ui.catalog.mods=模组
 ponder.ui.catalog.themes=主题
 ponder.ui.catalog.all=全部

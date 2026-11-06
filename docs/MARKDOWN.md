@@ -8,6 +8,22 @@
 
 静态页左侧可搜索正文和标题、选择教程和目录。正文与左栏分别滚动；正文支持滚轮、Page Up/Down、Home/End 和拖动滚动条。拖动 3D 场景旋转，Shift+滚轮缩放。物品可显示原生提示，支持的物品链接可进入相关教程。图文页按 Tab 可切至对应动画。
 
+### 索引的模组名称
+
+从 1.6.2 起，思索索引的“模组”分类使用当前语言的名称。简体／繁体中文已包含 Minecraft、AE2S / Supergiant、应用气动、MMCE、FTB Quests 等名称；英文界面保留模组原名。分类标题、悬浮说明、分类排序和搜索使用同一套名称，原英文名与注册命名空间仍可用于搜索。切换语言后刷新标签，保留当前分类、搜索词及 Mod ID。
+
+整合包可在资源包的 `assets/<任意命名空间>/lang/zh_cn.lang` 覆盖或新增：
+
+资源包的 `pack.mcmeta` 使用 Minecraft 1.12.2 的 `pack_format: 3`，以加载上述小写语言文件名。
+
+```properties
+ponder.mod_name.ae2=应用能源 2 超巨星
+ponder.mod_name.appliedpneumatics=应用气动
+ponder.mod_name.your_mod_id=你的模组中文名
+```
+
+查找顺序为 `ponder.mod_name.<物品注册命名空间>` → 模组提供的 `mod.<命名空间>.name` → Forge 元数据名称 → 命名空间。翻译只影响显示与搜索，不修改场景 ID 或物品注册名。资源包重载后重新打开索引即可应用同语言下的新覆盖。
+
 ## 最小共享教程
 
 放到 `scripts/ponder/guides/mypack/first_machine.md`。结构 `mypack:machine` 可用现有 F8 框选工具捕获，保存在 `scripts/ponder/structures/mypack/machine.nbt`。

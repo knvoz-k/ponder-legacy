@@ -1,0 +1,63 @@
+{
+  "version": "1.6.2",
+  "date": "2026-11-06",
+  "minecraft": "1.12.2",
+  "cleanroom": "0.4.0",
+  "java": "25.0.5",
+  "production_jar": "ponder-legacy-1.6.2.jar",
+  "sha256": "dddf7f51b50dcd4fa7ebb60e61ab0ddb196bcbff173c429e8a3aaf340c00494e",
+  "fixtures": [
+    {
+      "fixture": "core-client",
+      "result": "PASS",
+      "checks": 240,
+      "scenario": "full",
+      "report": "core-client/report.json"
+    },
+    {
+      "fixture": "core-server",
+      "result": "PASS",
+      "checks": 10,
+      "scenario": "full",
+      "report": "core-server/report.json"
+    },
+    {
+      "fixture": "optional-catalog-client",
+      "result": "PASS",
+      "checks": 81,
+      "scenario": "catalog",
+      "report": "optional-catalog-client/report.json"
+    },
+    {
+      "fixture": "optional-server",
+      "result": "PASS",
+      "checks": 10,
+      "scenario": "full",
+      "report": "optional-server/report.json"
+    }
+  ],
+  "unit_tests": {
+    "tests": 314,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": [
+    "Localized mod category titles, tooltips and sorting in Chinese and English; metadata and unknown-namespace fallbacks.",
+    "Resource-pack Ponder name overrides and mod-provided name keys; original English names and registry namespaces remain searchable.",
+    "Language changes preserve the selected namespace and search query; scrolling, resize, item navigation and category layout use actual client screens and framebuffers.",
+    "Actual AE2S / Supergiant and Applied Pneumatics categories with their installed tutorial plugins; no Applied Pneumatics duplicate-scene diagnostics.",
+    "Core full editor, guide, media fallback and world-projection regressions; baseline physical dedicated servers with and without optional integrations."
+  ],
+  "related_applied_pneumatics": {
+    "version": "1.0.9-cleanroom.2",
+    "artifact_sha256": "d4436d494c633fb6b41f2b49b6f14fe7b7ceff246f73e3f9bf52fc0c397db3e9",
+    "fix": "All 26 air_network component aliases share one storyboard object; strict Ponder duplicate-ID validation is retained."
+  },
+  "limitations": [
+    "Linux llvmpipe rendering; not every GPU, shader or arbitrary modpack.",
+    "Revo UI 0.8.7, NFR 0.8.0 and ModularUI 3.2.0-nfr.2 are covered by the focused catalog scenario; unrelated external post-processing issues are outside this adapter.",
+    "This release does not repeat every historical optional-mod scenario. Historical results correspond to their original artifacts.",
+    "The supplied user log used Cleanroom 0.6.13-alpha; acceptance is on the required 0.4.0 final baseline, and does not certify that entire user modpack."
+  ]
+}

@@ -90,6 +90,11 @@ public final class CleanroomEditorSmoke {
         if (exitAt != Integer.MAX_VALUE || ticks < waitUntil || screenshot != null) return;
         try {
             if (ticks > 2400) throw new IllegalStateException("Smoke timeout at phase " + phase);
+            if (phase>=2 && Boolean.getBoolean("ponder.dev.catalogOnly")) {
+                if (catalogSmoke==null) catalogSmoke=new net.createmod.ponder.foundation.ui.PonderCatalogSmoke(mc,this::require,this::requestScreenshot);
+                if (catalogSmoke.advance()) { report("PASS",null);exitAt=ticks+10; }
+                return;
+            }
             if (phase>=2 && Boolean.getBoolean("ponder.dev.mediaEditorOnly")) {
                 if (mediaSmoke==null) {
                     require(true,"focused Markdown media editor acceptance; legacy JSON editor scenario is separate");

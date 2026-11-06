@@ -152,6 +152,7 @@ def main():
     parser.add_argument("--vlc-root", type=Path, help="Optional unpacked VLC installation for Linux video verification")
     parser.add_argument("--video-test", type=Path, help="Copy a local test clip to the isolated guide media directory")
     parser.add_argument("--media-editor-only", action="store_true", help="Run only Markdown media authoring screens after client world startup")
+    parser.add_argument("--catalog-only", action="store_true", help="Run only catalog category, localization, search and layout checks after client world startup")
     args = parser.parse_args()
     if platform.system() != "Linux" or platform.machine() not in ("x86_64", "amd64"):
         parser.error("This development launcher supports Linux x64")
@@ -160,8 +161,10 @@ def main():
         return
     if args.empty and args.side != "server":
         parser.error("--empty is a dedicated-server probe")
-    if args.media_editor_only and (args.side != "client" or args.revo or args.mmce):
-        parser.error("--media-editor-only requires the editor client harness; install UI mods with --optional-jar")
+    if args.media_editor_only and args.catalog_only:
+        parser.error("Choose one focused client scenario")
+    if (args.media_editor_only or args.catalog_only) and (args.side != "client" or args.revo or args.mmce):
+        parser.error("Focused client scenarios require the editor client harness; install UI mods with --optional-jar")
     if sum((args.empty, bool(args.mmce), bool(args.revo))) > 1:
         parser.error("--empty, --mmce and --revo are separate fixtures")
     if args.ae2s and not args.revo:
@@ -263,6 +266,8 @@ def main():
         report = run / "ponder-smoke/report.json"
         if args.media_editor_only:
             command += ["-Dponder.dev.mediaEditorOnly=true"]
+        if args.catalog_only:
+            command += ["-Dponder.dev.catalogOnly=true"]
         command += ["-Dponder.dev.smoke=true", "top.outlands.foundation.boot.Foundation", "--tweakClass", "net.minecraftforge.fml.common.launcher.FMLTweaker",
                     "--username", "PonderDeveloper", "--uuid", "b4551621-016f-3568-8ef0-15ec7d7d579b", "--accessToken", "0", "--version", f"Cleanroom-{VERSION}",
                     "--gameDir", str(run), "--assetsDir", str(GRADLE / "caches/cleanroom_gradle/assets"), "--assetIndex", "1.12", "--width", "1280", "--height", "720"]
@@ -277,7 +282,7 @@ def main():
         report = run / "ponder-revo-smoke/report.json"
     report.unlink(missing_ok=True)
     (run / "runtime.json").write_text(json.dumps({"cleanroom": VERSION, "side": args.side,
-        "scenario": "markdown-media-editor" if args.media_editor_only else "full",
+        "scenario": "catalog" if args.catalog_only else "markdown-media-editor" if args.media_editor_only else "full",
         "jars": {jar.name: digest(jar, "sha256") for jar in jars},
         "libraries": {str(jar): digest(jar) for jar in classpath}}, indent=2) + "\n")
     print(f"Starting Cleanroom {VERSION} {args.side}; installation jars and SRG harness, no userdev", flush=True)

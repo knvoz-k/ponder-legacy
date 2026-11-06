@@ -18,8 +18,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import org.lwjgl.input.Keyboard;
 
 public class PonderIndexScreen extends PonderCatalogScreen {
@@ -32,18 +30,21 @@ public class PonderIndexScreen extends PonderCatalogScreen {
     private GuiTextField search;
     private boolean byTheme;
     private String selected = "";
+    private String language = "";
 
     @Override
     public void initGui() {
         String query = search == null ? "" : search.getText();
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
+        language = mc.getLanguageManager().getCurrentLanguage().getLanguageCode();
         catalog = PonderCatalog.current();
         names.clear(); modNames.clear();
         for (PonderCatalog.ItemEntry item : catalog.items) {
             String namespace = item.id.getNamespace();
-            modNames.computeIfAbsent(namespace, PonderIndexScreen::modName);
-            names.put(item.id, stackFor(item.id).getDisplayName() + "\n" + modNames.get(namespace));
+            modNames.computeIfAbsent(namespace, PonderModNames::localized);
+            names.put(item.id, stackFor(item.id).getDisplayName() + "\n" + modNames.get(namespace)
+                + "\n" + PonderModNames.original(namespace));
         }
         int sideWidth = Math.max(112, Math.min(160, width / 4));
         categoriesPane.layout(12, 68, 12 + sideWidth, height - 44, categories.size(), 22);
@@ -190,14 +191,11 @@ public class PonderIndexScreen extends PonderCatalogScreen {
         super.keyTyped(typedChar, keyCode);
     }
 
-    @Override public void updateScreen() { search.updateCursorCounter(); }
-    @Override public void onGuiClosed() { Keyboard.enableRepeatEvents(false); }
-
-    private static String modName(String namespace) {
-        if ("minecraft".equals(namespace)) return "Minecraft";
-        ModContainer mod = Loader.instance().getIndexedModList().get(namespace);
-        return mod == null ? namespace : mod.getName();
+    @Override public void updateScreen() {
+        if (!language.equals(mc.getLanguageManager().getCurrentLanguage().getLanguageCode())) initGui();
+        search.updateCursorCounter();
     }
+    @Override public void onGuiClosed() { Keyboard.enableRepeatEvents(false); }
 
     static ItemStack stackFor(ResourceLocation id) {
         if (Item.REGISTRY.containsKey(id)) return new ItemStack(Item.REGISTRY.getObject(id));
