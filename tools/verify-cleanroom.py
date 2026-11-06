@@ -192,7 +192,7 @@ def main():
     if args.crafttweaker == "absent":
         for obsolete in mods.glob("crafttweaker-*.jar"):
             obsolete.unlink()
-    if args.crafttweaker and not (args.mmce or args.revo):
+    if args.crafttweaker and not args.mmce and (not args.revo or args.side == "server"):
         # Keep the same .zs file in both fixtures to verify it is inert without CrT.
         script = run / "scripts/ponder/scenes/optional-crafttweaker.zs"
         script.parent.mkdir(parents=True, exist_ok=True)
