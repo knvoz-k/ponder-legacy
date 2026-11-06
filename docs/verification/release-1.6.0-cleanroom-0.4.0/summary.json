@@ -1,0 +1,58 @@
+{
+  "version": "1.6.0",
+  "date": "2026-11-06",
+  "minecraft": "1.12.2",
+  "cleanroom": "0.4.0",
+  "java": "25.0.5",
+  "production_jar": "ponder-legacy-1.6.0.jar",
+  "sha256": "a7863b678e2a43f43722690032c89d65c243356f970671b6aefa7b34073cad10",
+  "fixtures": [
+    {
+      "fixture": "core-client",
+      "result": "PASS",
+      "checks": 194,
+      "report": "core-client/report.json"
+    },
+    {
+      "fixture": "core-server",
+      "result": "PASS",
+      "checks": 10,
+      "report": "core-server/report.json"
+    },
+    {
+      "fixture": "ae2s-ftbq-media-client",
+      "result": "PASS",
+      "checks": 200,
+      "report": "ae2s-ftbq-media-client/report.json"
+    },
+    {
+      "fixture": "ae2s-ftbq-media-server",
+      "result": "PASS",
+      "checks": 10,
+      "report": "ae2s-ftbq-media-server/report.json"
+    },
+    {
+      "fixture": "revo-client",
+      "result": "PASS",
+      "checks": 70,
+      "report": "revo-client/report.json"
+    }
+  ],
+  "unit_tests": {
+    "tests": 307,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": [
+    "World placement starts with no opaque GUI; player camera and movement remain available.",
+    "Mouse confirmation, rotation, mirroring, height and distance; fixed position survives camera movement; cancel restores placement.",
+    "Framebuffer checks on grass and through an occluding wall; native AE2S models and multipart material resolution.",
+    "Ordinary guide/editor and optional media/quest/Revo regression."
+  ],
+  "limitations": [
+    "Linux llvmpipe rendering, not every hardware, shader or modpack combination.",
+    "Projection never places blocks; inputs are consumed only during placement or when grabbing a projection.",
+    "Media video fixture uses external Linux VLC; no audio acceptance."
+  ]
+}

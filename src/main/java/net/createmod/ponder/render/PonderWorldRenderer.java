@@ -12,6 +12,7 @@ import java.util.WeakHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import com.mojang.authlib.GameProfile;
 
@@ -63,6 +64,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class PonderWorldRenderer {
     private static final Logger LOGGER = LogManager.getLogger("PonderWorldRenderer");
+    private boolean projectionPass;
+
+    /** World ghosts use continuous transparency. No polygon stipple or GUI view transform. */
+    public void renderProjection(PonderScene scene, Vec3d camera, float partialTicks) {
+        java.nio.FloatBuffer previous = org.lwjgl.BufferUtils.createFloatBuffer(4);
+        GL11.glGetFloatv(GL14.GL_BLEND_COLOR, previous);
+        boolean old = projectionPass;
+        projectionPass = true;
+        try { GL14.glBlendColor(0, 0, 0, .58f); renderScene(scene, camera, partialTicks); }
+        finally { projectionPass = old; GL14.glBlendColor(previous.get(0), previous.get(1), previous.get(2), previous.get(3)); }
+    }
 
     private final Map<PonderWorld, ParticleManager> particleManagers =
         new WeakHashMap<PonderWorld, ParticleManager>();
@@ -445,7 +457,7 @@ public final class PonderWorldRenderer {
         return camera;
     }
 
-    private static void configureFixedPipeline() {
+    private void configureFixedPipeline() {
         Minecraft minecraft = Minecraft.getMinecraft();
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
         GlStateManager.enableDepth();
@@ -463,9 +475,10 @@ public final class PonderWorldRenderer {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
         GlStateManager.enableTexture2D();
         minecraft.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        if (projectionPass) configureProjectionBlend();
     }
 
-    private static void configurePostLayerPass() {
+    private void configurePostLayerPass() {
         GlStateManager.enableDepth();
         GlStateManager.depthFunc(GL11.GL_LEQUAL);
         GlStateManager.depthMask(true);
@@ -475,9 +488,10 @@ public final class PonderWorldRenderer {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
         GlStateManager.enableTexture2D();
         GlStateManager.color(1, 1, 1, 1);
+        if (projectionPass) configureProjectionBlend();
     }
 
-    private static void configureLayer(BlockRenderLayer layer) {
+    private void configureLayer(BlockRenderLayer layer) {
         Minecraft minecraft = Minecraft.getMinecraft();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
         GlStateManager.enableTexture2D();
@@ -500,6 +514,14 @@ public final class PonderWorldRenderer {
             GlStateManager.enableAlpha();
             GlStateManager.alphaFunc(GL11.GL_GREATER, .1f);
         }
+        if (projectionPass) configureProjectionBlend();
+    }
+
+    private static void configureProjectionBlend() {
+        GlStateManager.enableBlend();
+        // BLOCK vertex colours already contain alpha, so glColor alone cannot fade cached geometry.
+        GlStateManager.blendFunc(GL14.GL_CONSTANT_ALPHA, GL14.GL_ONE_MINUS_CONSTANT_ALPHA);
+        GlStateManager.depthMask(false);
     }
 
     private static boolean configureLayerFiltering(ITextureObject blockAtlas, BlockRenderLayer layer) {

@@ -34,6 +34,23 @@ public class ProjectionPlanTest {
         assertEquals(1,plan.transform(0,false,false).size());assertEquals(BlockPos.ORIGIN,plan.transform(0,false,false).get(0).position());assertEquals("source",cell.tile().getString("name"));
         cell.tile().setString("name","outside");assertEquals("source",cell.tile().getString("name"));
     }
+    @Test public void excludingANonexistentPlateKeepsTheLowestMachineLayer(){
+        var world=new net.createmod.ponder.api.level.PonderLevel(BlockPos.ORIGIN,null);
+        world.setBlockState(new BlockPos(0,1,0),Blocks.STONE.getDefaultState(),2);
+        world.setBlockState(new BlockPos(1,1,0),Blocks.CHEST.getDefaultState(),2);
+        var scene=new net.createmod.ponder.foundation.PonderScene(world,new net.createmod.ponder.foundation.registration.PonderLocalization(),"test",new ResourceLocation("test:machine"),List.of(),List.of());
+        scene.setSceneTitle("test:no_plate","Machine without floor");scene.builder().configureBasePlate(0,0,3);scene.builder().showBasePlate();
+        var plan=ProjectionPlan.capture(scene);assertFalse(plan.hasBase());
+        assertEquals(2,plan.transform(0,false,false).size());assertEquals(BlockPos.ORIGIN,plan.transform(0,false,false).get(0).position());
+    }
+    @Test public void declaredPlateRequiresACompleteLayerOfActualBlocks(){
+        var world=new net.createmod.ponder.api.level.PonderLevel(BlockPos.ORIGIN,null);
+        for(int x=0;x<3;x++)for(int z=0;z<3;z++)world.setBlockState(new BlockPos(x,0,z),Blocks.STONE.getDefaultState(),2);
+        world.setBlockState(new BlockPos(1,1,1),Blocks.FURNACE.getDefaultState(),2);
+        var scene=new net.createmod.ponder.foundation.PonderScene(world,new net.createmod.ponder.foundation.registration.PonderLocalization(),"test",new ResourceLocation("test:machine"),List.of(),List.of());
+        scene.setSceneTitle("test:plate","Machine");scene.builder().configureBasePlate(0,0,3);scene.builder().showBasePlate();
+        var plan=ProjectionPlan.capture(scene);assertTrue(plan.hasBase());assertEquals(1,plan.transform(0,false,false).size());
+    }
     @Test public void inventoryCountsVariantsAndAllMatchingStacks(){
         var wool=new MaterialRequirement(new ResourceLocation("minecraft:wool"),14,8);
         assertEquals(5,wool.available(List.of(new ItemStack(Blocks.WOOL,2,14),new ItemStack(Blocks.WOOL,3,14),new ItemStack(Blocks.WOOL,64,11))));

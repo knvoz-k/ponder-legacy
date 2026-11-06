@@ -33,9 +33,16 @@ public final class ProjectionPlan {
             cells.add(new Cell(pos,world.getBlockState(pos),nbt));
             if(cells.size()>MAX_BLOCKS)throw new IllegalArgumentException("Projection exceeds "+MAX_BLOCKS+" blocks");
         }
-        int y=world.getBoundsMin().getY();
+        int y=cells.stream().mapToInt(c->c.position().getY()).min().orElse(0);
         long foundation=cells.stream().filter(c->c.position().getY()==y&&new ResourceLocation("minecraft:concrete").equals(c.state().getBlock().getRegistryName())).count();
-        return new ProjectionPlan(scene.getId(),scene.getTitle(),cells,scene.isBasePlateShown()||foundation>=9);
+        // showBasePlate can be declared even when the structure contains no plate at y=0.
+        // Never interpret the first row of machines as a decorative layer in that case.
+        long plate=cells.stream().filter(c->c.position().getY()==0&&c.position().getX()>=scene.getBasePlateOffsetX()
+            &&c.position().getX()<scene.getBasePlateOffsetX()+scene.getBasePlateSize()
+            &&c.position().getZ()>=scene.getBasePlateOffsetZ()&&c.position().getZ()<scene.getBasePlateOffsetZ()+scene.getBasePlateSize()).count();
+        boolean declared=scene.isBasePlateShown()&&y==0&&scene.getBasePlateSize()>1
+            &&plate==(long)scene.getBasePlateSize()*scene.getBasePlateSize();
+        return new ProjectionPlan(scene.getId(),scene.getTitle(),cells,declared||foundation>=9);
     }
     public ResourceLocation id(){return id;}
     public String title(){return title;}
@@ -47,10 +54,11 @@ public final class ProjectionPlan {
         List<Cell> result=new ArrayList<>();int rotation=Math.floorMod(turns,4);
         Rotation r=Rotation.values()[rotation]; // NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90
         Mirror m=mirrored?Mirror.FRONT_BACK:Mirror.NONE;
+        boolean stripBase=hasBase&&!includeBase;
         for(Cell cell:cells){
-            if(!includeBase&&cell.position().getY()==min.getY())continue;
+            if(stripBase&&cell.position().getY()==min.getY())continue;
             BlockPos local=cell.position().subtract(min);
-            if(!includeBase)local=local.down();
+            if(stripBase)local=local.down();
             local=position(local,rotation,mirrored);
             result.add(new Cell(local,cell.state().withMirror(m).withRotation(r),transformTile(cell.tile(),rotation,mirrored)));
         }

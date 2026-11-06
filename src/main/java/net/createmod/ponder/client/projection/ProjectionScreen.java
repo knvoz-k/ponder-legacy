@@ -2,47 +2,60 @@ package net.createmod.ponder.client.projection;
 
 import java.io.IOException;
 import org.lwjgl.input.Mouse;
-import net.createmod.ponder.foundation.ui.*;
+import net.createmod.ponder.foundation.ui.PonderButton;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.*;
 
+/** Small transparent toolbox; the world remains visible while changing optional settings. */
 @SideOnly(Side.CLIENT)
-public final class ProjectionScreen extends AbstractPonderScreen {
+public final class ProjectionScreen extends GuiScreen {
     private final ProjectionSession session;
     private final GuiScreen parent;
-    private int scroll;
+    private boolean advanced;
+    private int panelWidth;
     public ProjectionScreen(ProjectionSession session,GuiScreen parent){this.session=session;this.parent=parent;}
-    @Override public void initGui(){buttonList.clear();int w=Math.min(420,width-16),x=(width-w)/2,bw=(w-12)/4;
-        button(x,42,bw,"−90°",()->{session.turns--;session.rebuild();});button(x+bw+4,42,bw,"+90°",()->{session.turns++;session.rebuild();});
-        button(x+2*(bw+4),42,bw,I18n.format("ponder.projection.mirror")+(session.mirror?" ✓":""),()->{session.mirror=!session.mirror;session.rebuild();initGui();});
-        button(x+3*(bw+4),42,bw,I18n.format("ponder.projection.here"),()->{session.anchor=ProjectionService.target();session.refresh();});
-        int y=68;
-        for(int axis=0;axis<3;axis++){final int a=axis;String name=new String[]{"X","Y","Z"}[axis];int bx=x+axis*(w/3);button(bx,y,40,name+" −",()->move(a,-1));button(bx+44,y,40,name+" +",()->move(a,1));}
-        button(x,94,bw,I18n.format("ponder.projection.base")+(session.includeBase?" ✓":""),()->{session.includeBase=!session.includeBase;session.rebuild();initGui();});
-        button(x+bw+4,94,bw,I18n.format("ponder.projection.layer")+": "+(session.layer<0?"*":session.layer),()->{session.layer=session.layer>=session.maxLayer()?-1:session.layer+1;session.refresh();initGui();});
-        button(x+2*(bw+4),94,bw,I18n.format("ponder.projection.hide_done")+(session.hideCorrect?" ✓":""),()->{session.hideCorrect=!session.hideCorrect;session.refresh();initGui();});
-        button(x+3*(bw+4),94,bw,I18n.format("ponder.projection.pin")+(session.pinned?" ✓":""),()->{session.pinned=!session.pinned;initGui();});
-        button(x,118,w/2-2,I18n.format("ponder.projection.layout"),()->{session.pinned=true;mc.displayGuiScreen(new ProjectionLayoutScreen(this));});
-        button(x+w/2+2,118,w/2-2,I18n.format("ponder.projection.reset_position"),()->{ProjectionOverlay.INSTANCE.reset(false);ProjectionOverlay.INSTANCE.reset(true);});
-        button(x,height-29,bw,I18n.format("ponder.projection.project"),()->{session.projecting=true;session.refresh();mc.displayGuiScreen(null);});
-        button(x+bw+4,height-29,bw,I18n.format("ponder.projection.stop"),()->{session.projecting=false;session.refresh();initGui();});
-        button(x+2*(bw+4),height-29,bw,I18n.format("ponder.guide.back"),()->mc.displayGuiScreen(parent));
-        button(x+3*(bw+4),height-29,bw,I18n.format("ponder.projection.clear"),()->{ProjectionService.clear();mc.displayGuiScreen(parent);});
-    }
-    private void button(int x,int y,int w,String title,Runnable action){addButton(new PonderButton(buttonList.size()+1,x,y,w,20,null).withLabel(title).withCallback(action));}
-    private void move(int axis,int amount){session.anchor=session.anchor.add(axis==0?amount:0,axis==1?amount:0,axis==2?amount:0);session.refresh();}
-    @Override protected void renderWindow(int mx,int my,float partial){
-        fontRenderer.drawString(fontRenderer.trimStringToWidth(session.plan.title(),width-24),12,13,0xffd2e9e4);
-        fontRenderer.drawString(fontRenderer.trimStringToWidth(I18n.format("ponder.projection.position",session.anchor.getX(),session.anchor.getY(),session.anchor.getZ(),Math.floorMod(session.turns,4)*90),width-24),12,146,0xffa5c7cf);
-        int y=164;int count=Math.max(0,(height-209)/18);scroll=Math.max(0,Math.min(scroll,Math.max(0,session.rows.size()-count)));
-        for(int i=scroll;i<Math.min(session.rows.size(),scroll+count);i++){
-            var row=session.rows.get(i);String text=row.target().stack().getDisplayName();String amount=row.available()+" / "+row.target().count()+"  "+I18n.format("ponder.projection.missing",row.missing());
-            fontRenderer.drawString(fontRenderer.trimStringToWidth(text,Math.max(20,width-180)),14,y,0xffd6e0e5);fontRenderer.drawString(amount,width-fontRenderer.getStringWidth(amount)-14,y,row.missing()==0?0xff9fe2c3:0xffedc995);y+=18;
+    public int panelWidth(){return panelWidth;}
+    @Override public void initGui(){
+        buttonList.clear();panelWidth=Math.min(174,Math.max(112,width/3));int x=12,w=panelWidth-16,half=(w-4)/2;
+        button(x,33,w,"ponder.projection.move",ProjectionService::move);
+        addButton(new PonderButton(2,x,57,half,20,null).withLabel("−90°").withCallback(()->{session.turns--;session.rebuild();}));
+        addButton(new PonderButton(3,x+half+4,57,half,20,null).withLabel("+90°").withCallback(()->{session.turns++;session.rebuild();}));
+        toggle(x,81,half,"ponder.projection.mirror",session.mirror,()->{session.mirror=!session.mirror;session.rebuild();});
+        toggle(x+half+4,81,half,"ponder.projection.base_short",session.includeBase,()->{session.includeBase=!session.includeBase;session.rebuild();}).enabled(session.plan.hasBase());
+        toggle(x,105,half,"ponder.projection.pin",session.pinned,()->session.pinned=!session.pinned);
+        button(x+half+4,105,half,advanced?"ponder.projection.less":"ponder.projection.more",()->{advanced=!advanced;initGui();});
+        if(advanced){
+            toggle(x,129,half,"ponder.projection.hide_done",session.hideCorrect,()->{session.hideCorrect=!session.hideCorrect;session.refresh();});
+            addButton(new PonderButton(buttonList.size()+1,x+half+4,129,half,20,null).withLabel(I18n.format("ponder.projection.layer")+": "+(session.layer<0?"*":session.layer)).withCallback(()->{session.layer=session.layer>=session.maxLayer()?-1:session.layer+1;session.refresh();initGui();}));
+            button(x,153,w,"ponder.projection.layout",()->{session.pinned=true;mc.displayGuiScreen(new ProjectionLayoutScreen(this));});
+            toggle(x,177,half,"ponder.projection.visible",session.projecting,()->{session.projecting=!session.projecting;session.refresh();});
+            button(x+half+4,177,half,"ponder.projection.reset_short",()->{ProjectionOverlay.INSTANCE.reset(false);ProjectionOverlay.INSTANCE.reset(true);});
         }
-        String note=session.unknown.isEmpty()?I18n.format("ponder.projection.inventory_note"):I18n.format("ponder.projection.unknown",session.unknown.size());
-        fontRenderer.drawString(fontRenderer.trimStringToWidth(note,width-24),12,height-43,session.unknown.isEmpty()?0xff91abb7:0xfff0a79c);
+        int bottom=height-29;
+        button(x,bottom,half,"ponder.guide.back",()->mc.displayGuiScreen(parent));
+        button(x+half+4,bottom,half,"ponder.projection.clear_short",()->{ProjectionService.clear();mc.displayGuiScreen(null);});
     }
-    @Override public void handleMouseInput()throws IOException{super.handleMouseInput();int wheel=Mouse.getEventDWheel();if(wheel!=0)scroll-=Integer.signum(wheel)*2;}
+    private void button(int x,int y,int w,String key,Runnable action){addButton(new PonderButton(buttonList.size()+1,x,y,w,20,null).withLabel(I18n.format(key)).withTooltip(key).withCallback(action));}
+    private PonderButton toggle(int x,int y,int w,String key,boolean active,Runnable action){
+        return addButton(new PonderButton(buttonList.size()+1,x,y,w,20,null).withLabel(I18n.format(key)).withTooltip(key).active(active).withCallback(()->{action.run();initGui();}));
+    }
+    @Override public void drawScreen(int mx,int my,float partial){
+        if(ProjectionService.current()!=session||!session.validDimension()){mc.displayGuiScreen(null);return;}
+        Gui.drawRect(6,6,panelWidth+6,height-6,0xcf14212b);
+        fontRenderer.drawString(fontRenderer.trimStringToWidth(session.plan.title(),panelWidth-16),12,15,0xffd2e9e4);
+        int y=advanced?205:139;
+        String pos=session.anchor.getX()+", "+session.anchor.getY()+", "+session.anchor.getZ();
+        if(y<height-60)fontRenderer.drawString(fontRenderer.trimStringToWidth(pos,panelWidth-16),12,y,0xffa5c7cf);
+        ProjectionOverlay.INSTANCE.draw(this,width,height,mx,my);
+        super.drawScreen(mx,my,partial);
+        for(var b:buttonList)if(b instanceof PonderButton p&&p.isHoveredButton()&&p.getTooltipKey()!=null)drawHoveringText(I18n.format(p.getTooltipKey()),mx,my);
+    }
+    @Override protected void mouseClicked(int mx,int my,int button)throws IOException{if(!ProjectionOverlay.INSTANCE.mouseDown(this,mx,my,button))super.mouseClicked(mx,my,button);}
+    @Override protected void mouseClickMove(int mx,int my,int button,long elapsed){ProjectionOverlay.INSTANCE.drag(this,mx,my);}
+    @Override protected void mouseReleased(int mx,int my,int button){ProjectionOverlay.INSTANCE.release(this);super.mouseReleased(mx,my,button);}
+    @Override public void onGuiClosed(){ProjectionOverlay.INSTANCE.release(this);}
+    @Override public void handleMouseInput()throws IOException{super.handleMouseInput();int wheel=Mouse.getEventDWheel();if(wheel!=0)ProjectionOverlay.INSTANCE.scroll(wheel);}
+    @Override protected void keyTyped(char character,int key)throws IOException{if(key==org.lwjgl.input.Keyboard.KEY_ESCAPE)mc.displayGuiScreen(parent);else super.keyTyped(character,key);}
+    @Override public boolean doesGuiPauseGame(){return false;}
 }

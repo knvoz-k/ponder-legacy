@@ -14,15 +14,15 @@
   "original_authors": "The Create Team (original Ponder), MCMGGF (1.12.2 base)",
   "original_repository": "https://github.com/MCMGGF/ponder-for-1.12.2",
   "verification_document": "LEGACY-VERIFICATION.md",
-  "verified_jar_sha256": "c452c409358f2facf87b2a5f402492be6930365dc4fb7eb82912835d02469456",
+  "verified_jar_sha256": "a7863b678e2a43f43722690032c89d65c243356f970671b6aefa7b34073cad10",
   "verified_cleanroom_versions": [
     "0.4.0"
   ],
   "previous_verification": {
-    "release_tag": "v1.5.0",
-    "jar_sha256": "bf668461d714313326ecf095614b58eee5b6fa5e5317c7ee5cb5de3bd92176d6",
-    "verification_document": "docs/verification/release-1.5.0-cleanroom-0.4.0/summary.json"
+    "release_tag": "v1.5.1",
+    "jar_sha256": "c452c409358f2facf87b2a5f402492be6930365dc4fb7eb82912835d02469456",
+    "verification_document": "docs/verification/release-1.5.1-cleanroom-0.4.0/summary.json"
   },
-  "release_tag": "v1.5.1",
-  "verification_directory": "docs/verification/release-1.5.1-cleanroom-0.4.0"
+  "release_tag": "v1.6.0",
+  "verification_directory": "docs/verification/release-1.6.0-cleanroom-0.4.0"
 }

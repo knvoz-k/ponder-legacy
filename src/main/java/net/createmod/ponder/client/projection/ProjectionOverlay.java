@@ -93,6 +93,9 @@ public final class ProjectionOverlay {
             for(GuiButton b:buttons)if(b.visible)result.add(new Rect(b.x-2,b.y-2,b.width+4,b.height+4));
             if(mc.player!=null&&!mc.player.getActivePotionEffects().isEmpty())result.add(new Rect(left-126,top,122,Math.min(height,mc.player.getActivePotionEffects().size()*33)));
         }else{
+            result.add(new Rect(sw-166,0,166,36)); // vanilla recipe and advancement toasts
+            if(screen instanceof ProjectionScreen settings)result.add(new Rect(0,0,settings.panelWidth()+12,sh));
+            if(ProjectionService.placing())result.add(new Rect(0,sh-126,sw,126));
             result.add(new Rect(sw/2-96,sh-62,192,62));
             result.add(new Rect(sw/2-32,sh/2-24,64,48));
             result.add(new Rect(sw/2-100,0,200,52));

@@ -43,6 +43,7 @@ public class ClientProxy extends CommonProxy {
         PonderKeybinds.register(ClientRegistry::registerKeyBinding);
         MinecraftForge.EVENT_BUS.register(events);
         MinecraftForge.EVENT_BUS.register(net.createmod.ponder.client.projection.ProjectionOverlay.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new net.createmod.ponder.client.projection.ProjectionPlacementEvents());
         net.minecraftforge.client.ClientCommandHandler.instance.registerCommand(new net.createmod.ponder.client.projection.ProjectionCommand());
         FMLCommonHandler.instance().bus().register(events);
         MinecraftForge.EVENT_BUS.register(new net.createmod.ponder.client.editor.EditorClientEvents());

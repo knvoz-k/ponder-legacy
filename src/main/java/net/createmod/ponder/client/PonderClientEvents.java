@@ -37,6 +37,7 @@ public final class PonderClientEvents {
         }
         PonderClient.onTick();
         net.createmod.ponder.client.projection.ProjectionService.tick();
+        net.createmod.ponder.client.projection.ProjectionPlacementEvents.tick();
         PonderTooltipHandler.tick();
         Minecraft minecraft = Minecraft.getMinecraft();
         if (minecraft.player != null) {

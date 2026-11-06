@@ -38,7 +38,8 @@ public final class EditorClientEvents {
 
     @SubscribeEvent public void mouse(MouseEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
-        if (!EditorWorkspace.selecting() || mc.currentScreen != null || mc.world == null) return;
+        if (!EditorWorkspace.selecting() || mc.currentScreen != null || mc.world == null
+            || net.createmod.ponder.client.projection.ProjectionService.placing()) return;
         if (event.getButton() != 0 && event.getButton() != 1) return;
         event.setCanceled(true);
         if (!event.isButtonstate()) return;

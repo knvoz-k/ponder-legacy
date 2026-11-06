@@ -56,8 +56,9 @@ public final class CleanroomEditorSmoke {
     private EditorScreen editor;
     private net.createmod.ponder.foundation.ui.PonderViewerSmoke viewerSmoke;
     private net.createmod.ponder.foundation.ui.PonderCatalogSmoke catalogSmoke;
-    private boolean viewerComplete, catalogComplete;
+    private boolean viewerComplete, catalogComplete, guideComplete;
     private net.createmod.ponder.client.guide.GuideSmoke guideSmoke;
+    private net.createmod.ponder.client.projection.ProjectionPlacementSmoke placementSmoke;
     private int phase, ticks, waitUntil, exitAt = Integer.MAX_VALUE;
     private String screenshot;
     private CompletableFuture<Void> worldReady;
@@ -245,7 +246,9 @@ public final class CleanroomEditorSmoke {
                         catalogSmoke = new net.createmod.ponder.foundation.ui.PonderCatalogSmoke(mc, this::require, this::requestScreenshot);
                     if (!catalogComplete) { catalogComplete = catalogSmoke.advance(); break; }
                     if (guideSmoke == null) guideSmoke = new net.createmod.ponder.client.guide.GuideSmoke(mc, this::require, this::requestScreenshot);
-                    if (guideSmoke.advance()) { report("PASS", null); exitAt = ticks + 10; }
+                    if (!guideComplete) { guideComplete=guideSmoke.advance(); break; }
+                    if (placementSmoke==null) placementSmoke=new net.createmod.ponder.client.projection.ProjectionPlacementSmoke(mc,this::require,this::requestScreenshot);
+                    if (placementSmoke.advance()) { report("PASS", null); exitAt=ticks+10; }
             }
         } catch (Throwable failure) {
             Ponder.LOGGER.error("Editor smoke failed at phase " + phase, failure);
@@ -260,6 +263,7 @@ public final class CleanroomEditorSmoke {
             if (viewerSmoke != null) viewerSmoke.verifyFrame(screenshot);
             if (catalogSmoke != null) catalogSmoke.verifyFrame(screenshot);
             if (guideSmoke != null) guideSmoke.verifyFrame(screenshot);
+            if (placementSmoke != null) placementSmoke.verifyFrame(screenshot);
             require(GL11.glGetError() == GL11.GL_NO_ERROR, "render " + screenshot + " has no OpenGL errors");
         } catch (Throwable failure) {
             report("FAIL", failure); exitAt = ticks + 10;

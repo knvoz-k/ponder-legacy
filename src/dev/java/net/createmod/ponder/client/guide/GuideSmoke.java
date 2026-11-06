@@ -71,7 +71,7 @@ public final class GuideSmoke {
                 world.setBlockState(new net.minecraft.util.math.BlockPos(0,1,0),net.minecraft.init.Blocks.CHEST.getDefaultState(),2);world.createBackup();
                 var scene=new net.createmod.ponder.foundation.PonderScene(world,new net.createmod.ponder.foundation.registration.PonderLocalization(),"smoke",component,List.of(),List.of());scene.setSceneTitle("smoke:projection","Construction target");
                 originalStack=mc.player.inventory.mainInventory.get(0).copy();mc.player.inventory.mainInventory.set(0,new net.minecraft.item.ItemStack(net.minecraft.init.Blocks.STONE,1));
-                net.createmod.ponder.client.projection.ProjectionService.project(scene,null);projection=net.createmod.ponder.client.projection.ProjectionService.current();projection.anchor=anchor;projection.refresh();
+                net.createmod.ponder.client.projection.ProjectionService.project(scene,null);net.createmod.ponder.client.projection.ProjectionService.confirmPlacement();projection=net.createmod.ponder.client.projection.ProjectionService.current();projection.anchor=anchor;projection.refresh();
                 check.accept(mc.world.isAirBlock(anchor)&&mc.world.isAirBlock(anchor.up()),"projecting never places blocks in the player world");
                 var stone=projection.rows.stream().filter(r->r.target().item().toString().equals("minecraft:stone")).findFirst().orElseThrow();
                 check.accept(stone.target().count()==2&&stone.available()==1&&stone.missing()==1,"pinned materials count backpack stock and missing quantity");

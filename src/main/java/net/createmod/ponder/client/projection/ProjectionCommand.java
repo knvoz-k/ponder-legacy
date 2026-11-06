@@ -10,12 +10,14 @@ import net.minecraftforge.fml.relauncher.*;
 @SideOnly(Side.CLIENT)
 public final class ProjectionCommand extends CommandBase {
     @Override public String getName(){return "ponderprojection";}
-    @Override public String getUsage(ICommandSender sender){return "/ponderprojection [layout|reset|clear|unpin|here|rotate|layer <all|y>|offset <x> <y> <z>]";}
+    @Override public String getUsage(ICommandSender sender){return "/ponderprojection [move|settings|layout|reset|clear|unpin|here|rotate|layer <all|y>|offset <x> <y> <z>]";}
     @Override public int getRequiredPermissionLevel(){return 0;}
     @Override public void execute(MinecraftServer server,ICommandSender sender,String[] args)throws CommandException{
         ProjectionSession s=ProjectionService.current();if(s==null)throw new CommandException("ponder.projection.none");
-        if(args.length==0){Minecraft.getMinecraft().displayGuiScreen(new ProjectionScreen(s,null));return;}
+        if(args.length==0){ProjectionService.move();return;}
         switch(args[0]){
+            case "move":ProjectionService.move();return;
+            case "settings":if(ProjectionService.placing())ProjectionService.confirmPlacement();Minecraft.getMinecraft().displayGuiScreen(new ProjectionScreen(s,null));return;
             case "layout":s.pinned=true;Minecraft.getMinecraft().displayGuiScreen(new ProjectionLayoutScreen(null));return;
             case "reset":ProjectionOverlay.INSTANCE.reset(false);ProjectionOverlay.INSTANCE.reset(true);return;
             case "clear":ProjectionService.clear();return;
@@ -27,5 +29,5 @@ public final class ProjectionCommand extends CommandBase {
             default:throw new WrongUsageException(getUsage(sender));
         }
     }
-    @Override public List<String> getTabCompletions(MinecraftServer server,ICommandSender sender,String[] args,BlockPos pos){return args.length==1?getListOfStringsMatchingLastWord(args,"layout","reset","clear","unpin","here","rotate","layer","offset"):List.of();}
+    @Override public List<String> getTabCompletions(MinecraftServer server,ICommandSender sender,String[] args,BlockPos pos){return args.length==1?getListOfStringsMatchingLastWord(args,"move","settings","layout","reset","clear","unpin","here","rotate","layer","offset"):List.of();}
 }

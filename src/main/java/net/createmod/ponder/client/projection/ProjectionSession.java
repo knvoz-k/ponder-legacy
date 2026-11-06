@@ -28,14 +28,29 @@ public final class ProjectionSession {
     public List<String> unknown=List.of();
     public List<BlockPos> conflicts=List.of();
     public int complete,total;
+    public boolean placing;
     public PonderScene ghost;
     private PonderLevel world;
     private final int dimension;
+    private net.minecraft.util.math.AxisAlignedBB localBounds=new net.minecraft.util.math.AxisAlignedBB(0,0,0,1,1,1);
     public ProjectionSession(ProjectionPlan plan,BlockPos anchor){this.plan=plan;this.anchor=anchor;includeBase=!plan.hasBase();dimension=Minecraft.getMinecraft().world.provider.getDimension();rebuild();}
     public int maxLayer(){return cells.stream().mapToInt(c->c.position().getY()).max().orElse(0);}
+    public List<ProjectionPlan.Cell> cells(){return cells;}
+    public Set<BlockPos> visiblePositions(){return visible;}
+    public net.minecraft.util.math.AxisAlignedBB bounds(){return localBounds.offset(anchor);}
+    /** Aim at the centre of the footprint so a large template stays in view while positioning it. */
+    public BlockPos anchorAt(BlockPos surface){
+        var box=localBounds;int cx=(int)Math.floor((box.minX+box.maxX-1)/2),cz=(int)Math.floor((box.minZ+box.maxZ-1)/2);
+        return new BlockPos(surface.getX()-cx,Math.max(0,Math.min(255-maxLayer(),surface.getY())),surface.getZ()-cz);
+    }
     public boolean validDimension(){return Minecraft.getMinecraft().world!=null&&Minecraft.getMinecraft().world.provider.getDimension()==dimension;}
     public void rebuild(){
-        cells=plan.transform(turns,mirror,includeBase);world=new PonderLevel(BlockPos.ORIGIN,null);
+        cells=plan.transform(turns,mirror,includeBase);
+        if(cells.isEmpty()){includeBase=true;cells=plan.transform(turns,mirror,true);}
+        BlockPos min=new BlockPos(cells.stream().mapToInt(c->c.position().getX()).min().orElse(0),cells.stream().mapToInt(c->c.position().getY()).min().orElse(0),cells.stream().mapToInt(c->c.position().getZ()).min().orElse(0));
+        BlockPos max=new BlockPos(cells.stream().mapToInt(c->c.position().getX()).max().orElse(0),maxLayer(),cells.stream().mapToInt(c->c.position().getZ()).max().orElse(0));
+        localBounds=new net.minecraft.util.math.AxisAlignedBB(min,max.add(1,1,1));
+        world=new PonderLevel(BlockPos.ORIGIN,null);
         for(var c:cells)world.setBlockState(c.position(),c.state(),2);
         for(var c:cells)if(c.tile()!=null){var nbt=c.tile();nbt.setInteger("x",c.position().getX());nbt.setInteger("y",c.position().getY());nbt.setInteger("z",c.position().getZ());var tile=TileEntity.create(world,nbt);if(tile!=null)world.setTileEntity(c.position(),tile);}
         world.createBackup();Map<BlockPos,List<ItemStack>> resolved=new LinkedHashMap<>();List<String> unknown=new ArrayList<>();
@@ -51,7 +66,7 @@ public final class ProjectionSession {
         Minecraft mc=Minecraft.getMinecraft();if(mc.player==null||mc.world==null)return;
         Map<String,MaterialRequirement> required=new LinkedHashMap<>();Set<BlockPos> show=new LinkedHashSet<>();List<BlockPos> conflicts=new ArrayList<>();
         complete=0;total=cells.size();
-        for(var c:cells){boolean matches=projecting&&matches(c,anchor.add(c.position()));if(matches)complete++;
+        for(var c:cells){boolean matches=projecting&&!placing&&matches(c,anchor.add(c.position()));if(matches)complete++;
             if(layer<0||c.position().getY()==layer){if(!hideCorrect||!matches)show.add(c.position());if(projecting&&!matches&&!mc.world.isAirBlock(anchor.add(c.position())))conflicts.add(c.position());}
             if(matches)continue;
             for(ItemStack stack:items.getOrDefault(c.position(),List.of())){

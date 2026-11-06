@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.createmod.ponder.projection.ProjectionPlanTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-06T17:57:39.116Z" hostname="yudream-dev" time="0.006">
+  <properties/>
+  <testcase name="inventoryCountsVariantsAndAllMatchingStacks" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.0"/>
+  <testcase name="declaredPlateRequiresACompleteLayerOfActualBlocks" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.003"/>
+  <testcase name="rotatesAe2sMultipartFacesWithoutChangingSourceNbt" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.0"/>
+  <testcase name="excludingANonexistentPlateKeepsTheLowestMachineLayer" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.0"/>
+  <testcase name="allQuarterTurnsAndMirroringKeepCorrectCoordinates" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.001"/>
+  <testcase name="materialResolutionAvoidsDoubleCountingDoorsAndUsesFluidBuckets" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.0"/>
+  <testcase name="planOwnsTileDataAndCanRemoveOnlyItsBaseLayer" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.0"/>
+  <testcase name="multimediaAndQuestLinksCompileWithoutOptionalMods" classname="net.createmod.ponder.projection.ProjectionPlanTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

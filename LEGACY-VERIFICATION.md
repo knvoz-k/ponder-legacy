@@ -1,6 +1,27 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.5.1（FTB Quests 加载顺序循环修复）
+## 当前：1.6.0（世界内投影放置与可见性）
+
+- 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
+- 生产安装包：`ponder-legacy-1.6.0.jar`；SHA-256：`a7863b678e2a43f43722690032c89d65c243356f970671b6aefa7b34073cad10`。
+- 307 项单元测试，新增实际底板判定及最低机器层保留回归；所有运行验收使用生产 SRG 安装包和独立 harness。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| core-client | PASS | 194 |
+| core-server | PASS | 10 |
+| ae2s-ftbq-media-client | PASS | 200 |
+| ae2s-ftbq-media-server | PASS | 10 |
+| revo-client | PASS | 70 |
+
+世界内检查使用真实草地方块和原生相机：点击投影后没有屏幕阻挡，准星带动预览，左右键、Shift、滚轮输入经过放置处理器，固定后原点保持不动；世界方块未被放置或破坏。蹲下中键重新抓取、Esc 拦截菜单并恢复原位置／旋转／镜像。实际 framebuffer 核对地形仍可见、蓝色投影轮廓存在，另搭建墙体验证遮挡时的轮廓和透明工具面板。
+
+AE2S / Supergiant 1.1.0 + 教程附属 0.2.0 + FTB Quests 1202.10.0-modern.10 + FTB Library 5.5.4-modern.1 + Media API 1.0.2 + ItemFilters 1.0.4.2 组合检查真实机器、线缆与终端投影及材料分解，并回归视频解码、任务跳转；未修改依赖 jar。Revo UI 0.8.7 / NFR 0.8.0 / ModularUI 3.2.0-nfr.2 组合通过原有提示框、静态页及字体重排。CraftTweaker 未安装，类加载审计通过。
+
+[原始报告、运行指纹和实机截图](docs/verification/release-1.6.0-cleanroom-0.4.0/summary.json)。Linux llvmpipe，未覆盖所有硬件、光影或任意整合包。视频使用外置 Linux VLC，不验收音频。投影仅辅助建造，不自动放置方块。历史组合结论仍对应各自安装包。
+
+
+## 历史：1.5.1（FTB Quests 加载顺序循环修复）
 
 - 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
 - 生产安装包：`ponder-legacy-1.5.1.jar`；SHA-256：`c452c409358f2facf87b2a5f402492be6930365dc4fb7eb82912835d02469456`。
