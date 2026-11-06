@@ -1,0 +1,7 @@
+{
+  "result": "EXPECTED_FAILURE",
+  "cleanroom": "0.4.0",
+  "first_mod_in_cycle": "ponder-legacy{1.5.0}",
+  "ftbquests": "1202.10.0-modern.10",
+  "shutdown": "Test JVM terminated after the matching startup failure was recorded."
+}

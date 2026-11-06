@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.createmod.ponder.metadata.OptionalIntegrationSortingTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-06T17:17:26.625Z" hostname="yudream-dev" time="0.299">
+  <properties/>
+  <testcase name="ftbQuestsCanLoadAfterPonderAlongsideAe2sTutorials" classname="net.createmod.ponder.metadata.OptionalIntegrationSortingTest" time="0.053"/>
+  <testcase name="ftbQuestsRemainsOptional" classname="net.createmod.ponder.metadata.OptionalIntegrationSortingTest" time="0.0"/>
+  <testcase name="previousBidirectionalDeclarationReproducesTheReportedCycle" classname="net.createmod.ponder.metadata.OptionalIntegrationSortingTest" time="0.231"/>
+  <testcase name="olderFtbQuestsWithoutPonderOrderingStillSorts" classname="net.createmod.ponder.metadata.OptionalIntegrationSortingTest" time="0.001"/>
+  <testcase name="packagedMetadataDoesNotReintroduceReverseOrdering" classname="net.createmod.ponder.metadata.OptionalIntegrationSortingTest" time="0.002"/>
+  <system-out><![CDATA[[12:17:26] [Test worker/FATAL] [FML]: Mod Sorting failed.
+[12:17:26] [Test worker/FATAL] [FML]: Visiting node ponder-legacy
+[12:17:26] [Test worker/FATAL] [FML]: Current sorted list : [Dummy Container (BeforeAll) @1789452565, Dummy Container (Before) @1579280783, cleanroom, forge, mixinbooter, ftblib, itemfilters, media_api, ae2]
+[12:17:26] [Test worker/FATAL] [FML]: Visited set for this node : [ae2, media_api, ftblib, itemfilters, Dummy Container (Before) @1579280783, cleanroom, ponder-legacy, Dummy Container (AfterAll) @1370074462, mixinbooter, forge, ftbquests, Dummy Container (After) @1595938139, Dummy Container (BeforeAll) @1789452565]
+[12:17:26] [Test worker/FATAL] [FML]: Explored node set : [ae2, media_api, mixinbooter, forge, Dummy Container (BeforeAll) @1789452565, ftblib, itemfilters, Dummy Container (Before) @1579280783, cleanroom]
+[12:17:26] [Test worker/FATAL] [FML]: Likely cycle is in : [ponder-legacy, Dummy Container (AfterAll) @1370074462, ftbquests, Dummy Container (After) @1595938139]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

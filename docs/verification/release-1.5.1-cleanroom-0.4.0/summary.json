@@ -1,0 +1,42 @@
+{
+  "version": "1.5.1",
+  "date": "2026-11-06",
+  "minecraft": "1.12.2",
+  "cleanroom": "0.4.0",
+  "java": "25.0.5",
+  "production_jar": "ponder-legacy-1.5.1.jar",
+  "sha256": "c452c409358f2facf87b2a5f402492be6930365dc4fb7eb82912835d02469456",
+  "fixtures": [
+    {
+      "fixture": "ftbq-ae2s-combined-client",
+      "result": "PASS",
+      "checks": 168,
+      "report": "ftbq-ae2s-combined-client/report.json"
+    },
+    {
+      "fixture": "ftbq-ae2s-combined-server",
+      "result": "PASS",
+      "checks": 10,
+      "report": "ftbq-ae2s-combined-server/report.json"
+    },
+    {
+      "fixture": "without-optionals-client",
+      "result": "PASS",
+      "checks": 166,
+      "report": "without-optionals-client/report.json"
+    },
+    {
+      "fixture": "without-optionals-server",
+      "result": "PASS",
+      "checks": 10,
+      "report": "without-optionals-server/report.json"
+    }
+  ],
+  "unit_tests": {
+    "tests": 305,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "regression": "Ponder after:ftbquests plus FTB Quests after:ponder-legacy creates an FML ordering cycle. Remove the lazy consumer bridge ordering from Ponder."
+}

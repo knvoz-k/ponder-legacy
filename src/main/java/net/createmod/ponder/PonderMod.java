@@ -21,7 +21,8 @@ import net.minecraftforge.fml.relauncher.Side;
     version = Ponder.VERSION,
     acceptedMinecraftVersions = "[1.12.2]",
     dependencies = "required-after:cleanroom@[0.4.0,);required-after:forge@[14.23.5.2847,);required-after:mixinbooter@[9.1,);"
-        + "after:crafttweaker@[4.1.20,);after:modularmachinery;after:ftbquests;after:media_api@[1.0.2,2.0.0)",
+        // FTB Quests may load after Ponder for its optional tutorial integration. This bridge is lazy.
+        + "after:crafttweaker@[4.1.20,);after:modularmachinery;after:media_api@[1.0.2,2.0.0)",
     guiFactory = "net.createmod.ponder.client.PonderGuiFactory",
     acceptableRemoteVersions = "*"
 )

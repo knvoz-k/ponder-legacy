@@ -1,6 +1,26 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.5.0（双展示、Markdown、投影与材料目标）
+## 当前：1.5.1（FTB Quests 加载顺序循环修复）
+
+- 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
+- 生产安装包：`ponder-legacy-1.5.1.jar`；SHA-256：`c452c409358f2facf87b2a5f402492be6930365dc4fb7eb82912835d02469456`。
+- 305 项单元测试，包括 5 项 Forge ModSorter 排序与元数据回归。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| ftbq-ae2s-combined-client | PASS | 168 |
+| ftbq-ae2s-combined-server | PASS | 10 |
+| without-optionals-client | PASS | 166 |
+| without-optionals-server | PASS | 10 |
+
+已用原 1.5.0 实际生产包 + FTBQ 1202.10.0-modern.10 + AE2S / Supergiant 1.1.0 + AE2S Ponder Legacy 0.2.0 复现截图对应的 FML 排序循环；旧包日志和运行指纹作为预期失败保留。该 FTBQ 声明 `after:ponder-legacy`，与 1.5.0 的 `after:ftbquests` 互相冲突。1.5.0 的早先媒体组合使用不含这一声明的 FTBQ modern.8，不能覆盖此次组合。
+
+1.5.1 移除 Ponder 反向约束，在相同 modern.10 组合上通过客户端、专服及原生任务链接／媒体／投影回归；另检查未安装可选联动的两端。FTB Quests、Media API 和 CraftTweaker 保持可选，原 AE2S 附属 0.2.0 无需重新打包。FTB Library 5.5.4-modern.1、ItemFilters 1.0.4.2 和 Media API 1.0.2 按原 jar 验证，未修改依赖本体。
+
+[本版报告、运行指纹、失败复现与截图](docs/verification/release-1.5.1-cleanroom-0.4.0/summary.json)。Linux llvmpipe；未覆盖任意整合包或全部硬件。视频测试使用外置 Linux VLC，不验收音频。本版没有重跑所有旧版可选模组组合，历史记录仅对应其各自的包。
+
+
+## 历史：1.5.0（双展示、Markdown、投影与材料目标）
 
 - 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
 - 生产安装包：`ponder-legacy-1.5.0.jar`；SHA-256：`bf668461d714313326ecf095614b58eee5b6fa5e5317c7ee5cb5de3bd92176d6`。

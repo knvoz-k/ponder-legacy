@@ -36,7 +36,7 @@ with ZipFile(jars[0]) as archive:
     assert 'net/createmod/ponder/guide/MarkdownTutorialCompiler.class' in classes, 'Shared guide compiler missing'
     assert 'net/createmod/ponder/client/projection/ProjectionLayoutScreen.class' in classes, 'Material layout editor missing'
     assert not any(name.startswith(('com/feed_the_beast/', 'dev/yudream/mediaapi/')) for name in classes), 'Optional media dependency bundled'
-    assert 'after:ftbquests' in metadata['dependencies'], 'FTB Quests must remain optional'
+    assert not any(':ftbquests' in dep for dep in metadata['dependencies']), 'Lazy FTB Quests bridge must not constrain reverse load ordering'
     assert 'after:media_api@[1.0.2,2.0.0)' in metadata['dependencies'], 'Media API must remain optional'
     assert archive.namelist().count('mixins.ponder.refmap.json') == 1, 'Expected one SRG refmap'
     assert 'after:crafttweaker@[4.1.20,)' in metadata['dependencies'], 'CraftTweaker must remain optional'
