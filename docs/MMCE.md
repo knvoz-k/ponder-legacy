@@ -1,5 +1,7 @@
 # MMCE 可选适配
 
+Ponder Legacy 1.4.1 起自身不再强制安装 CraftTweaker；官方 MMCE 2.3.2 的元数据仍要求 CraftTweaker 4.0.4+，因此 MMCE 组合仍需安装它。Ponder 的 ZenScript 前端使用 4.1.20+，验证版本为 4.1.20.698。
+
 Ponder 的 Cleanroom 运行包内置 MMCE 适配代码，MMCE 自身仍需独立安装。
 只安装 Ponder 时也能正常使用；不需要额外的 Ponder-MMCE 运行 jar。
 

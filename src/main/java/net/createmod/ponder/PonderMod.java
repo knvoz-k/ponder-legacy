@@ -3,6 +3,7 @@ package net.createmod.ponder;
 import java.util.Map;
 
 import net.createmod.ponder.compat.PonderOptionalCompat;
+import net.createmod.ponder.compat.crafttweaker.PonderCraftTweakerCompat;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
     version = Ponder.VERSION,
     acceptedMinecraftVersions = "[1.12.2]",
     dependencies = "required-after:cleanroom@[0.4.0,);required-after:forge@[14.23.5.2847,);required-after:mixinbooter@[9.1,);"
-        + "required-after:crafttweaker@[4.1.20,);after:modularmachinery",
+        + "after:crafttweaker@[4.1.20,);after:modularmachinery",
     guiFactory = "net.createmod.ponder.client.PonderGuiFactory",
     acceptableRemoteVersions = "*"
 )
@@ -39,6 +40,7 @@ public final class PonderMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        PonderCraftTweakerCompat.initialize();
         java.io.File gameDirectory = event.getModConfigurationDirectory().getParentFile();
         net.createmod.ponder.script.BuiltinScriptInstaller.retireUnmodifiedExamples(gameDirectory);
         net.createmod.ponder.foundation.structure.PonderStructureLoader.setExternalRoot(new java.io.File(gameDirectory, "scripts/ponder/structures"));

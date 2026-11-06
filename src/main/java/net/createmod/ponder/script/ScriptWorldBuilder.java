@@ -5,6 +5,7 @@ import crafttweaker.api.data.IData;
 import crafttweaker.mc1120.data.NBTConverter;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -441,6 +442,7 @@ public final class ScriptWorldBuilder {
     }
 
     @ZenMethod
+    @Optional.Method(modid = "crafttweaker")
     public void modifyTileNBT(ScriptSelection selection, IData value, boolean replace, boolean redraw) {
         if (value == null) throw new IllegalArgumentException("Tile NBT data is required");
         NBTBase converted = NBTConverter.from(value);

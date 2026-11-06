@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'net.createmod.ponder'
-version = '1.4.0'
+version = '1.4.1'
 base.archivesName = 'ponder-legacy'
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
@@ -24,7 +24,11 @@ repositories {
 }
 dependencies {
     implementation cleanroom.userdev(cleanroom_version)
-    implementation(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
+    compileOnly(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
+    testImplementation(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
+    if (project.hasProperty('withCraftTweaker')) {
+        runtimeOnly(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
+    }
     // The integration ships in Ponder, while MMCE remains an independently installed, optional mod.
     compileOnly(deobf('curse.maven:modularmachinery-community-edition-817377:7372951')) { transitive = false }
     testImplementation(deobf('curse.maven:modularmachinery-community-edition-817377:7372951')) { transitive = false }
@@ -74,6 +78,7 @@ tasks.register('serverHarnessJar', Jar) {
     destinationDirectory = layout.buildDirectory.dir('dev')
     from sourceSets.dev.output
     include 'net/createmod/ponder/server/**'
+    include 'net/createmod/ponder/verification/optional/**'
 }
 tasks.register('mmceHarnessJar', Jar) {
     dependsOn tasks.mmceHarnessClasses

@@ -28,6 +28,7 @@ public final class CleanroomServerSmoke {
 
     @Mod.EventHandler public void prepare(FMLPreInitializationEvent event) {
         if (!Boolean.getBoolean("ponder.dev.serverSmoke")) return;
+        net.createmod.ponder.verification.optional.CraftTweakerChecks.prepare();
         // Default demos are intentionally not installed. The isolated harness
         // provides its own scene instead of depending on user content.
         PonderIndex.addPlugin(new net.createmod.ponder.api.registration.PonderPlugin() {
@@ -55,6 +56,9 @@ public final class CleanroomServerSmoke {
         report.addProperty("minecraft", "1.12.2");
         report.addProperty("cleanroom", Loader.instance().getIndexedModList().get("cleanroom").getVersion());
         try {
+            com.google.gson.JsonArray checks = new com.google.gson.JsonArray();
+            for (String check : net.createmod.ponder.verification.optional.CraftTweakerChecks.verify()) checks.add(check);
+            report.add("checks", checks);
             PonderScene scene = PonderIndex.getSceneAccess().compile(new ResourceLocation("minecraft:crafting_table")).get(0);
             scene.begin(); scene.seek(scene.getTotalTicks()); scene.restart();
             if (scene.getWorld() == null || scene.getCurrentTick() != 0) throw new IllegalStateException("Server scene runtime failed");

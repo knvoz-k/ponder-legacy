@@ -1,6 +1,40 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.4.0 正式版（含 Revo UI 可选适配）
+## 当前：1.4.1（CraftTweaker 可选前置）
+
+- 验收日期：2026-11-06。
+- Minecraft 1.12.2；**Cleanroom 0.4.0 正式版（无 `-alpha`）**；Java 25.0.5。
+- 安装包：`ponder-legacy-1.4.1.jar`。
+- SHA-256：`fb6dc08c9f9cdd36deb7f610df0e751957fec8d354cd4c904ef793ab1d1839a7`。
+- 279 项单元测试通过；实际运行使用生产 SRG jar 与独立 harness，不使用 MCP / userdev。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| 无 CraftTweaker 客户端 | PASS | 126 |
+| 无 CraftTweaker 物理专服 | PASS | 10 |
+| CraftTweaker 4.1.20.698 客户端 | PASS | 127 |
+| CraftTweaker 4.1.20.698 物理专服 | PASS | 11 |
+| 无 CraftTweaker，安装 Revo UI / NFR / ModularUI / AE2S 的客户端 | PASS | 68 |
+| 无 CraftTweaker，安装 Revo UI / NFR / ModularUI 的物理专服 | PASS | 10 |
+| MMCE 2.3.2 + CraftTweaker 客户端 / 物理专服 | PASS | 34 / 29 |
+
+未安装 CrT 时，完整编辑器、框选捕获、NBT 保留、动画、目录与多场景导航通过；Java 场景注册、JSON 自定义 codec、保存重载、场景编译/跳转/重播及同步快照通过。类加载审计确认没有加载 CraftTweaker、ZenScript 或 CrT 诊断桥；专服不加载 Ponder 客户端适配类。涉及 `IData` 的 ZenScript 专用方法由 Forge 可选方法转换器移除，公共类可正常枚举方法。
+
+安装 CrT 时，真实 `.zs` fixture 在启动阶段注册场景，并执行 `modifyTileNBT`、自定义 codec 与播放验证。Gradle 依赖改为 `compileOnly`，发布 POM 不携带 CrT 传递依赖；开发时通过 `-PwithCraftTweaker` 显式启用。
+
+官方 MMCE 2.3.2 **自身**要求 CraftTweaker 4.0.4+，因此该组合不能省去 CrT；Ponder 不修改第三方 jar 或依赖约束。该限制的实际加载器错误与全部独立报告、运行指纹、截图见 [1.4.1 验收证据](docs/verification/release-1.4.1-cleanroom-0.4.0/summary.json)。Revo UI 组合使用 [NFR 合法最小配置](docs/REVO-UI.md)。渲染使用 Linux llvmpipe，未覆盖所有硬件与整合包。
+
+复现核心组合：
+
+```bash
+./tools/dev.sh build reobfDevHarnessJar reobfServerHarnessJar
+python3 tools/verify-cleanroom.py client --crafttweaker absent
+python3 tools/verify-cleanroom.py server --crafttweaker absent
+python3 tools/verify-cleanroom.py client --crafttweaker present
+python3 tools/verify-cleanroom.py server --crafttweaker present
+```
+
+## 历史：1.4.0 正式版（含 Revo UI 可选适配）
 
 - 验收日期：2026-11-04。
 - Minecraft 1.12.2；**Cleanroom 0.4.0 正式版（无 `-alpha`）**；Java 25.0.5；CraftTweaker 4.1.20.698。

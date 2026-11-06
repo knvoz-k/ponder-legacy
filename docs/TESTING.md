@@ -1,5 +1,7 @@
 # Ponder 1.12.2 发布与运行验收
 
+当前 Cleanroom 1.4.1 起 CraftTweaker 为可选依赖。当前客户端 / 专服验收和精确包哈希见 [LEGACY-VERIFICATION.md](../LEGACY-VERIFICATION.md)。下文旧 Forge / CatServer 基线只适用于对应历史产物。
+
 所有结果都绑定到一次具体构建的 SHA-256。重新构建会改变 manifest 时间戳和 jar 哈希，之前的
 客户端、专服或 CatServer 结果不能自动转移到新 jar。服务端单独启动成功也不能代替客户端渲染验收。
 

@@ -1,6 +1,7 @@
 # Ponder Legacy ZenScript API
 
 本文档对应 `1.3.0-alpha.1-mc1.12.2` 的实际 `@ZenClass` 和 `@ZenMethod`。脚本由
+Ponder 1.4.1 起 CraftTweaker 是可选前置，只有本页的 ZenScript 前端需要它；JSON、Java 和编辑器不依赖它。
 CraftTweaker 4.1.20+ 在启动阶段执行，推荐放在 `scripts/ponder/scenes`。修改脚本后必须重启；
 `/ponder reload` 会重新读取 JSON 场景包，但只重新应用当前进程中已经编译的 ZS 定义。
 

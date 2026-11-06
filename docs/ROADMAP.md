@@ -1,5 +1,7 @@
 # Ponder Legacy 项目路线图
 
+当前 Cleanroom 1.4.1 已将 CraftTweaker 改为可选前置，JSON、Java API 和编辑器可独立使用。下方保留旧 Forge 开发路线的历史约束。
+
 最后更新：2026-07-18
 
 本路线图用于记录 Ponder Legacy 的当前完成度、已知缺口、版本目标和发布门槛。

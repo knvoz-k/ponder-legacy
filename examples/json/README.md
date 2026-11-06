@@ -1,7 +1,7 @@
 # Ponder JSON example pack
 
 Copy the `scripts` directory into a Minecraft 1.12.2 instance that has Ponder
-Legacy 1.3.0, CraftTweaker and MixinBooter installed.
+Legacy installed. Ponder Legacy 1.4.1+ on Cleanroom does not require CraftTweaker for JSON packs.
 
 The pack registers one authored scene for the crafting table. It demonstrates
 pack tags, shared text, index exclusions, selections, independent section and

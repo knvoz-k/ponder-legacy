@@ -1,6 +1,6 @@
 # Ponder Example Addon Smoke Pack
 
-Install the generated addon jar together with Ponder 1.3.0, CraftTweaker and
+Install the generated addon jar together with Ponder Legacy 1.4.1+, CraftTweaker (this smoke pack includes .zs scripts), and
 MixinBooter. Copy the `scripts` directory into the Minecraft instance.
 
 The pack registers a server-synchronizable ZenScript scene using the

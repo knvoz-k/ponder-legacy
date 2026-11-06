@@ -10,9 +10,11 @@ import crafttweaker.api.data.IData;
 import crafttweaker.mc1120.data.NBTConverter;
 import net.createmod.ponder.api.script.ScriptInstructionCodec;
 import net.createmod.ponder.api.script.ScriptInstructionCodecs;
+import net.createmod.ponder.compat.crafttweaker.PonderCraftTweakerCompat;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenProperty;
@@ -136,6 +138,7 @@ public final class ScriptSceneBuilder {
     }
 
     @ZenMethod
+    @Optional.Method(modid = "crafttweaker")
     public ScriptSceneBuilder custom(String codecId, IData value) {
         ResourceLocation id = ScriptSceneRegistry.parseId(codecId, "instruction codec id");
         ScriptInstructionCodec codec = ScriptInstructionCodecs.get(id);
@@ -268,11 +271,7 @@ public final class ScriptSceneBuilder {
     }
 
     private static String captureSource() {
-        try {
-            return normalizeSource(crafttweaker.CraftTweakerAPI.getScriptFileAndLine());
-        } catch (Throwable ignored) {
-            return null;
-        }
+        return normalizeSource(PonderCraftTweakerCompat.captureSource());
     }
 
     private static String normalizeSource(String value) {

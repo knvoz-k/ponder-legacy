@@ -38,6 +38,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
@@ -60,6 +61,10 @@ public final class CleanroomEditorSmoke {
     private String screenshot;
     private CompletableFuture<Void> worldReady;
     private final BlockPos origin = new BlockPos(-3, 64, -5);
+
+    @Mod.EventHandler public void preInit(FMLPreInitializationEvent event) {
+        net.createmod.ponder.verification.optional.CraftTweakerChecks.prepare();
+    }
 
     @Mod.EventHandler public void init(FMLInitializationEvent event) throws Exception {
         if (!Boolean.getBoolean("ponder.dev.smoke")) return;
@@ -126,6 +131,8 @@ public final class CleanroomEditorSmoke {
                 case 2:
                     if (!worldReady.isDone()) return;
                     worldReady.join();
+                    for (String check : net.createmod.ponder.verification.optional.CraftTweakerChecks.verify())
+                        require(true, check);
                     SceneDocument fixture = SceneDocument.create("smoke:editor", "minecraft:book", "Ponder editor smoke", "ponder:demo/basics");
                     Path fixturePath = ScenePackIO.resolveId(EditorWorkspace.packs(), "smoke:editor_pack", ".ponder.json");
                     ScenePackIO.save(fixturePath, fixture);

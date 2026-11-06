@@ -6,6 +6,8 @@ import net.createmod.ponder.mmce.structure.MMCEStructureProvider;
 import net.createmod.ponder.mmce.subject.MMCEBlueprintResolver;
 import net.createmod.ponder.mmce.script.MMCEStructures;
 import net.createmod.ponder.mmce.script.MMCEStructureRef;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 
 /**
  * Lifecycle bridge shared by the integrated Ponder jar and the legacy addon.
@@ -19,15 +21,19 @@ public final class PonderMMCEEntrypoint {
 
     public static synchronized void preInit() {
         if (compatibilityEnabled || !MMCECompatibility.isSupported()) return;
-        // CraftTweaker loads @ZenRegister classes even before evaluating @ModOnly.
-        // Register these only after presence and ABI checks, before the normal script loader runs.
-        crafttweaker.CraftTweakerAPI.registerClass(MMCEStructureRef.class);
-        crafttweaker.CraftTweakerAPI.registerClass(MMCEStructures.class);
+        if (Loader.isModLoaded("crafttweaker")) registerScriptClasses();
         PonderStructureProviders.register(MMCEStructureProvider.INSTANCE);
         PonderSubjectResolvers.register(PonderMMCE.BLUEPRINT_RESOLVER_ID,
             MMCEBlueprintResolver.PRIORITY, MMCEBlueprintResolver.INSTANCE);
         compatibilityEnabled = true;
         PonderMMCE.LOGGER.info("Enabled optional MMCE structure provider and blueprint resolver");
+    }
+
+    @Optional.Method(modid = "crafttweaker")
+    private static void registerScriptClasses() {
+        // Register only after both optional dependencies passed their presence / ABI checks.
+        crafttweaker.CraftTweakerAPI.registerClass(MMCEStructureRef.class);
+        crafttweaker.CraftTweakerAPI.registerClass(MMCEStructures.class);
     }
 
     public static synchronized void postInit() {

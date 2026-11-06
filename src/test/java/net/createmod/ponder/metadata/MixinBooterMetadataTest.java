@@ -1,6 +1,7 @@
 package net.createmod.ponder.metadata;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 
 public class MixinBooterMetadataTest {
     private static final String SUPPORTED_DEPENDENCY = "required-after:mixinbooter@[9.1,)";
-    private static final String CRAFTTWEAKER_DEPENDENCY = "required-after:crafttweaker@[4.1.20,)";
+    private static final String CRAFTTWEAKER_DEPENDENCY = "after:crafttweaker@[4.1.20,)";
 
     @Test
     public void modAnnotationAllowsSupportedMixinBooterVersions() {
@@ -28,6 +29,7 @@ public class MixinBooterMetadataTest {
         assertEquals(Ponder.MOD_ID, annotation.modid());
         assertTrue(annotation.dependencies().contains(SUPPORTED_DEPENDENCY));
         assertTrue(annotation.dependencies().contains(CRAFTTWEAKER_DEPENDENCY));
+        assertFalse(annotation.dependencies().contains("required-after:crafttweaker"));
     }
 
     @Test
@@ -44,6 +46,7 @@ public class MixinBooterMetadataTest {
         assertNotNull("processed Ponder mcmod.info is missing", ponderMetadata);
         assertTrue(ponderMetadata.contains(SUPPORTED_DEPENDENCY));
         assertTrue(ponderMetadata.contains(CRAFTTWEAKER_DEPENDENCY));
+        assertFalse(ponderMetadata.contains("required-after:crafttweaker"));
     }
 
     @Test

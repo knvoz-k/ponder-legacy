@@ -25,13 +25,16 @@ with ZipFile(jars[0]) as archive:
     assert '${' not in archive.read('mcmod.info').decode(), 'Unexpanded metadata'
     assert not any('/dev/' in name or 'Smoke.class' in name for name in archive.namelist() if name.endswith('.class')), 'Development harness in release'
     classes = [name for name in archive.namelist() if name.endswith('.class')]
-    assert not any(name.startswith(('hellfirepvp/modularmachinery/', 'github/kasuminova/mmce/', 'neofontrender/',
+    assert not any(name.startswith(('crafttweaker/', 'stanhebben/zenscript/',
+                                    'hellfirepvp/modularmachinery/', 'github/kasuminova/mmce/', 'neofontrender/',
                                     'net/createmod/ponder/verification/')) for name in classes), 'Dependency or harness bundled in release'
     assert 'net/createmod/ponder/mmce/PonderMMCEMod.class' not in classes, 'Old standalone MMCE entrypoint bundled'
     assert 'net/createmod/ponder/mmce/PonderMMCEEntrypoint.class' in classes, 'MMCE optional integration missing'
     assert 'net/createmod/ponder/compat/revoui/PonderRevoMixinLoader.class' in classes, 'Optional Revo UI loader missing'
     assert 'mixins.ponder.revo_ui.json' in archive.namelist(), 'Optional Revo UI mixin config missing'
     assert archive.namelist().count('mixins.ponder.refmap.json') == 1, 'Expected one SRG refmap'
+    assert 'after:crafttweaker@[4.1.20,)' in metadata['dependencies'], 'CraftTweaker must remain optional'
+    assert not any('required' in dep and ':crafttweaker' in dep for dep in metadata['dependencies']), 'CraftTweaker declared required'
     cleanmix_versions = json.loads(archive.read('cleanmix_version_compatibility.json'))
     assert list(cleanmix_versions) == sorted(cleanmix_versions), 'CleanMix compatibility metadata must be sorted for reproducible jars'
     expected_tag = 'v' + metadata['version']

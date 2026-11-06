@@ -4,11 +4,11 @@
 
 ## Ponder Legacy 的 GitHub Release
 
-当前 Ponder 正式版本为 `1.4.0`，最低加载器为 **0.4.0 正式版（无 `-alpha`）**。历史预发行版本为 `1.4.0-cleanroom-alpha.1`。
+当前 Ponder 版本为 `1.4.1`（CraftTweaker 可选），历史正式版本为 `1.4.0`，最低加载器为 **0.4.0 正式版（无 `-alpha`）**。历史预发行版本为 `1.4.0-cleanroom-alpha.1`。
 
 1. 将当前代码、README、`legacy-identity.json` 与对应运行证据提交到 `main`，确认普通 CI 的构建、测试及包检查通过。
 2. 核对 CI 生产 jar 的 SHA-256 与 `verified_jar_sha256` 及 [安装包验收](../LEGACY-VERIFICATION.md) 一致。若不同，先定位差异并完成对应运行验证，更新证据后再发布。
-3. 推送与 jar 内版本一致的标签（当前包对应 `v1.4.0`）。`ci.yml` 会重新构建并强制核对已验收哈希，再创建 GitHub Release。
+3. 推送与 jar 内版本一致的标签（当前包对应 `v1.4.1`）。`ci.yml` 会重新构建并强制核对已验收哈希，再创建 GitHub Release。
 4. 发行资产为生产 jar、`-api.jar`、`-sources.jar` 和 `SHA256SUMS`；发行说明来自 `docs/releases/<version>.md`。Alpha / Beta / RC 标签保持预发行状态。
 5. 从 Release 下载生产 jar 并核对校验值；开发 harness 与测试报告只属于开发证据，不作为运行模组发布。
 
@@ -58,12 +58,12 @@
 
 | 项目 | 必需关系 | 可选关系 / 说明 |
 | --- | --- | --- |
-| Ponder Legacy | CraftTweaker 4.1.20.698 | MMCE 2.3.2 可选，独立安装；适配已包含在 Ponder 中。附属自行依赖 Ponder；不要把开发 API jar 当运行库 |
+| Ponder Legacy 1.4.1+ | 无额外 Mod 前置；需要 Cleanroom / Java | CraftTweaker 4.1.20.698（仅 ZenScript）、MMCE 2.3.2、Revo UI 均可选且独立安装；附属自行依赖 Ponder；不要把开发 API jar 当运行库 |
 | Hostile Neural Networks Legacy | Cleanroom / Java 要求写入描述 | Ponder Legacy；JEI 用于配方查询 |
 | Powah Legacy | Cleanroom / Java 要求写入描述 | Ponder Legacy；目前没有 energizing JEI 页面 |
 | AE2S Ponder Legacy | **AE2S / Supergiant 1.1.0**，实际 loader ID `ae2` | Ponder Legacy；没有 Ponder 时正常启动但不显示教程 |
 
-平台关系必须选择实际的 Legacy / AE2S 项目 ID，并检查其 1.12.2 文件；不能链接现代同名项目、原版 AE2 或 AE2UEL 代替 AE2S。附属安装 Ponder 时，CraftTweaker 由 Ponder 的必需关系传递安装；手工安装时也须提供它。
+平台关系必须选择实际的 Legacy / AE2S 项目 ID，并检查其 1.12.2 文件；不能链接现代同名项目、原版 AE2 或 AE2UEL 代替 AE2S。Ponder 1.4.1 起不得将 CraftTweaker 标为必需或传递安装依赖；仅分发 `.zs` 教程的整合包需要安装它。历史 1.4.0 的必需关系保持原样。
 
 ## CurseForge / Modrinth 后续自动发布
 

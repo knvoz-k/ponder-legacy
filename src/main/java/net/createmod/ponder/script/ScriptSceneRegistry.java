@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.IdentityHashMap;
 
-import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import net.createmod.ponder.compat.crafttweaker.PonderCraftTweakerCompat;
 import net.createmod.ponder.api.diagnostic.PonderDiagnosticIssue;
 import net.createmod.ponder.api.diagnostic.PonderDiagnosticSeverity;
 import net.createmod.ponder.api.diagnostic.PonderDiagnosticView;
@@ -68,7 +68,7 @@ public final class ScriptSceneRegistry {
             || JSON_LOCAL.containsKey(definition.getSceneId()))
             throw new IllegalArgumentException("Duplicate Ponder script scene id: " + definition.getSceneId());
         ZS_LOCAL.put(definition.getSceneId(), definition);
-        CraftTweakerAPI.logInfo("Registered Ponder scene " + definition.getSceneId()
+        PonderCraftTweakerCompat.logInfo("Registered Ponder scene " + definition.getSceneId()
             + " for " + definition.getComponent());
     }
 
@@ -102,7 +102,7 @@ public final class ScriptSceneRegistry {
             String source = builder.getSourceDescription();
             String message = "Ponder scene builder was not registered: " + builder.getSceneId()
                 + (source == null ? "" : " at " + source);
-            CraftTweakerAPI.logError(message);
+            PonderCraftTweakerCompat.logError(message);
             addRegistrationIssue(new PonderDiagnosticIssue("registration.script_unregistered",
                 PonderDiagnosticSeverity.ERROR, message, builder.getSceneId(), -1));
         }

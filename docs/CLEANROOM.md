@@ -6,14 +6,15 @@
 - 编译与编辑器开发环境使用 Cleanroom `0.7.14-alpha` userdev；该工具链版本不代表最低运行要求。
 - Java 25（当前工作区提供 Temurin `25.0.5+8`）。
 - CleanroomGradle `0.22.0`，Gradle Wrapper `9.8.1`。
-- CraftTweaker `4.1.20.698`，运行时为外部依赖。
+- CraftTweaker 为可选外部依赖，仅 ZenScript 前端需要；验证版本为 `4.1.20.698`。默认开发客户端不安装，可用 `-PwithCraftTweaker` 启用。
 - Cleanroom 内置 MixinBooter 兼容 API，当前开发运行显示版本 `12.1`。
 - 来源、基础提交及 MIT 许可证见 [`../NOTICE.md`](../NOTICE.md)。
 
 ```bash
 export JAVA_HOME=/home/yudream/code/mods/.dev/jdk-25.0.5+8
 ./gradlew build                 # 单元测试、MCP 开发 jar、SRG 安装 jar、API 和源码 jar
-./gradlew runClient             # MCP 开发客户端
+./gradlew runClient             # MCP 开发客户端，无需 CraftTweaker
+./gradlew runClient -PwithCraftTweaker # 同时验证可选 ZenScript 前端
 ./gradlew runServer             # 本地独立服务器；首次运行需自行接受 EULA
 ./gradlew runClient -PponderSmoke  # 自动客户端验证，完成后退出
 ./gradlew runClient -PponderSmoke -PpackagedSmoke # 用安装 jar 替换源码输出进行验证
@@ -53,7 +54,7 @@ Windows 使用 `gradlew.bat`，并把 `JAVA_HOME` 指向 Java 25。
 
 Java addon 推荐编译依赖完整 `-mcp.jar`，运行时使用安装 jar。
 发布文件没有嵌入 Cleanroom、CraftTweaker 或开发测试模组。
-Mod ID 为 `ponder_legacy`，内容 namespace 为 `ponder`。
+Mod ID 为 `ponder-legacy`，内容 namespace 为 `ponder`。
 
 ## 世界选区到场景
 

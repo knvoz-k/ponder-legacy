@@ -10,9 +10,9 @@
 
 ## 当前状态
 
-当前正式版本为 **`1.4.0`**，新增 [Revo UI / 焕新 UI 可选适配](docs/REVO-UI.md)，修复现代提示框中的思索进度条覆盖文字、伸入模型预览区的问题；保留可选 MMCE 2.3.2 适配。运行基线为 **Cleanroom 0.4.0 正式版（无 `-alpha`）**。当前包与历史发行包的验收范围、SHA-256 分别记录在 [验收记录](LEGACY-VERIFICATION.md)。
+当前版本为 **`1.4.1`**，CraftTweaker 已改为可选前置：只有 ZenScript 场景需要安装；JSON、Java API 和游戏内编辑器可独立运行。沿用 `1.4.0` 的 [Revo UI / 焕新 UI 可选适配](docs/REVO-UI.md)，修复现代提示框中的思索进度条覆盖文字、伸入模型预览区的问题；保留可选 MMCE 2.3.2 适配。运行基线为 **Cleanroom 0.4.0 正式版（无 `-alpha`）**。当前包与历史发行包的验收范围、SHA-256 分别记录在 [验收记录](LEGACY-VERIFICATION.md)。
 
-安装包从 [GitHub Releases](https://github.com/mcyudream/ponder-legacy/releases) 获取，选择无分类后缀的 `ponder-legacy-*.jar`，并独立安装 CraftTweaker。发行状态见 [PUBLICATION.md](PUBLICATION.md)。
+安装包从 [GitHub Releases](https://github.com/mcyudream/ponder-legacy/releases) 获取，选择无分类后缀的 `ponder-legacy-*.jar`。从 `1.4.1` 起，仅使用 ZenScript 时需要独立安装 CraftTweaker；`1.4.0` 仍要求安装。发行状态见 [PUBLICATION.md](PUBLICATION.md)。
 
 <!-- legacy-authorship:start -->
 ## 作者与来源 / Authors and upstream
@@ -64,8 +64,9 @@
 
 ## 依赖
 
-- 必需：CraftTweaker 4.1.20.698；Cleanroom 提供 MixinBooter 兼容接口。
-- 可选：MMCE 2.3.2，安装后启用机器结构与蓝图入口；无需额外安装 Ponder-MMCE 附属包。
+- 必需：Cleanroom 0.4.0 正式版（无 `-alpha`）与 Java 25；Cleanroom 提供 MixinBooter 兼容接口。
+- 可选：CraftTweaker 4.1.20+（验证版本 4.1.20.698），用于加载 ZenScript 场景；未安装时 JSON、Java API、结构捕获和编辑器仍可使用。
+- 可选：MMCE 2.3.2，安装后启用机器结构与蓝图入口；无需额外安装 Ponder-MMCE 附属包。MMCE 2.3.2 自身要求 CraftTweaker，安装它时仍须满足该依赖。
 - 可选：Revo UI 0.8.7 / NFR 0.8.0 / ModularUI 3.2.0-nfr.2；按其官方要求独立安装，见 [适配说明](docs/REVO-UI.md)。
 - 作为其他 Mod 的教程运行库时独立安装；附属应以可选兼容方式接入。
 
@@ -124,7 +125,7 @@ export JAVA_HOME=/home/yudream/code/mods/.dev/jdk-25.0.5+8
 本地开发环境使用 MCP 命名，资源与世界保存在工程 `run/client/` 目录。
 默认 Gradle/JDK 配置、运行说明和 API 示例见 [Cleanroom 开发手册](docs/CLEANROOM.md)。
 
-安装时使用 `build/libs/ponder-legacy-1.4.0.jar`，并安装 **CraftTweaker 4.1.20.698**。
+安装时使用 `build/libs/ponder-legacy-1.4.1.jar`；仅使用 `.zs` 场景时需要安装 **CraftTweaker 4.1.20.698**。
 Cleanroom 已提供 MixinBooter 兼容接口。`-mcp`、`-api`、`-sources` 文件用于开发，不要作为重复模组安装。
 Mod ID 保持 `ponder-legacy`；资源空间为 `ponder`。客户端与安装了 Ponder 的服务器需要使用相同版本。
 

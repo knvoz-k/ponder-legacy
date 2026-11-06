@@ -1,0 +1,8 @@
+{
+  "mod": "modularmachinery",
+  "version": "2.3.2",
+  "result": "MISSING_REQUIRED_CRAFTTWEAKER",
+  "loader": "0.4.0",
+  "loader_error": "\u001b[31;1m[05:34:49] [Server thread/FATAL] [FML]: net.minecraftforge.fml.common.MissingModsException: Mod modularmachinery (Modular Machinery: Community Edition) requires [crafttweaker@[4.0.4,)]",
+  "scope": "MMCE dependency; Ponder by itself passes client and server with CraftTweaker absent."
+}

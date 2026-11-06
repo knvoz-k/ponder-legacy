@@ -1,5 +1,7 @@
 # Ponder 1.12.2 / 1.3.0 开发接入
 
+当前 Cleanroom 1.4.1 起 CraftTweaker 为可选依赖，只有 ZenScript 前端需要它；当前构建与运行说明见 [CLEANROOM.md](CLEANROOM.md)，安装包证据见 [LEGACY-VERIFICATION.md](../LEGACY-VERIFICATION.md)。下方旧 Forge 1.3.0 基线按原版本保留。
+
 本项目的公开 Ponder API 位于 `net.createmod.ponder.api`，脚本支持和运行时适配类位于
 `net.createmod.ponder.script` 与 `net.createmod.catnip`。addon 编译时可依赖
 `Ponder-1.12.2-1.3.0-alpha.1-api.jar`，但不要把这个反混淆 API jar 安装到游戏。运行环境应安装 reobf 的

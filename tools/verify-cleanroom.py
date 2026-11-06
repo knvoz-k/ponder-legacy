@@ -142,6 +142,7 @@ def main():
     parser.add_argument("side", choices=["client", "server"])
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--empty", action="store_true", help="Attempt loader-only dedicated server startup")
+    parser.add_argument("--crafttweaker", choices=["present", "absent"], help="Verify optional CraftTweaker in an isolated production-jar instance")
     parser.add_argument("--mmce", choices=["present", "absent", "incompatible"], help="Verify optional MMCE using isolated production-jar fixtures")
     parser.add_argument("--revo", choices=["present", "absent"], help="Verify tooltip geometry with an isolated Revo UI fixture")
     parser.add_argument("--revo-dir", type=Path, default=WORKSPACE / ".dev/revo-ui", help="Directory containing the official Revo UI 0.8.7, NFR 0.8.0 and ModularUI 3.2.0-nfr.2 jars")
@@ -158,16 +159,18 @@ def main():
         parser.error("--empty, --mmce and --revo are separate fixtures")
     if args.ae2s and not args.revo:
         parser.error("--ae2s requires --revo")
+    if args.crafttweaker == "absent" and args.mmce in ("present", "incompatible"):
+        parser.error("Official MMCE 2.3.2 requires CraftTweaker itself; this combination cannot start")
     run = PROJECT / "run" / f"cleanroom-{VERSION}-legacy" / ("empty-server" if args.empty else args.side)
     if args.mmce:
         run = PROJECT / "run" / f"cleanroom-{VERSION}-mmce" / args.mmce / args.side
     if args.revo:
         run = PROJECT / "run" / f"cleanroom-{VERSION}-revo" / args.revo / args.side
+    if args.crafttweaker:
+        fixture_name = "mmce-" + args.mmce if args.mmce else "revo-" + args.revo if args.revo else "core"
+        run = PROJECT / "run" / f"cleanroom-{VERSION}-crafttweaker" / args.crafttweaker / fixture_name / args.side
     mods = run / "mods"
     mods.mkdir(parents=True, exist_ok=True)
-    crafttweaker = list((GRADLE / "caches/modules-2/files-2.1/maven.modrinth/crafttweaker/4.1.20.698").glob("*/*.jar"))
-    if len(crafttweaker) != 1:
-        raise RuntimeError("Run tools/dev.sh build to resolve CraftTweaker 4.1.20.698")
     harness = "ponder-editor-harness-srg.jar" if args.side == "client" else "ponder-server-harness-srg.jar"
     if args.mmce:
         harness = "ponder-mmce-harness-srg.jar"
@@ -180,8 +183,20 @@ def main():
     for obsolete in mods.glob("ponder-legacy-*.jar"):
         if obsolete.name != production.name:
             obsolete.unlink()
-    jars = [] if args.empty else [production,
-            PROJECT / "build/dev" / harness, crafttweaker[0]]
+    jars = [] if args.empty else [production, PROJECT / "build/dev" / harness]
+    if not args.empty and args.crafttweaker != "absent":
+        crafttweaker = list((GRADLE / "caches/modules-2/files-2.1/maven.modrinth/crafttweaker/4.1.20.698").glob("*/*.jar"))
+        if len(crafttweaker) != 1:
+            raise RuntimeError("Run tools/dev.sh build to resolve CraftTweaker 4.1.20.698")
+        jars.append(crafttweaker[0])
+    if args.crafttweaker == "absent":
+        for obsolete in mods.glob("crafttweaker-*.jar"):
+            obsolete.unlink()
+    if args.crafttweaker and not (args.mmce or args.revo):
+        # Keep the same .zs file in both fixtures to verify it is inert without CrT.
+        script = run / "scripts/ponder/scenes/optional-crafttweaker.zs"
+        script.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(PROJECT / "src/dev/fixtures/optional-crafttweaker.zs", script)
     if args.revo == "present":
         jars += [args.revo_dir / name for name in (
             "neofontrender-0.8.0-full.jar", "neofontrender-ui-enhancements-0.8.7.jar", "modularui-3.2.0-nfr.2.jar")]
@@ -212,12 +227,16 @@ def main():
     jdk = Path(os.environ.get("PONDER_JAVA_HOME", WORKSPACE / ".dev/jdk-25.0.5+8"))
     command = [str(jdk / "bin/java"), "-Xmx3G", "-Dfile.encoding=UTF-8", f"-Djava.library.path={natives}",
                "-cp", os.pathsep.join(map(str, classpath))]
+    if args.mmce or args.revo or args.crafttweaker:
+        command += ["-Xlog:class+load=info:file=class-load.log"]
+    if args.crafttweaker:
+        command += [f"-Dponder.crafttweaker.smoke={args.crafttweaker}"]
     if args.mmce:
-        command += [f"-Dponder.mmce.smoke={args.mmce}", "-Xlog:class+load=info:file=class-load.log"]
+        command += [f"-Dponder.mmce.smoke={args.mmce}"]
         if args.mmce == "incompatible":
             command += ["-Dponder.mmce.verification.forceIncompatibleAbi=true"]
     if args.revo:
-        command += [f"-Dponder.revo.smoke={args.revo}", "-Xlog:class+load=info:file=class-load.log"]
+        command += [f"-Dponder.revo.smoke={args.revo}"]
         if args.ae2s:
             command += ["-Dponder.revo.requireAe2s=true"]
     if args.side == "client":
@@ -258,6 +277,14 @@ def main():
             if forbidden in loads:
                 raise SystemExit(f"Optional MMCE class loaded while absent: {forbidden}")
         print("PASS: no MMCE implementation classes loaded", flush=True)
+    if args.crafttweaker == "absent":
+        loads = (run / "class-load.log").read_text()
+        for forbidden in ("crafttweaker.", "stanhebben.zenscript.",
+                          "net.createmod.ponder.compat.crafttweaker.PonderCraftTweakerCompat$Bridge"):
+            if any(line.split("[class,load] ", 1)[-1].split(" source:", 1)[0].startswith(forbidden)
+                   for line in loads.splitlines()):
+                raise SystemExit(f"Optional CraftTweaker class loaded while absent: {forbidden}")
+        print("PASS: no CraftTweaker, ZenScript or optional bridge classes loaded", flush=True)
     print("PASS:", report, flush=True)
 
 

@@ -1,0 +1,10 @@
+# Isolated verification config. NFR 0.8.0's generated default declares [compat]
+# twice and fails TOML parsing. Omitted settings use NFR's own runtime defaults.
+enabled = true
+
+[font]
+name = "Noto Sans SC"
+path = "neofontrender:fonts/noto_sans_sc-regular.otf"
+
+[rendering]
+engine = "cosmic"

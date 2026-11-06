@@ -1,0 +1,125 @@
+{
+  "cleanroom": "0.4.0",
+  "mode": "present",
+  "side": "SERVER",
+  "mmce": "2.3.2",
+  "checks": [
+    {
+      "check": "expected MMCE installation",
+      "result": "PASS"
+    },
+    {
+      "check": "optional provider registered exactly once or disabled",
+      "result": "PASS"
+    },
+    {
+      "check": "optional blueprint resolver enabled only for supported MMCE",
+      "result": "PASS"
+    },
+    {
+      "check": "optional lifecycle is idempotent",
+      "result": "PASS"
+    },
+    {
+      "check": "MMCE loads real machine JSON",
+      "result": "PASS"
+    },
+    {
+      "check": "static structure normalizes negative coordinates and has a stable fingerprint",
+      "result": "PASS"
+    },
+    {
+      "check": "stable repeated structure reference",
+      "result": "PASS"
+    },
+    {
+      "check": "static group mmce:all",
+      "result": "PASS"
+    },
+    {
+      "check": "static group mmce:controller",
+      "result": "PASS"
+    },
+    {
+      "check": "static group mmce:tag/item_input",
+      "result": "PASS"
+    },
+    {
+      "check": "static group mmce:tag/preview_nbt",
+      "result": "PASS"
+    },
+    {
+      "check": "preview NBT survives structure placement",
+      "result": "PASS"
+    },
+    {
+      "check": "dynamic group mmce:dynamic/line/segment/0/frame",
+      "result": "PASS"
+    },
+    {
+      "check": "dynamic group mmce:dynamic/line/segment/1/frame",
+      "result": "PASS"
+    },
+    {
+      "check": "dynamic group mmce:dynamic/line/segment/2/frame",
+      "result": "PASS"
+    },
+    {
+      "check": "dynamic group mmce:dynamic/line/end/output",
+      "result": "PASS"
+    },
+    {
+      "check": "blueprint mapping modularmachinery:ponder_mmce_static_demo",
+      "result": "PASS"
+    },
+    {
+      "check": "blueprints only offer author-provided scenes modularmachinery:ponder_mmce_static_demo",
+      "result": "PASS"
+    },
+    {
+      "check": "blueprint mapping modularmachinery:ponder_mmce_dynamic_demo",
+      "result": "PASS"
+    },
+    {
+      "check": "blueprints only offer author-provided scenes modularmachinery:ponder_mmce_dynamic_demo",
+      "result": "PASS"
+    },
+    {
+      "check": "blueprint mapping modularmachinery:ponder_mmce_unconfigured",
+      "result": "PASS"
+    },
+    {
+      "check": "blueprints only offer author-provided scenes modularmachinery:ponder_mmce_unconfigured",
+      "result": "PASS"
+    },
+    {
+      "check": "unrelated structures pass to other providers",
+      "result": "PASS"
+    },
+    {
+      "check": "stale structure fingerprint is rejected",
+      "result": "PASS"
+    },
+    {
+      "check": "cache invalidation reloads valid dynamic structures",
+      "result": "PASS"
+    },
+    {
+      "check": "JSON and editor API compile MMCE structures",
+      "result": "PASS"
+    },
+    {
+      "check": "scene seek and replay ponder_mmce:static_demo",
+      "result": "PASS"
+    },
+    {
+      "check": "scene seek and replay ponder_mmce:dynamic_demo",
+      "result": "PASS"
+    },
+    {
+      "check": "scene seek and replay ponder_mmce:json_fixture",
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS"
+}
