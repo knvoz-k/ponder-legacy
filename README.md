@@ -10,7 +10,7 @@
 
 ## 当前状态
 
-当前版本为 **`1.6.0`**，投影改为世界内准星预览、鼠标定位与透明工具面板，并修复底板误识别导致投影为空的问题。保留新版 FTB Quests 加载顺序修复，以及 **动画／静态图文双展示**、共享 Markdown 动作编排和游戏内 Markdown 编辑，见 [Markdown 教程手册](docs/MARKDOWN.md)。只使用 W 入口，可在界面切换并保存默认展示。CraftTweaker 保持可选：只有 ZenScript 场景需要安装；JSON、Java API 和游戏内编辑器可独立运行。沿用 `1.4.0` 的 [Revo UI / 焕新 UI 可选适配](docs/REVO-UI.md)，修复现代提示框中的思索进度条覆盖文字、伸入模型预览区的问题；保留可选 MMCE 2.3.2 适配。运行基线为 **Cleanroom 0.4.0 正式版（无 `-alpha`）**。当前包与历史发行包的验收范围、SHA-256 分别记录在 [验收记录](LEGACY-VERIFICATION.md)。
+当前版本为 **`1.6.1`**，Markdown 编辑器新增 **图片／视频插入面板** 与游戏内文件选择器，可填写来源、标题、尺寸和封面，自动导入本地媒体并生成可撤销的 Markdown。保留世界内准星预览、鼠标定位投影与透明工具面板，以及新版 FTB Quests 加载顺序修复。支持 **动画／静态图文双展示**、共享 Markdown 动作编排和游戏内 Markdown 编辑，见 [Markdown 教程手册](docs/MARKDOWN.md)。只使用 W 入口，可在界面切换并保存默认展示。CraftTweaker 保持可选：只有 ZenScript 场景需要安装；JSON、Java API 和游戏内编辑器可独立运行。沿用 `1.4.0` 的 [Revo UI / 焕新 UI 可选适配](docs/REVO-UI.md)，修复现代提示框中的思索进度条覆盖文字、伸入模型预览区的问题；保留可选 MMCE 2.3.2 适配。运行基线为 **Cleanroom 0.4.0 正式版（无 `-alpha`）**。当前包与历史发行包的验收范围、SHA-256 分别记录在 [验收记录](LEGACY-VERIFICATION.md)。
 
 安装包从 [GitHub Releases](https://github.com/mcyudream/ponder-legacy/releases) 获取，选择无分类后缀的 `ponder-legacy-*.jar`。从 `1.4.1` 起，仅使用 ZenScript 时需要独立安装 CraftTweaker；`1.4.0` 仍要求安装。发行状态见 [PUBLICATION.md](PUBLICATION.md)。
 
@@ -110,7 +110,7 @@ GitHub 发行流程、CurseForge / Modrinth 项目资料和平台凭据配置见
 
 ## 详细使用与开发说明
 
-面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.6.0`，最低加载器声明为 **0.4.0 正式版**。
+面向 **Cleanroom / Java 25** 的思索开发分支，版本 `1.6.1`，最低加载器声明为 **0.4.0 正式版**。
 编译与编辑器开发工具链使用 `0.7.14-alpha` userdev；当前安装包与历史快照见 [验收记录](LEGACY-VERIFICATION.md)，Revo UI 组合见 [适配说明](docs/REVO-UI.md)，历史 MMCE 证据见 [运行验收](docs/CLEANROOM-VERIFICATION.md)。
 基于 [MCMGGF 的 1.12.2 实现](https://github.com/MCMGGF/ponder-for-1.12.2)，保留原有场景、Catnip、ZenScript、JSON 与插件 API；新增游戏内场景和动画编辑器。[来源说明](NOTICE.md)。
 
@@ -131,7 +131,7 @@ export JAVA_HOME=/home/yudream/code/mods/.dev/jdk-25.0.5+8
 本地开发环境使用 MCP 命名，资源与世界保存在工程 `run/client/` 目录。
 默认 Gradle/JDK 配置、运行说明和 API 示例见 [Cleanroom 开发手册](docs/CLEANROOM.md)。
 
-安装时使用 `build/libs/ponder-legacy-1.6.0.jar`；仅使用 `.zs` 场景时需要安装 **CraftTweaker 4.1.20.698**。
+安装时使用 `build/libs/ponder-legacy-1.6.1.jar`；仅使用 `.zs` 场景时需要安装 **CraftTweaker 4.1.20.698**。
 Cleanroom 已提供 MixinBooter 兼容接口。`-mcp`、`-api`、`-sources` 文件用于开发，不要作为重复模组安装。
 Mod ID 保持 `ponder-legacy`；资源空间为 `ponder`。客户端与安装了 Ponder 的服务器需要使用相同版本。
 

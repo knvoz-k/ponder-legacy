@@ -1,0 +1,187 @@
+Starting Cleanroom 0.4.0 server; installation jars and SRG harness, no userdev
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jline.nativ.JLineNativeLoader in an unnamed module (file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/org/jline/jline/3.30.6/jline-3.30.6.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldOffset has been called by zone.rong.imaginebreaker.ImagineBreaker (file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/zone/rong/imaginebreaker/2.1/imaginebreaker-2.1.jar)
+WARNING: Please consider reporting this to the maintainers of class zone.rong.imaginebreaker.ImagineBreaker
+WARNING: sun.misc.Unsafe::staticFieldOffset will be removed in a future release
+[14:29:35] [main/INFO] [Foundation]: Loading tweak name net.minecraftforge.fml.common.launcher.FMLServerTweaker
+[14:29:35] [main/INFO] [FML.TWEAK]: Initializing Mixins...
+[14:29:35] [main/INFO] [mixin]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/com/cleanroommc/sponge-mixin/0.20.12+mixin.0.8.7/sponge-mixin-0.20.12+mixin.0.8.7.jar!/org/spongepowered/asm/mixin/MixinEnvironment.class Service=LaunchWrapper Env=UNKNOWN
+[14:29:35] [main/INFO] [FML.TWEAK]: Initializing MixinExtras...
+[14:29:35] [main/INFO] [Foundation]: Using primary tweak name net.minecraftforge.fml.common.launcher.FMLServerTweaker
+[14:29:35] [main/INFO] [Foundation]: Loading tweak name org.spongepowered.asm.mixin.EnvironmentStateTweaker
+[14:29:35] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLServerTweaker@1af146
+[14:29:35] [main/INFO] [FML.TWEAK]: Jar location: file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/com/cleanroommc/cleanroom/0.4.0/cleanroom-0.4.0.jar
+[14:29:35] [main/INFO] [FML]: Forge Mod Loader version 14.23.5.2864 for Minecraft 1.12.2 loading
+[14:29:35] [main/INFO] [FML]: Cleanroom version 0.4.0
+[14:29:35] [main/INFO] [FML]: Java is OpenJDK 64-Bit Server VM, version 25.0.5, running on Linux:amd64:7.0.0-42-generic, installed at /home/yudream/code/mods/.dev/jdk-25.0.5+8
+[14:29:35] [main/INFO] [FML]: Searching /home/yudream/code/mods/1.12.2/ponder/run/cleanroom-0.4.0-optional/markdown-media-native-final-v161/server/./mods for mods
+[14:29:35] [main/INFO] [FML]: Searching /home/yudream/code/mods/1.12.2/ponder/run/cleanroom-0.4.0-optional/markdown-media-native-final-v161/server/./mods/1.12.2 for mods
+[14:29:35] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in ae2s-ponder-legacy-0.2.0.jar.
+[14:29:35] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in AppliedEnergistics2-Supergiant-1.1.0.jar.
+[14:29:35] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in modularui-3.2.0-nfr.2.jar.
+[14:29:35] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in neofontrender-0.8.0-full.jar.
+[14:29:35] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in neofontrender-ui-enhancements-0.8.7.jar.
+[14:29:35] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in ponder-legacy-1.6.1.jar.
+[14:29:35] [main/INFO] [Foundation]: Calling tweak org.spongepowered.asm.mixin.EnvironmentStateTweaker@6bc28a83
+[14:29:35] [main/INFO] [Foundation]: Loading tweak name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[14:29:35] [main/INFO] [Foundation]: Loading tweak name org.spongepowered.asm.launch.MixinTweaker
+[14:29:35] [main/INFO] [Foundation]: Loading tweak name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[14:29:35] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker@70e659aa
+[14:29:35] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker@70e659aa
+[14:29:35] [main/INFO] [Foundation]: Calling tweak AE2Core
+[14:29:35] [main/INFO] [Foundation]: Calling tweak FMLCorePlugin
+[14:29:36] [main/INFO] [mixin]: Initialised Mixin FML Remapper Adapter with net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper@622fdb81
+[14:29:36] [main/INFO] [FML]: FML appears to be missing any signature data. This is expected, don't worry.
+[14:29:36] [main/INFO] [Foundation]: Calling tweak FMLForgePlugin
+[14:29:36] [main/INFO] [Foundation]: Calling tweak AE2SPonderCleanroom040ServerCompatibility
+[14:29:36] [main/INFO] [Foundation]: Calling tweak PonderMixinLoader
+[14:29:36] [main/INFO] [Foundation]: Calling tweak org.spongepowered.asm.launch.MixinTweaker@1debc91c
+[33;1m[14:29:36] [main/WARN] [mixin]: The requested compatibility level JAVA_25 is higher than the level supported by the active subsystem 'LaunchWrapper' which supports JAVA_21. This is not a supported configuration and instability may occur.
+[39;0m[14:29:36] [main/INFO] [mixin]: Compatibility level set to JAVA_25
+[14:29:36] [main/INFO] [Foundation]: Calling tweak MixinBooter
+[14:29:36] [main/INFO] [FML]: Loading early loader neofontrender.addons.mixin.UiEnhancementsMixinLoader for its mixins.
+[14:29:36] [main/INFO] [FML]: Adding mixins.neofontrender_ui_enhancements.json mixin configuration.
+[14:29:36] [main/INFO] [FML]: Loading early loader net.createmod.ponder.mixin.PonderMixinLoader for its mixins.
+[14:29:36] [main/INFO] [FML]: Adding mixins.ponder.json mixin configuration.
+[14:29:36] [main/INFO] [FML]: Loading early loader com.cleanroommc.modularui.core.ModularUICore for its mixins.
+[14:29:36] [main/INFO] [FML]: Adding mixin.modularui.json mixin configuration.
+[14:29:36] [main/INFO] [FML]: Loading early loader neofontrender.mixin.NeofontrenderMixinLoader for its mixins.
+[14:29:36] [main/INFO] [FML]: Adding mixins.neofontrender.json mixin configuration.
+[14:29:36] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLDeobfTweaker@4715ae33
+[14:29:36] [main/INFO] [STDOUT]: [dev.yudream.ae2sponder.compat.cleanroom.Cleanroom040ServerTransformer:transform:35]: [AE2S Ponder compatibility] Isolated client Kirino discovery from the Cleanroom 0.4.0 dedicated server
+[14:29:36] [main/INFO] [Foundation]: Calling tweak ModularUI-Core
+[14:29:36] [main/INFO] [Foundation]: Calling tweak NeofontrenderMixinLoader
+[14:29:36] [main/INFO] [Foundation]: Calling tweak NfrUiEnhancementsMixinLoader
+[33;1m[14:29:36] [main/WARN] [Foundation]: Tweak name org.spongepowered.asm.mixin.EnvironmentStateTweaker has already been visited -- skipping
+[39;0m[33;1m[14:29:36] [main/WARN] [mixin]: Error loading class: net/minecraft/client/gui/FontRenderer (net.minecraftforge.fml.common.asm.ASMTransformerWrapper$TransformerException: Exception in class transformer net.minecraftforge.fml.common.asm.transformers.SideTransformer@2ec3633f from coremod FMLCorePlugin)
+[39;0m[33;1m[14:29:36] [main/WARN] [mixin]: @Mixin target net.minecraft.client.gui.FontRenderer was not found mixin.modularui.json:minecraft.FontRendererAccessor from mod unknown-owner
+[39;0m[14:29:36] [main/INFO] [Foundation]: Launching wrapped minecraft net.minecraft.server.MinecraftServer
+[14:29:36] [main/INFO] [MixinExtras|Service]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[14:29:38] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.12.2
+[14:29:38] [Server thread/INFO] [FML]: Cleanroom v0.4.0 Initialized
+[14:29:38] [Server thread/INFO] [FML]: Starts to replace vanilla recipe ingredients with ore ingredients.
+[14:29:38] [Server thread/INFO] [FML]: Invalid recipe found with multiple oredict ingredients in the same ingredient...
+> [14:29:38] [Server thread/INFO] [FML]: Replaced 1227 ore ingredients
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:39] [Server thread/INFO] [FML]: Disabling mod ae2s-ponder-legacy it is client side only.
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:39] [Server thread/INFO] [FML]: Disabling mod neofontrender it is client side only.
+>   [14:29:39] [Server thread/INFO] [FML]: Disabling mod neofontrender_resources it is client side only.
+>   [14:29:39] [Server thread/INFO] [FML]: Disabling mod salutation it is client side only.
+>   [14:29:39] [Server thread/INFO] [FML]: Disabling mod tabbychat2 it is client side only.
+>   [14:29:39] [Server thread/INFO] [FML]: Disabling mod neofontrender_ui_enhancements it is client side only.
+> >   [14:29:39] [Server thread/INFO] [FML]: Forge Mod Loader has identified 15 mods to load
+>   [33;1m[14:29:39] [Server thread/WARN] [FML]: Missing English translation for cleanroom: assets/cleanroom/lang/en_us.lang
+[39;0m
+>   [33;1m[14:29:39] [Server thread/WARN] [FML]: Missing English translation for mixinbooter: assets/mixinbooter/lang/en_us.lang
+[39;0m
+>   [33;1m[14:29:39] [Server thread/WARN] [FML]: Missing English translation for configanytime: assets/configanytime/lang/en_us.lang
+[39;0m
+>   [33;1m[14:29:39] [Server thread/WARN] [FML]: Missing English translation for FML: assets/fml/lang/en_us.lang
+[39;0m
+>   [33;1m[14:29:39] [Server thread/WARN] [FML]: Missing English translation for ponder-legacy: assets/ponder-legacy/lang/en_us.lang
+[39;0m
+>   [33;1m[14:29:39] [Server thread/WARN] [FML]: Missing English translation for ponder_server_harness: assets/ponder_server_harness/lang/en_us.lang
+[39;0m
+> >   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file ae2s-ponder-legacy-0.2.0.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file annotations-13.0.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file audio-bundled.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file error_prone_annotations-2.36.0.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file gson-2.12.1.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file h2-2.3.232.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jaudiotagger-3.0.1.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jazzy-0.5.2-rtext-1.4.1-2.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jieba-analysis-1.0.2.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jlatexmath-1.0.7.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jlatexmath-font-cyrillic-1.0.7.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jlatexmath-font-greek-1.0.7.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file jsvg-2.1.0.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file kotlin-stdlib-2.3.20.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file neofontrender-0.8.0-full.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file neofontrender-ui-enhancements-0.8.7.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: FML has found a non-mod file nfr-tiqian-jvm-jvm-0.1.0-d25567f.jar in your mods directory. It will now be injected into your classpath.
+>   [14:29:39] [Server thread/INFO] [FML]: Instantiating all ILateMixinLoader implemented classes...
+>   [14:29:39] [Server thread/INFO] [FML]: Instantiating class com.cleanroommc.modularui.core.LateMixins for its mixins.
+>   [14:29:39] [Server thread/INFO] [FML]: Instantiating class neofontrender.addons.compat.UiEnhancementsCompatMixinLoader for its mixins.
+>   [14:29:39] [Server thread/INFO] [FML]: Instantiating class net.createmod.ponder.compat.revoui.PonderRevoMixinLoader for its mixins.
+> > > > > >   [14:29:39] [Server thread/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, cleanroom, mixinbooter, configanytime, FML, forge, ae2, ftblib, ftbquests, itemfilters, media_api, modularui, ponder-legacy, ponder_server_harness] at CLIENT
+>   [14:29:39] [Server thread/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, cleanroom, mixinbooter, configanytime, FML, forge, ae2, ftblib, ftbquests, itemfilters, media_api, modularui, ponder-legacy, ponder_server_harness] at SERVER
+>   [14:29:40] [Server thread/INFO] [modularui]: Applied net.minecraft.network.PacketBuffer ASM from ModularUI
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:40] [Server thread/INFO] [FML]: Processing ObjectHolder annotations
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:40] [Server thread/INFO] [FML]: Found 1195 ObjectHolder annotations
+> > > > > > > > > >   [14:29:40] [Server thread/INFO] [FML]: Identifying ItemStackHolder annotations
+> > > > >   [14:29:40] [Server thread/INFO] [FML]: Found 0 ItemStackHolder annotations
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:40] [Server thread/INFO] [FML]: Configured a dormant chunk cache size of 0
+>   [14:29:40] [Cleanroom Version Check/INFO] [forge.VersionCheck]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
+>   [14:29:40] [Server thread/INFO] [Applied Energistics 2 - Supergiant]: Applied Energistics 2 - Supergiant preInit
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:40] [Server thread/INFO] [AE2:S]: Registered spatial storage dimension -256
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:40] [Server thread/INFO] [Ponder Legacy]: Starting Ponder Legacy 1.6.1 for Minecraft 1.12.2
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [14:29:41] [Server thread/INFO] [FML]: Object Holders set.
+> > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [14:29:41] [Server thread/INFO] [FML]: Object Holders set.
+>   [14:29:41] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [14:29:41] [Server thread/INFO] [FML]: Object Holders set.
+>   [14:29:41] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [14:29:41] [Server thread/INFO] [FML]: Object Holders set.
+>   [14:29:41] [Server thread/INFO] [FML]: Injecting itemstacks
+>   [14:29:41] [Server thread/INFO] [FML]: Itemstack injection complete
+>   [14:29:41] [Server thread/INFO] [minecraft/DedicatedServer]: Loading properties
+> >   [14:29:41] [Server thread/INFO] [minecraft/DedicatedServer]: Default game type: SURVIVAL
+> >   [14:29:41] [Server thread/INFO] [minecraft/DedicatedServer]: Generating keypair
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [minecraft/DedicatedServer]: Starting Minecraft server on 127.0.0.1:25684
+>   [14:29:41] [Server thread/INFO] [minecraft/NetworkSystem]: Using epoll channel type
+>   [33;1m[14:29:41] [Server thread/WARN] [minecraft/DedicatedServer]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[39;0m
+>   [33;1m[14:29:41] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[39;0m
+>   [33;1m[14:29:41] [Server thread/WARN] [minecraft/DedicatedServer]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[39;0m
+>   [33;1m[14:29:41] [Server thread/WARN] [minecraft/DedicatedServer]: To change this, set "online-mode" to "true" in the server.properties file.
+[39;0m
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [14:29:41] [Server thread/INFO] [FML]: Object Holders set.
+>   [14:29:41] [Server thread/INFO] [Applied Energistics 2 - Supergiant]: Applied Energistics 2 - Supergiant init
+>   [14:29:41] [Server thread/INFO] [FML]: Injecting itemstacks
+>   [14:29:41] [Server thread/INFO] [FML]: Itemstack injection complete
+>   [33;1m[14:29:41] [Server thread/WARN] [FML]: No types have been added to Biome ae2:spatial_storage, types have been assigned on a best-effort guess: [PLAINS]
+[39;0m
+>   [14:29:41] [Server thread/INFO] [Applied Energistics 2 - Supergiant]: Applied Energistics 2 - Supergiant postInit
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [Ponder Legacy]: Registered 3 Ponder plugin(s) and 1 storyboard(s)
+>   [14:29:41] [Server thread/INFO] [Ponder Legacy]: Registered 3 Ponder plugin(s) and 1 storyboard(s)
+>   [14:29:41] [Server thread/INFO] [Ponder Legacy]: Loaded 0 Ponder JSON pack(s), 0 scene(s), 0 warning(s), 0 error(s)
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [FML]: Forge Mod Loader has successfully loaded 15 mods
+>   [14:29:41] [Server thread/INFO] [minecraft/DedicatedServer]: Preparing level "ponder-verification"
+>   [14:29:41] [Server thread/INFO] [FML]: Loading dimension 0 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@6e5c706)
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:41] [Server thread/INFO] [minecraft/AdvancementList]: Loaded 516 advancements
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:42] [Server thread/INFO] [FML]: Loading dimension -1 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@6e5c706)
+>   [14:29:42] [Server thread/INFO] [FML]: Loading dimension 1 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@6e5c706)
+>   [14:29:42] [Server thread/INFO] [FML]: Loading dimension -256 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@6e5c706)
+>   [14:29:42] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for level 0
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:42] [Server thread/INFO] [minecraft/DedicatedServer]: Done (0.887s)! For help, type "help" or "?"
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:42] [Server thread/INFO] [FTB Quests]: Loaded 0 chapters, 0 quests, 0 tasks and 0 rewards. In total, 0 objects
+> > >   [14:29:42] [Server thread/INFO] [FTB Quests]: File version changed 0 -> 9
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:42] [Server thread/INFO] [minecraft/AdvancementList]: Loaded 516 advancements
+>   [14:29:42] [Server thread/INFO] [FTB Library]: Reloaded server in 1ms
+>   [14:29:42] [Server thread/INFO] [Ponder Legacy]: Registered Ponder scene ponder_crt_smoke:java for minecraft:stick
+>   [14:29:42] [Server thread/INFO] [Ponder Legacy]: Registered 3 Ponder plugin(s) and 3 storyboard(s)
+>   [14:29:42] [Server thread/INFO] [Ponder Legacy]: Loaded 1 Ponder JSON pack(s), 1 scene(s), 0 warning(s), 0 error(s)
+>   [14:29:42] [Server thread/INFO] [Ponder Legacy]: Registered 3 Ponder plugin(s) and 3 storyboard(s)
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [14:29:42] [Server thread/INFO] [FML]: Unloading dimension -1
+>   [14:29:42] [Server thread/INFO] [FML]: Unloading dimension 1
+>   [14:29:42] [Server thread/INFO] [FML]: Unloading dimension -256
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > [14:29:43] [Cleanroom Version Check/INFO] [forge.VersionCheck]: [forge] Found status: BETA Target: null
+[14:29:43] [Cleanroom Version Check/INFO] [forge.VersionCheck]: [cleanroom] Starting version check at https://download.cleanroommc.com/api/forge
+[14:29:43] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[14:29:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[14:29:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[14:29:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ponder-verification'/overworld
+[14:29:43] [Server thread/INFO] [FML]: Unloading dimension 0
+[14:29:43] [Server Shutdown Thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[14:29:43] [Server Shutdown Thread/INFO] [minecraft/MinecraftServer]: Saving players
+[14:29:43] [Server Shutdown Thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+PASS: no CraftTweaker, ZenScript or optional bridge classes loaded
+PASS: /home/yudream/code/mods/1.12.2/ponder/run/cleanroom-0.4.0-optional/markdown-media-native-final-v161/server/ponder-server-smoke.json

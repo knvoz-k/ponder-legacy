@@ -8,6 +8,8 @@ Revo UI 会重新安排标题图标、稀有度、模型预览、换行和正文
 
 关闭 Revo UI 的现代提示框时使用原版 Forge 提示框布局。未安装 Revo UI 时也可正常使用 Ponder；它与 NFR、ModularUI 均不会被打包进 Ponder，也不会成为 Ponder 的必需前置。
 
+1.6.1 起，Ponder 页面自行处理背景，跳过 Revo UI 的背景模糊与渐变过渡。这样 Markdown 图片／视频面板、文件选择器、JSON 编辑器及场景预览不受额外后处理影响，透明投影工具仍能看清世界。进入时清空旧过渡，离开时不会遗留模糊动画；其他模组与原版页面保持 Revo UI 的设置。实机调试发现官方 Revo UI 0.8.7 的模糊状态恢复会在当前软件 OpenGL 环境报告 `glPopAttrib / GL_COLOR_ATTACHMENT0` 错误；该适配只避开 Ponder 自己页面上的冗余效果，不修改依赖 jar 或全局配置。
+
 适配代码只在物理客户端且发现 `neofontrender_ui_enhancements` 时加入可选 Mixin；专服不加入该客户端 Mixin。教程仍由作者通过 JSON、ZenScript 或 Java 注册，不会自动为其他 Mod 生成演示。
 
 ## 验收组合

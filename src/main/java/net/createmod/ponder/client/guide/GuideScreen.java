@@ -33,7 +33,7 @@ public final class GuideScreen extends AbstractPonderScreen {
     private final Map<Block,net.createmod.ponder.compat.media.MediaVideo> videos=new LinkedHashMap<>();
     private net.createmod.ponder.compat.media.MediaVideo hoveredVideo;
     private Placed hoveredVideoBlock;
-    private int hoveredVideoY;
+    private int hoveredVideoX,hoveredVideoY,hoveredVideoWidth;
     private GuiTextField search;
     private int pageIndex,side,contentX,contentWidth,documentHeight,scroll,navScroll;
     private ResourceLocation selected;
@@ -100,8 +100,8 @@ public final class GuideScreen extends AbstractPonderScreen {
                 case SCENE -> h=Math.max(100,Math.min(180,contentWidth*2/3));
                 case ITEMS -> h=28;
                 case RECIPE -> h=84;
-                case IMAGE -> {int[] size=images.dimensions(block.target());h=block.media()!=null&&block.media().height()>0?Math.min(300,block.media().height()):size[0]==0?Math.min(180,contentWidth*9/16):Math.min(240,Math.max(16,contentWidth*size[1]/size[0]));}
-                case VIDEO -> h=Math.max(90,Math.min(200,contentWidth*9/16))+26;
+                case IMAGE -> {int[] size=images.dimensions(block.target());h=block.media()!=null&&block.media().height()>0?Math.min(300,block.media().height()):size[0]==0?Math.min(180,mediaWidth(block)*9/16):Math.min(240,Math.max(16,mediaWidth(block)*size[1]/size[0]));}
+                case VIDEO -> h=(block.media()!=null&&block.media().height()>0?Math.max(40,Math.min(300,block.media().height())):Math.max(40,Math.min(200,mediaWidth(block)*9/16)))+26;
                 case QUEST_LINK -> h=26;
                 case RULE -> h=8;
                 case TABLE -> {lines=tableLines(block.text());h=tableHeight(lines);}
@@ -114,6 +114,10 @@ public final class GuideScreen extends AbstractPonderScreen {
             layout.add(new Placed(block,y,h,lines));y+=h+(block.kind()==Kind.HEADING?10:12);
         }
         documentHeight=y;clampScroll();rebuildNavigation();widgets.clear();
+    }
+    private int mediaWidth(Block block){
+        int configured=block.media()==null?0:block.media().width();
+        return configured==0?contentWidth:Math.min(contentWidth,Math.max(block.kind()==Kind.VIDEO?70:1,configured));
     }
     private void rebuildNavigation() {
         navigation.clear();String category=null;String q=search.getText().toLowerCase(Locale.ROOT).trim();
@@ -200,25 +204,27 @@ public final class GuideScreen extends AbstractPonderScreen {
             }
             case RECIPE -> renderRecipe(b,x,y,mx,my);
             case IMAGE -> {
-                String status=images.draw(b.target(),x,y,contentWidth,placed.height());
+                int mediaWidth=mediaWidth(b);
+                String status=images.draw(b.target(),x+(contentWidth-mediaWidth)/2,y,mediaWidth,placed.height());
                 if(!status.isEmpty())fontRenderer.drawSplitString(status+(b.text().isBlank()?"":" · "+b.text()),x+6,y+6,contentWidth-12,0xffb7c9d5);
             }
             case VIDEO -> {
-                Gui.drawRect(x,y,x+contentWidth,y+placed.height(),0xff1c2932);
+                int mediaWidth=mediaWidth(b);x+=(contentWidth-mediaWidth)/2;
+                Gui.drawRect(x,y,x+mediaWidth,y+placed.height(),0xff1c2932);
                 var video=videos.computeIfAbsent(b,key->new net.createmod.ponder.compat.media.MediaVideo(key.target()));
                 int vh=placed.height()-26,texture=video.texture();
                 if(texture>0){
                     int vw=video.width(),height=video.height();if(vw<=0||height<=0){vw=16;height=9;}
-                    float scale=Math.min(contentWidth/(float)vw,vh/(float)height);int iw=(int)(vw*scale),ih=(int)(height*scale);
-                    GlStateManager.bindTexture(texture);GlStateManager.color(1,1,1,1);Gui.drawModalRectWithCustomSizedTexture(x+(contentWidth-iw)/2,y+(vh-ih)/2,0,0,iw,ih,iw,ih);
-                }else if(b.media()!=null&&!b.media().poster().isBlank())images.draw(b.media().poster(),x,y,contentWidth,vh);
-                if(texture<=0)fontRenderer.drawSplitString(video.status(),x+6,y+8,contentWidth-12,0xffd5dfe5);
-                int cy=y+vh;Gui.drawRect(x,cy,x+contentWidth,y+placed.height(),0xff293c49);
+                    float scale=Math.min(mediaWidth/(float)vw,vh/(float)height);int iw=Math.max(1,(int)(vw*scale)),ih=Math.max(1,(int)(height*scale));
+                    GlStateManager.bindTexture(texture);GlStateManager.color(1,1,1,1);Gui.drawModalRectWithCustomSizedTexture(x+(mediaWidth-iw)/2,y+(vh-ih)/2,0,0,iw,ih,iw,ih);
+                }else if(b.media()!=null&&!b.media().poster().isBlank())images.draw(b.media().poster(),x,y,mediaWidth,vh);
+                if(texture<=0)fontRenderer.drawSplitString(video.status(),x+6,y+8,mediaWidth-12,0xffd5dfe5);
+                int cy=y+vh;Gui.drawRect(x,cy,x+mediaWidth,y+placed.height(),0xff293c49);
                 PonderButton.drawIcon(video.playing()?PonderButton.Icon.PAUSE:PonderButton.Icon.PLAY,x+13,cy+12,16,0xffb5e8da);
                 PonderButton.drawIcon(PonderButton.Icon.REPLAY,x+34,cy+12,16,0xffb5e8da);
-                String label=texture<=0||b.text().isBlank()?video.status():b.text();fontRenderer.drawString(fontRenderer.trimStringToWidth(label,Math.max(10,contentWidth-52)),x+47,cy+4,0xffc3d6dd);
-                if(video.seekable()&&video.duration()>0){Gui.drawRect(x+47,cy+17,x+contentWidth-5,cy+21,0xff455d6b);int fill=(int)((contentWidth-52)*Math.min(1,video.position()/(double)video.duration()));Gui.drawRect(x+47,cy+17,x+47+fill,cy+21,0xff9fd6d2);}
-                if(hover){hoveredVideo=video;hoveredVideoBlock=placed;hoveredVideoY=y;}
+                String label=texture<=0||b.text().isBlank()?video.status():b.text();fontRenderer.drawString(fontRenderer.trimStringToWidth(label,Math.max(10,mediaWidth-52)),x+47,cy+4,0xffc3d6dd);
+                if(video.seekable()&&video.duration()>0){Gui.drawRect(x+47,cy+17,x+mediaWidth-5,cy+21,0xff455d6b);int fill=(int)((mediaWidth-52)*Math.min(1,video.position()/(double)video.duration()));Gui.drawRect(x+47,cy+17,x+47+fill,cy+21,0xff9fd6d2);}
+                if(hover&&mx>=x&&mx<x+mediaWidth){hoveredVideo=video;hoveredVideoBlock=placed;hoveredVideoX=x;hoveredVideoY=y;hoveredVideoWidth=mediaWidth;}
             }
             case QUEST_LINK -> {
                 Gui.drawRect(x,y,x+contentWidth,y+24,hover?0xff375564:0xff273d49);
@@ -302,8 +308,8 @@ public final class GuideScreen extends AbstractPonderScreen {
         }
         if(hoveredVideo!=null&&(button==0||button==1)) {
             int cy=hoveredVideoY+hoveredVideoBlock.height()-26;
-            if(button==1||mx<contentX+43&&mx>=contentX+23)hoveredVideo.replay();
-            else if(my>=cy+15&&mx>=contentX+47&&hoveredVideo.seekable())hoveredVideo.seek((long)(Math.max(0,Math.min(1,(mx-contentX-47)/(double)Math.max(1,contentWidth-52)))*hoveredVideo.duration()));
+            if(button==1||mx<hoveredVideoX+43&&mx>=hoveredVideoX+23)hoveredVideo.replay();
+            else if(my>=cy+15&&mx>=hoveredVideoX+47&&hoveredVideo.seekable())hoveredVideo.seek((long)(Math.max(0,Math.min(1,(mx-hoveredVideoX-47)/(double)Math.max(1,hoveredVideoWidth-52)))*hoveredVideo.duration()));
             else hoveredVideo.toggle();
             return;
         }

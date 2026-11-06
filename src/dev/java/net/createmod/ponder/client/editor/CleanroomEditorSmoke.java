@@ -56,8 +56,9 @@ public final class CleanroomEditorSmoke {
     private EditorScreen editor;
     private net.createmod.ponder.foundation.ui.PonderViewerSmoke viewerSmoke;
     private net.createmod.ponder.foundation.ui.PonderCatalogSmoke catalogSmoke;
-    private boolean viewerComplete, catalogComplete, guideComplete;
+    private boolean viewerComplete, catalogComplete, guideComplete, mediaComplete;
     private net.createmod.ponder.client.guide.GuideSmoke guideSmoke;
+    private net.createmod.ponder.client.guide.MarkdownMediaSmoke mediaSmoke;
     private net.createmod.ponder.client.projection.ProjectionPlacementSmoke placementSmoke;
     private int phase, ticks, waitUntil, exitAt = Integer.MAX_VALUE;
     private String screenshot;
@@ -89,9 +90,26 @@ public final class CleanroomEditorSmoke {
         if (exitAt != Integer.MAX_VALUE || ticks < waitUntil || screenshot != null) return;
         try {
             if (ticks > 2400) throw new IllegalStateException("Smoke timeout at phase " + phase);
+            if (phase>=2 && Boolean.getBoolean("ponder.dev.mediaEditorOnly")) {
+                if (mediaSmoke==null) {
+                    require(true,"focused Markdown media editor acceptance; legacy JSON editor scenario is separate");
+                    mediaSmoke=new net.createmod.ponder.client.guide.MarkdownMediaSmoke(mc,this::require,this::requestScreenshot);
+                }
+                if (mediaSmoke.advance()) { report("PASS",null);exitAt=ticks+10; }
+                return;
+            }
             switch (phase) {
                 case 0:
                     if (!(mc.currentScreen instanceof GuiMainMenu)) return;
+                    if (Boolean.getBoolean("ponder.dev.traceGl")) {
+                        var messages=new java.util.concurrent.atomic.AtomicInteger();
+                        org.lwjgl.opengl.GL43.glDebugMessageCallback((source,type,id,severity,length,message,user)->{
+                            if (type==org.lwjgl.opengl.GL43.GL_DEBUG_TYPE_ERROR && messages.getAndIncrement()<12)
+                                Ponder.LOGGER.error("GL driver: "+org.lwjgl.system.MemoryUtil.memUTF8(message,length),new Throwable("OpenGL call site"));
+                        },0);
+                        GL11.glEnable(org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT);
+                        GL11.glEnable(org.lwjgl.opengl.GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS);
+                    }
                     require(Loader.isModLoaded(Ponder.MOD_ID), "normal FML discovery");
                     require(Loader.isModLoaded("cleanroom"), "Cleanroom loaded");
                     require(net.createmod.ponder.foundation.PonderIndex.getSceneAccess().getRegisteredEntries().stream()
@@ -247,6 +265,8 @@ public final class CleanroomEditorSmoke {
                     if (!catalogComplete) { catalogComplete = catalogSmoke.advance(); break; }
                     if (guideSmoke == null) guideSmoke = new net.createmod.ponder.client.guide.GuideSmoke(mc, this::require, this::requestScreenshot);
                     if (!guideComplete) { guideComplete=guideSmoke.advance(); break; }
+                    if (mediaSmoke==null) mediaSmoke=new net.createmod.ponder.client.guide.MarkdownMediaSmoke(mc,this::require,this::requestScreenshot);
+                    if (!mediaComplete) { mediaComplete=mediaSmoke.advance(); break; }
                     if (placementSmoke==null) placementSmoke=new net.createmod.ponder.client.projection.ProjectionPlacementSmoke(mc,this::require,this::requestScreenshot);
                     if (placementSmoke.advance()) { report("PASS", null); exitAt=ticks+10; }
             }

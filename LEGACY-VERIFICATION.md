@@ -1,6 +1,29 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.6.0（世界内投影放置与可见性）
+## 当前：1.6.1（Markdown 媒体插入面板）
+
+- 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
+- 生产安装包：`ponder-legacy-1.6.1.jar`；SHA-256：`4c3f8913b9df79220615e747dd76962b9bf2007c783ec4c0d97ce41f16ce3ed7`。
+- 314 项单元测试，新增媒体属性转义／来源校验、完整插入撤销、元数据保护、本地导入防覆盖及中文文件名回归；验收使用实际生产 SRG 安装包与独立 harness。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| 无外部 Mod 客户端，完整教程／编辑器／投影流程 | PASS | 223 |
+| 无外部 Mod 专服 | PASS | 10 |
+| AE2S／FTBQ／Media 客户端，完整流程 | PASS | 229 |
+| 上述组合并安装 Revo／NFR／ModularUI 的专服 | PASS | 10 |
+| 全部可选 Mod 联合安装，Revo 下的 Markdown 媒体面板专项 | PASS | 35 |
+
+实机点击编辑器的图片／视频按钮，进入文件选择器并导入原始文件，核对文件字节与可移植的本地引用。验证空来源／非法尺寸不改变文档、取消保留草稿、一次撤销／重做、标题特殊字符、封面、尺寸、保存后索引重载及 F5 预览。真实解码插入的图片和视频；未安装 Media API 时保留编辑与封面回退。中文／英文和 320 × 240 界面检查工具栏换行、输入框边界、滚动与 Tab 定位。
+
+可选组合使用 AE2S / Supergiant 1.1.0、教程附属 0.2.0、FTB Quests 1202.10.0-modern.10、FTB Library 5.5.4-modern.1、Media API 1.0.2、ItemFilters 1.0.4.2，以及 Revo UI 0.8.7 / NFR 0.8.0 / ModularUI 3.2.0-nfr.2。CraftTweaker 未安装，类加载审计通过。
+
+Revo 的专项调试用驱动回调定位到其背景模糊状态恢复中的 `glPopAttrib / GL_COLOR_ATTACHMENT0` 错误；进入 Ponder 页面时跳过该后处理并清除过渡，最终专项未报告驱动错误。修复前中间包的预期失败日志和真实包哈希一并归档。这一适配只处理 Ponder 页面；其他模组／原版页面中的 Revo 后处理问题不包含在此结论中。
+
+[报告、运行指纹、界面截图和构建一致性](docs/verification/release-1.6.1-cleanroom-0.4.0/summary.json)。本地开发目录与独立发布目录安装包逐字节一致。Linux llvmpipe；未覆盖所有显卡、光影和任意整合包。视频使用独立 Linux VLC，不验收音频，不发布测试片段或解码依赖。历史验收仅对应各自安装包。
+
+
+## 历史：1.6.0（世界内投影放置与可见性）
 
 - 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
 - 生产安装包：`ponder-legacy-1.6.0.jar`；SHA-256：`a7863b678e2a43f43722690032c89d65c243356f970671b6aefa7b34073cad10`。

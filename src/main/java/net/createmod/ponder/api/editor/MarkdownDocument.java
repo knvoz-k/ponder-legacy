@@ -25,6 +25,17 @@ public final class MarkdownDocument {
         if(text.length()-b+a+value.length()>MarkdownTutorialCompiler.MAX_CHARACTERS)throw new IllegalArgumentException("Markdown page is too large");
         remember();text=text.substring(0,a)+value+text.substring(b);cursor=anchor=a+value.length();revision++;
     }
+    /** Inserts a standalone block and preserves frontmatter when the caret is still in its header. */
+    public void insertBlock(String block){
+        int a=Math.min(cursor,anchor),b=Math.max(cursor,anchor);
+        if(text.startsWith("---\n")){
+            int end=text.indexOf("\n---",3);
+            if(end>=0&&(end+4==text.length()||text.charAt(end+4)=='\n')&&a<end+4)a=b=Math.min(text.length(),end+5);
+        }
+        String value="\n\n"+block.strip()+"\n\n";
+        if(text.length()-b+a+value.length()>MarkdownTutorialCompiler.MAX_CHARACTERS)throw new IllegalArgumentException("Markdown page is too large");
+        remember();text=text.substring(0,a)+value+text.substring(b);cursor=anchor=a+value.length();revision++;
+    }
     public void erase(boolean backwards){
         if(cursor==anchor){if(backwards&&cursor>0)anchor=cursor-1;else if(!backwards&&cursor<text.length())anchor=cursor+1;else return;}
         insert("");

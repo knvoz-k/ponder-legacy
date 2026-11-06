@@ -3,6 +3,6 @@
   "minVersion": "0.8",
   "package": "net.createmod.ponder.mixin.revoui",
   "compatibilityLevel": "JAVA_25",
-  "client": ["RevoTooltipLayoutMixin"],
+  "client": ["RevoTooltipLayoutMixin", "RevoScreenEffectsMixin"],
   "injectors": {"defaultRequire": 0}
 }

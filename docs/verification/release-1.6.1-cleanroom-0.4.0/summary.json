@@ -1,0 +1,71 @@
+{
+  "version": "1.6.1",
+  "date": "2026-11-06",
+  "minecraft": "1.12.2",
+  "cleanroom": "0.4.0",
+  "java": "25.0.5",
+  "production_jar": "ponder-legacy-1.6.1.jar",
+  "sha256": "4c3f8913b9df79220615e747dd76962b9bf2007c783ec4c0d97ce41f16ce3ed7",
+  "fixtures": [
+    {
+      "fixture": "core-client",
+      "result": "PASS",
+      "checks": 223,
+      "scenario": "full",
+      "report": "core-client/report.json"
+    },
+    {
+      "fixture": "core-server",
+      "result": "PASS",
+      "checks": 10,
+      "scenario": "full",
+      "report": "core-server/report.json"
+    },
+    {
+      "fixture": "ae2s-ftbq-media-client",
+      "result": "PASS",
+      "checks": 229,
+      "scenario": "full",
+      "report": "ae2s-ftbq-media-client/report.json"
+    },
+    {
+      "fixture": "optional-server",
+      "result": "PASS",
+      "checks": 10,
+      "scenario": "full",
+      "report": "optional-server/report.json"
+    },
+    {
+      "fixture": "revo-media-client",
+      "result": "PASS",
+      "checks": 35,
+      "scenario": "markdown-media-editor",
+      "report": "revo-media-client/report.json"
+    }
+  ],
+  "unit_tests": {
+    "tests": 314,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": [
+    "Image/video toolbar panels, literal attributes, local file browsing and portable imports, source/title/poster/dimensions.",
+    "Single undo/redo, cancel/invalid input preserve document, validation/save/reload/F5 preview, 320x240 GUI and Chinese/English text.",
+    "Actual inserted local video decodes through optional Media API; absent decoder retains authoring and fallback.",
+    "Revo UI 0.8.7 background transitions bypassed only for Ponder screens; focused media scenario has zero driver callback errors.",
+    "Full core and AE2S/FTBQ/Media guide/projection regressions, plus physical dedicated servers."
+  ],
+  "diagnosis": {
+    "report": "revo-blur-before/report.json",
+    "expected_result": "FAIL",
+    "artifact": "intermediate 1.6.1 before the screen-effects adapter",
+    "driver_error": "GL_INVALID_OPERATION in glDrawBuffer(GL_COLOR_ATTACHMENT0) from Revo HudGlStateSnapshot.close / renderBlur",
+    "log": "revo-blur-before/startup.txt"
+  },
+  "limitations": [
+    "Linux llvmpipe rendering, not every GPU, shader or modpack.",
+    "Revo media scenario verifies Ponder screens; the external background-effects issue on unrelated screens is outside this adapter.",
+    "Optional video uses independently installed Linux VLC; audio is not accepted. Test clips and external mods are not included in the release."
+  ]
+}

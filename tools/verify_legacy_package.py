@@ -34,6 +34,8 @@ with ZipFile(jars[0]) as archive:
     assert 'mixins.ponder.revo_ui.json' in archive.namelist(), 'Optional Revo UI mixin config missing'
     assert 'META-INF/licenses/guideme-markdown-MIT.txt' in archive.namelist(), 'GuideME Markdown license missing'
     assert 'net/createmod/ponder/guide/MarkdownTutorialCompiler.class' in classes, 'Shared guide compiler missing'
+    assert 'net/createmod/ponder/client/guide/MarkdownMediaScreen.class' in classes, 'Markdown media insertion panel missing'
+    assert 'net/createmod/ponder/client/guide/MediaFileBrowserScreen.class' in classes, 'Game-native media browser missing'
     assert 'net/createmod/ponder/client/projection/ProjectionLayoutScreen.class' in classes, 'Material layout editor missing'
     assert 'net/createmod/ponder/client/projection/ProjectionPlacementEvents.class' in classes, 'World placement controls missing'
     assert not any(name.startswith(('com/feed_the_beast/', 'dev/yudream/mediaapi/')) for name in classes), 'Optional media dependency bundled'
