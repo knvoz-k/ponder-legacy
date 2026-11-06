@@ -60,7 +60,7 @@ abstract class PonderCatalogScreen extends AbstractPonderScreen {
             ItemStack stack = PonderIndexScreen.stackFor(item.id);
             entries.add(new GridEntry(item.id, stack, Arrays.asList(stack.getDisplayName(),
                 "\u00a78" + item.id, "\u00a77" + I18n.format("ponder.ui.catalog.scenes", item.sceneCount)),
-                () -> ScreenOpener.open(PonderUI.of(item.id))));
+                () -> ScreenOpener.open(net.createmod.ponder.client.guide.Tutorials.open(item.id))));
         }
     }
 

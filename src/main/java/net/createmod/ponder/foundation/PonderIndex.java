@@ -114,6 +114,11 @@ public final class PonderIndex {
         PonderSceneRegistry scenes = new PonderSceneRegistry(localization);
         PonderTagRegistry tags = new PonderTagRegistry();
         PonderIndexExclusionHelper exclusions = new PonderIndexExclusionHelper();
+        net.createmod.ponder.guide.TutorialRegistry.Builder tutorials = new net.createmod.ponder.guide.TutorialRegistry.Builder();
+
+        for (PonderPlugin plugin : PLUGINS)
+            plugin.registerTutorials(tutorials);
+        tutorials.loadLocal();
 
         for (PonderPlugin plugin : PLUGINS)
             plugin.registerScenes(new DefaultPonderSceneRegistrationHelper(plugin.getModId(),
@@ -125,9 +130,10 @@ public final class PonderIndex {
         for (PonderPlugin plugin : PLUGINS)
             plugin.indexExclusions(exclusions);
 
+        net.createmod.ponder.guide.TutorialRegistry guides = tutorials.build(scenes);
         scenes.freeze();
         tags.freeze();
-        return new RegistrationState(localization, scenes, tags, exclusions);
+        return new RegistrationState(localization, scenes, tags, exclusions, guides);
     }
 
     public static void forEachPlugin(Consumer<PonderPlugin> consumer) {
@@ -143,6 +149,7 @@ public final class PonderIndex {
     }
 
     public static SceneRegistryAccess getSceneAccess() { return state.scenes; }
+    public static net.createmod.ponder.guide.TutorialRegistry getTutorials() { return state.guides; }
     public static TagRegistryAccess getTagAccess() { return state.tags; }
     public static LangRegistryAccess getLangAccess() { return state.localization; }
     public static void setTranslationProvider(PonderLocalization.TranslationProvider provider) {
@@ -170,13 +177,16 @@ public final class PonderIndex {
         final PonderSceneRegistry scenes;
         final PonderTagRegistry tags;
         final PonderIndexExclusionHelper exclusions;
+        final net.createmod.ponder.guide.TutorialRegistry guides;
 
         RegistrationState(PonderLocalization localization, PonderSceneRegistry scenes,
-                          PonderTagRegistry tags, PonderIndexExclusionHelper exclusions) {
+                          PonderTagRegistry tags, PonderIndexExclusionHelper exclusions,
+                          net.createmod.ponder.guide.TutorialRegistry guides) {
             this.localization = localization;
             this.scenes = scenes;
             this.tags = tags;
             this.exclusions = exclusions;
+            this.guides = guides;
         }
 
         static RegistrationState empty() {
@@ -185,7 +195,8 @@ public final class PonderIndex {
             PonderTagRegistry tags = new PonderTagRegistry();
             scenes.freeze();
             tags.freeze();
-            return new RegistrationState(localization, scenes, tags, new PonderIndexExclusionHelper());
+            return new RegistrationState(localization, scenes, tags, new PonderIndexExclusionHelper(),
+                net.createmod.ponder.guide.TutorialRegistry.empty());
         }
     }
 }

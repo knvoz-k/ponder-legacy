@@ -24,10 +24,19 @@ final class PonderCatalog {
     final Map<ResourceLocation, PonderTag> themes = new LinkedHashMap<>();
 
     static PonderCatalog current() {
-        return new PonderCatalog(PonderIndex.getSceneAccess().getRegisteredEntries(), PonderIndex.getTagAccess(), id -> {
+        PonderCatalog catalog = new PonderCatalog(PonderIndex.getSceneAccess().getRegisteredEntries(), PonderIndex.getTagAccess(), id -> {
             ItemStack stack = PonderIndexScreen.stackFor(id);
             return !stack.isEmpty() && !PonderIndex.getIndexExclusions().isExcluded(stack.getItem());
         });
+        for (var page : PonderIndex.getTutorials().all()) for (ResourceLocation id : page.components()) {
+            ItemStack stack = PonderIndexScreen.stackFor(id);
+            if (stack.isEmpty() || PonderIndex.getIndexExclusions().isExcluded(stack.getItem())) continue;
+            ItemEntry item = catalog.items.stream().filter(i -> i.id.equals(id)).findFirst().orElse(null);
+            if (item == null) { item = new ItemEntry(id); catalog.items.add(item); }
+            item.tags.addAll(page.tags());
+            if (page.scenes().isEmpty() && page.animation() == null) item.sceneCount++;
+        }
+        return catalog;
     }
 
     PonderCatalog(Collection<Map.Entry<ResourceLocation, StoryBoardEntry>> scenes, TagRegistryAccess tags,

@@ -1,6 +1,27 @@
 # Ponder Legacy — 安装包验收
 
-## 当前：1.4.1（CraftTweaker 可选前置）
+## 当前：1.5.0（双展示、Markdown、投影与材料目标）
+
+- 日期：2026-11-06；Minecraft 1.12.2 / **Cleanroom 0.4.0 正式版（无 -alpha）** / Java 25.0.5。
+- 生产安装包：`ponder-legacy-1.5.0.jar`；SHA-256：`bf668461d714313326ecf095614b58eee5b6fa5e5317c7ee5cb5de3bd92176d6`。
+- 300 项单元测试，生产 SRG 安装包与独立 harness；不使用 MCP / userdev 验收。
+
+| 组合 | 结果 | 检查项 |
+| --- | --- | --- |
+| core-client | PASS | 166 |
+| core-server | PASS | 10 |
+| quests-media-client | PASS | 168 |
+| revo-client | PASS | 70 |
+| crt-server | PASS | 11 |
+| mmce-client | PASS | 34 |
+| mmce-server | PASS | 29 |
+
+覆盖 W 默认展示、共享 Markdown 编译、滚动与视图切换、游戏内校验保存／预览、原生结构投影的真实 framebuffer、材料统计／已建扣减、HUD 与背包独立拖拽位置及磁盘重载。FTB Quests 1202.10.0-modern.8 / FTB Library 5.5.4-modern.1 / Media API 1.0.2 组合验证原生任务跳转、本地视频实际解码与跳转；Revo UI 0.8.7 / NFR 0.8.0 / ModularUI 3.2.0-nfr.2 / AE2S 1.1.0 组合验证提示框与静态页字体重排。MMCE 2.3.2 客户端／专服回归通过，其自身仍需 CraftTweaker。
+
+[原始报告、环境指纹与截图](docs/verification/release-1.5.0-cleanroom-0.4.0/summary.json)。无 CrT 组合类加载审计通过；专服检查不加载客户端渲染与可选桥。视频测试使用外置 Linux VLC，未验收音频；素材仅存在测试实例，不打入发布包。Linux llvmpipe，未覆盖所有硬件、任意整合包和任意 Mod 覆盖层。材料只计算主背包／副手，不计算容器内物品和机器 NBT；投影不代建。
+
+
+## 历史：1.4.1（CraftTweaker 可选前置）
 
 - 验收日期：2026-11-06。
 - Minecraft 1.12.2；**Cleanroom 0.4.0 正式版（无 `-alpha`）**；Java 25.0.5。

@@ -1,0 +1,7 @@
+{
+  "local_development_sha256": "bf668461d714313326ecf095614b58eee5b6fa5e5317c7ee5cb5de3bd92176d6",
+  "local_standalone_sha256": "bf668461d714313326ecf095614b58eee5b6fa5e5317c7ee5cb5de3bd92176d6",
+  "byte_identical": true,
+  "runtime_acceptance": "summary.json",
+  "release_hash_gate": "tools/verify_legacy_package.py --require-verified-hash"
+}

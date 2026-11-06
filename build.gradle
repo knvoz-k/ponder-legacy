@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'net.createmod.ponder'
-version = '1.4.1'
+version = '1.5.0'
 base.archivesName = 'ponder-legacy'
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
@@ -24,6 +24,7 @@ repositories {
 }
 dependencies {
     implementation cleanroom.userdev(cleanroom_version)
+    compileOnly 'org.jetbrains:annotations:23.0.0'
     compileOnly(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
     testImplementation(deobf('maven.modrinth:crafttweaker:4.1.20.698')) { transitive = false }
     if (project.hasProperty('withCraftTweaker')) {
@@ -36,6 +37,7 @@ dependencies {
 }
 sourceSets {
     main {
+        java.srcDir 'third_party/guideme-markdown/src/main/java'
         java.srcDir 'ponder-mmce/src/main/java'
         java.exclude 'net/createmod/ponder/mmce/PonderMMCEMod.java'
     }
@@ -230,6 +232,10 @@ processResources {
     exclude 'assets/ponder/ponder/debug/**'
 }
 jar {
+    from('third_party/guideme-markdown/LICENSE') {
+        into 'META-INF/licenses'
+        rename { 'guideme-markdown-MIT.txt' }
+    }
     manifest {
         attributes 'FMLCorePlugin': 'net.createmod.ponder.mixin.PonderMixinLoader',
             'FMLCorePluginContainsFMLMod': 'true', 'ForceLoadAsMod': 'true',

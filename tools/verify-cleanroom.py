@@ -147,6 +147,10 @@ def main():
     parser.add_argument("--revo", choices=["present", "absent"], help="Verify tooltip geometry with an isolated Revo UI fixture")
     parser.add_argument("--revo-dir", type=Path, default=WORKSPACE / ".dev/revo-ui", help="Directory containing the official Revo UI 0.8.7, NFR 0.8.0 and ModularUI 3.2.0-nfr.2 jars")
     parser.add_argument("--ae2s", type=Path, help="Optional AE2 Supergiant production jar for the gray smart cable tooltip fixture")
+    parser.add_argument("--optional-jar", action="append", type=Path, default=[], help="Additional independently installed optional mod")
+    parser.add_argument("--fixture-name", help="Use an isolated named fixture directory")
+    parser.add_argument("--vlc-root", type=Path, help="Optional unpacked VLC installation for Linux video verification")
+    parser.add_argument("--video-test", type=Path, help="Copy a local test clip to the isolated guide media directory")
     args = parser.parse_args()
     if platform.system() != "Linux" or platform.machine() not in ("x86_64", "amd64"):
         parser.error("This development launcher supports Linux x64")
@@ -169,6 +173,10 @@ def main():
     if args.crafttweaker:
         fixture_name = "mmce-" + args.mmce if args.mmce else "revo-" + args.revo if args.revo else "core"
         run = PROJECT / "run" / f"cleanroom-{VERSION}-crafttweaker" / args.crafttweaker / fixture_name / args.side
+    if args.fixture_name:
+        if not re.fullmatch(r"[a-z0-9-]+", args.fixture_name):
+            parser.error("Invalid fixture name")
+        run = PROJECT / "run" / f"cleanroom-{VERSION}-optional" / args.fixture_name / args.side
     mods = run / "mods"
     mods.mkdir(parents=True, exist_ok=True)
     harness = "ponder-editor-harness-srg.jar" if args.side == "client" else "ponder-server-harness-srg.jar"
@@ -212,10 +220,17 @@ def main():
         # Examples are installed explicitly in this isolated test instance only.
         if args.mmce == "present":
             shutil.copytree(fixture / "scripts", run / "scripts", dirs_exist_ok=True)
+    jars += [jar.resolve() for jar in args.optional_jar]
+    if args.video_test:
+        media = run / "scripts/ponder/media/guide-smoke.mp4"
+        media.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(args.video_test, media)
     for jar in jars:
         if not jar.is_file():
             raise FileNotFoundError(f"Build first: tools/dev.sh build reobfDevHarnessJar; missing {jar}")
         shutil.copyfile(jar, mods / jar.name)
+    # The guide fixture is authored during the run and must not affect earlier catalog checks on rerun.
+    (run / "scripts/ponder/guides/smoke/markdown_network.md").unlink(missing_ok=True)
     config = run / "config"
     config.mkdir(exist_ok=True)
     (config / "splash.properties").write_text("enabled=false\n")
@@ -227,6 +242,8 @@ def main():
     jdk = Path(os.environ.get("PONDER_JAVA_HOME", WORKSPACE / ".dev/jdk-25.0.5+8"))
     command = [str(jdk / "bin/java"), "-Xmx3G", "-Dfile.encoding=UTF-8", f"-Djava.library.path={natives}",
                "-cp", os.pathsep.join(map(str, classpath))]
+    if args.vlc_root:
+        command += ["-Djna.library.path=" + str(args.vlc_root.resolve() / "usr/lib/x86_64-linux-gnu")]
     if args.mmce or args.revo or args.crafttweaker:
         command += ["-Xlog:class+load=info:file=class-load.log"]
     if args.crafttweaker:
@@ -258,8 +275,13 @@ def main():
         "jars": {jar.name: digest(jar, "sha256") for jar in jars},
         "libraries": {str(jar): digest(jar) for jar in classpath}}, indent=2) + "\n")
     print(f"Starting Cleanroom {VERSION} {args.side}; installation jars and SRG harness, no userdev", flush=True)
+    environment = os.environ.copy()
+    if args.vlc_root:
+        native = args.vlc_root.resolve() / "usr/lib/x86_64-linux-gnu"
+        environment["LD_LIBRARY_PATH"] = str(native) + os.pathsep + environment.get("LD_LIBRARY_PATH", "")
+        environment["VLC_PLUGIN_PATH"] = str(native / "vlc/plugins")
     try:
-        result = subprocess.run(command, cwd=run, timeout=45 if args.empty else 300)
+        result = subprocess.run(command, cwd=run, env=environment, timeout=45 if args.empty else 300)
     except subprocess.TimeoutExpired:
         raise SystemExit(f"Verification timed out; inspect {run}")
     if args.empty:

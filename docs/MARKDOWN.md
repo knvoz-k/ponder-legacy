@@ -1,0 +1,204 @@
+# Markdown 教程：一份内容，两种展示
+
+从 Ponder Legacy 1.5.0 起，Markdown 可以直接编排动画，同时提供静态图文页面。Minecraft 1.12.2 / Cleanroom 0.4.0 正式版 / Java 25；无需 CraftTweaker 或现代 GuideME。
+
+## 玩家入口
+
+只注册 **W**。悬停物品并长按 W，按玩家的默认展示设置打开教程。动画左上角可切到图文，图文左上角可切到对应动画；星号按钮将当前展示设为默认并保存到客户端配置。仅有一种展示的教程自动使用可用形式。
+
+静态页左侧可搜索正文和标题、选择教程和目录。正文与左栏分别滚动；正文支持滚轮、Page Up/Down、Home/End 和拖动滚动条。拖动 3D 场景旋转，Shift+滚轮缩放。物品可显示原生提示，支持的物品链接可进入相关教程。图文页按 Tab 可切至对应动画。
+
+## 最小共享教程
+
+放到 `scripts/ponder/guides/mypack/first_machine.md`。结构 `mypack:machine` 可用现有 F8 框选工具捕获，保存在 `scripts/ponder/structures/mypack/machine.nbt`。
+
+````markdown
+---
+id: mypack:first_machine
+title: 第一台机器
+item_ids: [minecraft:furnace]
+structure: mypack:machine
+presentation: both
+step_ticks: 160
+---
+# 第一台机器
+
+## 放置机器
+
+放置熔炉，并为输入、燃料和成品留出不同路线。
+
+```ponder
+[
+  {
+    "op": "world.show_section",
+    "selection": {"type": "position", "pos": [1, 1, 1]},
+    "direction": "down"
+  }
+]
+```
+
+## 移动示意
+
+将这一组方块向右平移一格。这里是演示动画。
+
+```ponder
+[
+  {
+    "op": "world.show_independent_immediate",
+    "handle": "machine",
+    "selection": {"type": "position", "pos": [1, 1, 1]}
+  },
+  {"op": "world.move_section", "handle": "machine", "x": 1, "y": 0, "z": 0, "duration": 30},
+  {"op": "scene.idle", "ticks": 35}
+]
+```
+````
+
+H2 标题划分步骤。每步的正文成为动画讲解，`ponder` 围栏中的 JSON 数组进入现有指令校验器和执行器；作者可使用位移、旋转、方块、NBT、物品移动、提示、等待等现有指令。编译器添加步骤关键帧、讲解停留和完成指令，静态页在移动完成后的步骤时刻显示同一场景的快照。
+
+动作操作和必填字段见 [指令表](../schemas/ponder-operations-v1.json)。`scene.idle` 会推进动作编排时间；单个动作的 `duration` 表示持续时间，不会自动顺序等待。不要自行添加 `scene.finish`；Markdown 编译器会结束教程。开始时结构整体可见，需要逐步搭建时可先隐藏需要演示的区域。
+
+## 元数据
+
+| 字段 | 用途 |
+| --- | --- |
+| `id` | 稳定的教程 ID，`命名空间:路径`；游戏内编辑时保持不变 |
+| `title` | 页面和动画标题，缺省取第一个标题 |
+| `item_ids` | 入口物品列表，可用缩进的 `-` 列表或方括号列表 |
+| `structure` | 用原生 NBT 结构生成动画，与 `scene` 二选一 |
+| `scene` | 引用现有 Java／JSON／ZenScript 动画 ID，不替换该动画 |
+| `presentation` | `both`、`guide` 或 `animation`；默认为 `both` |
+| `step_ticks` | 每步自动停留时间，20–1200，默认 160 tick |
+| `tags` | 已注册的 Ponder 主题 ID 列表 |
+| `categories` | 静态导航分类列表，使用第一个分类 |
+| `navigation` | 支持缩进的 `title`、`icon`、`parent`、`position` 元数据；未指定 categories 时用 parent 作分组 |
+
+前置区实现的是明确的 YAML 子集：标量、字符串列表、navigation 映射。不支持任意 YAML 对象、锚点或脚本。资源 ID 需要完整命名空间，不接受 `..`。文件最大 512 Ki 字符，本地目录总大小最大 16 MiB。
+
+## 为两种展示定制内容
+
+````markdown
+<GuideOnly>
+
+## 参数与故障排查
+
+| 症状 | 检查 |
+| --- | --- |
+| 停止输入 | 目标已满，或过滤不匹配 |
+
+</GuideOnly>
+
+<AnimationOnly>
+
+这一段只作为动画讲解。
+
+```ponder
+[{"op":"scene.rotate_camera","degrees":45}]
+```
+
+</AnimationOnly>
+````
+
+`presentation: guide` 可以完全没有动画；`presentation: animation` 不生成静态页。已有 Java／JSON 教程未写 Markdown 时，会从原生讲解和时间轴自动生成图文回退页。
+
+## 原生静态组件
+
+借助 GuideME 的 Markdown/MDX 解析器，支持标题、段落、粗体／斜体、列表、代码、链接、图片和 GFM 表格，以及这些原生组件：
+
+````markdown
+<ItemLink id="minecraft:iron_ingot" />
+<ItemImage id="minecraft:furnace" />
+
+<RecipeFor item="minecraft:furnace" fallbackText="当前整合包没有这项配方。" />
+<Recipe id="minecraft:furnace" />
+
+<GameScene scene="mypack:first_machine" tick={80} interactive={true} />
+
+<GameScene yaw={-35} pitch={25} zoom={1} interactive={true}>
+  <ImportStructure src="mypack:machine" />
+  <Block id="minecraft:chest" x={2} y={1} z={1} p:facing="north" />
+  <BlockAnnotation x={2} y={1} z={1} color="#00ff00">产物容器</BlockAnnotation>
+  <BoxAnnotation min="1 1 1" max="3 2 2" color="green" />
+  <LineAnnotation from="1.5 1.5 1.5" to="2.5 1.5 1.5" color="white" />
+</GameScene>
+````
+
+- 每个独立 GameScene 可以导入一份原生结构，使用其已保存坐标；也可直接使用 Block 组成场景。链接现有场景时不混入结构修改。
+- 摄像机缩放为原生渲染倍率（大于 0，不超过 8）。不等同于现代 GuideME 的像素缩放参数。
+- 注解接受 Ponder 调色板名或 `#RRGGBB`；十六进制色映射到最接近的原生调色板色。
+- `ItemIcon`、`ItemGrid`、`RecipesFor`、`Row`、`Column`、`Color`、`OptionalSection` 也可解析。当前 Row/Column 使用顺序排版，OptionalSection 不求值条件，Color 使用正文样式。
+- 配方来自当前游戏实际的合成／冶炼注册表；多配方循环显示。现代 GuideME 专有标签、实体场景、任意 JavaScript及任意 JEI 分类配方没有直接移植。未知组件会报告错误。
+- 图片请用完整资源 ID，例如 `mypack:textures/guide/diagram.png`。链接支持同命名空间页面、标题锚点和 `item:minecraft:furnace`。一个文本块的链接区域跟随其第一个链接；索引页建议每行放一个链接。
+
+## 图片、视频和 FTB Quests 任务
+
+```markdown
+<Image src="mypack:textures/guide/wiring.png" height={100} />
+<Image src="local:wiring.png" />
+<Image src="https://example.org/wiring.png" />
+<Video src="local:demo.mp4" poster="mypack:textures/guide/poster.png" title="搭建过程" />
+<QuestLink id="1234abcd" title="打开对应任务" />
+[查看任务](quest:1234abcd)
+```
+
+- 本地媒体放在 `scripts/ponder/media/`；资源使用完整资源 ID。路径禁止越界和符号链接。
+- 普通图片由本模组加载；HTTP 图片异步读取并限制文件大小、像素数和缓存。外部网页链接使用 Minecraft 的原生确认界面。
+- **Media API 1.0.2 为可选依赖**：安装后支持视频播放／暂停、重播、进度跳转，以及其支持的本地、资源、HTTP、Bilibili 来源。视频解码依赖 Media API 的平台运行环境；未安装时显示说明和封面。离开页面释放播放器，滚出视口暂停。
+- **FTB Quests 为可选依赖**：安装后使用其原生任务链接处理器跳到指定任务，并可通过 `media:` 引用任务媒体资源、复用其 GIF/APNG 图片后端。引用任务 ID 需要与当前任务文件一致；缺失时显示说明。
+- 这些适配不打包外部 Mod，不要求安装 FTB Quests、Media API 或现代 GuideME。
+
+## 结构投影与材料目标
+
+动画和静态页面右下角有 **投影** 与 **材料** 图标。投影读取当前场景的结构快照，在准星位置创建客户端虚影；静态页面优先使用当前可见的 3D 场景。Shift 点击进入管理界面。
+
+投影可调整 XYZ 原点、90° 旋转、镜像、显示层、底板和隐藏已完成方块。它不会放置方块、发送建造请求或消耗材料，原版或服务器无需额外建造权限。退出服务器或切换维度后清除。
+
+材料目标默认检查主背包、快捷栏和副手，每 10 tick 刷新。投影建好的部分从剩余需求中扣除。支持原生物品变种、AE2S 线缆和面板部件；容器内物品与机器 NBT 不计为建造材料。不认识的方块会列出未识别项，不能当作材料齐全。一个结构上限为 8192 格。
+
+- 点击材料按钮可单独钉住清单，HUD 和背包均可查看，不必开启投影。
+- **背包中拖动标题栏**移动面板；Shift 点击管理，滚轮或底部分页切换清单。
+- 在管理页选择「调整 HUD 位置」，或输入 `/ponderprojection layout`，拖动游戏画面中的面板；Esc 结束。
+- HUD、背包位置分别保存到客户端配置。调整窗口和 GUI 缩放后自动约束到屏幕内。
+- 自动避开容器槽位、原版配方书、可见按钮及常见 HUD 区域；物品提示框显示在面板上方。窄窗口折叠为摘要，悬停查看材料、点击打开完整清单。其他 Mod 自定义覆盖层可通过拖拽手动避开。
+- 「重置面板位置」或 `/ponderprojection reset` 恢复自动布局。另有 `clear`、`unpin`、`here`、`rotate`、`layer all|Y`、`offset X Y Z`。
+
+附属可通过 `PonderMaterialResolvers.register(ResourceLocation, Resolver)` 扩展材料解析。Resolver 返回 `null` 交给后续解析器，空列表表示该格不需要独立物品，返回的物品数量计入需求。使用 `ProjectionPlan.capture(scene)` 获取独立结构数据；世界渲染与 HUD 管理 API 位于客户端包，应按侧隔离。
+
+## 游戏内 Markdown 编辑
+
+在图文页点击「Markdown 编辑」或按 F7。具备多行输入、鼠标选区、复制粘贴、撤销重做、步骤与动作插入、保存校验及预览。宽窗口显示原生场景和时间轴预览；窄窗口使用完整源码区域，按预览查看图文结果。
+
+- Ctrl+S：校验、原子保存到本地 guides 目录并重新加载。
+- Ctrl+Z / Ctrl+Y：撤销／重做；F5：预览当前草稿。
+- 预览区点击播放／暂停，点击进度条定位。
+- 返回时在本次游戏进程中保留草稿；未保存内容不跨游戏重启。
+- 错误文件不会覆盖有效运行内容，重新加载保留上次有效版本。删除本地覆盖文件后重新加载可恢复资源包原文。
+
+在动画页按 F7：Markdown 教程进入源码编辑器，原生 JSON 场景继续使用现有可视化动画编辑器。F8 世界框选、NBT 捕获和原有时间轴编辑功能可继续配合使用。
+
+## Java API 与资源分发
+
+```java
+@Override
+public void registerTutorials(TutorialRegistrationHelper helper) {
+    helper.addMarkdown(new ResourceLocation("myaddon", "machine"));
+    // 或注册清单：assets/myaddon/ponder/guides/index.json
+    helper.addMarkdownIndex(new ResourceLocation("myaddon", "index"));
+}
+```
+
+清单格式为 `{"pages":["machine","automation/line"]}`。页面路径为：
+
+- `assets/myaddon/ponder/guides/zh_cn/machine.md`
+- `assets/myaddon/ponder/guides/en_us/machine.md`
+- 或无语言目录的 `assets/myaddon/ponder/guides/machine.md`
+
+按当前游戏语言、英文、无语言目录回退。资源包可覆盖页面；本地 `scripts/ponder/guides/` 覆盖同 ID 页面。`/ponder reload` 或资源重新加载后更新。资源包新增页面应加入已注册的 index 清单。
+
+API 模型为 `Tutorial`，注册快照见 `PonderIndex.getTutorials()`。编译器 `MarkdownTutorialCompiler.compile(...)` 返回同一份静态文档和已经过指令校验的动画定义。注册和编译保持服务端安全，渲染和编辑在 client 包中隔离。
+
+Markdown 页面按客户端资源加载；当前服务端脚本同步协议仍传输现有 JSON／ZenScript 场景，不下发 Markdown 原文。多人整合包应将 Markdown 和结构一起分发到客户端。
+
+## 来源
+
+解析器取自 [AppliedEnergistics/GuideME](https://github.com/AppliedEnergistics/GuideME) 的独立 MIT Markdown 模块，固定于 `cb12bc543ff051e1dbc3828bfeed521a5e3cdd59`。版权、许可证与变更记录见 [third_party/guideme-markdown](../third_party/guideme-markdown)。1.12.2 渲染器、双视图编译和编辑器由本项目维护。

@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/AppliedEnergistics/GuideME",
+  "revision": "cb12bc543ff051e1dbc3828bfeed521a5e3cdd59",
+  "directory": "markdown",
+  "license": "MIT",
+  "changes": [
+    "Relocate guideme.libs to net.createmod.ponder.guide.libs.",
+    "Use the loader-provided Log4j API instead of SLF4J in two tokenizer classes."
+  ]
+}

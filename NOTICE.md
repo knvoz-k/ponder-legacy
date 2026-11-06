@@ -19,3 +19,13 @@ jar. Cleanroom supplies its MixinBooter compatibility API.
 The older Forge release instructions and tools in docs/, tools/ and verification/
 are inherited reference material. See README.md and docs/CLEANROOM.md for this
 fork's build and validation results.
+
+## GuideME Markdown module
+
+The relocated parser in `third_party/guideme-markdown/` is taken from the MIT-licensed
+`markdown/` module of AppliedEnergistics/GuideME, revision
+`cb12bc543ff051e1dbc3828bfeed521a5e3cdd59`. Its original MIT copyright and
+permission notice are preserved in that directory and in the installation jar at
+`META-INF/licenses/guideme-markdown-MIT.txt`. Changes are recorded in UPSTREAM.json.
+The native 1.12.2 guide renderer, tutorial compiler and editor are maintained here.
+GuideME's LGPL Minecraft/NeoForge integration is not included in this distribution.

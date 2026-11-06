@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
     version = Ponder.VERSION,
     acceptedMinecraftVersions = "[1.12.2]",
     dependencies = "required-after:cleanroom@[0.4.0,);required-after:forge@[14.23.5.2847,);required-after:mixinbooter@[9.1,);"
-        + "after:crafttweaker@[4.1.20,);after:modularmachinery",
+        + "after:crafttweaker@[4.1.20,);after:modularmachinery;after:ftbquests;after:media_api@[1.0.2,2.0.0)",
     guiFactory = "net.createmod.ponder.client.PonderGuiFactory",
     acceptableRemoteVersions = "*"
 )
@@ -45,6 +45,7 @@ public final class PonderMod {
         net.createmod.ponder.script.BuiltinScriptInstaller.retireUnmodifiedExamples(gameDirectory);
         net.createmod.ponder.foundation.structure.PonderStructureLoader.setExternalRoot(new java.io.File(gameDirectory, "scripts/ponder/structures"));
         net.createmod.ponder.script.PonderJsonLoader.setRoot(new java.io.File(gameDirectory, "scripts/ponder/packs"));
+        net.createmod.ponder.guide.GuideSources.setRoot(new java.io.File(gameDirectory, "scripts/ponder/guides"));
         Ponder.LOGGER.info("Starting {} {} for Minecraft 1.12.2", Ponder.MOD_NAME, Ponder.VERSION);
         proxy.preInit(event);
         PonderOptionalCompat.preInit();

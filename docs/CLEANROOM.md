@@ -243,3 +243,7 @@ MMCE fixture 位于 `run/cleanroom-<版本>-mmce/<模式>/<端>/`。
 此编辑器测试没有覆盖大规模整合包、多名远程玩家、全部第三方 TileEntity 或人工输入的所有交互。
 MMCE 软适配由单独的生产包 fixture 验证，见 [MMCE 接入手册](MMCE.md)。
 Revo UI 的实际物品提示框与像素检查见 [Revo UI 可选适配](REVO-UI.md)。
+
+## 共享 Markdown 教程
+
+1.5.0 新增静态图文展示与 Markdown 动画编排。使用 `PonderPlugin.registerTutorials(TutorialRegistrationHelper)` 注册；格式、原生组件、资源本地化和编辑器操作见 [Markdown 手册](MARKDOWN.md)。玩家入口只注册 W。

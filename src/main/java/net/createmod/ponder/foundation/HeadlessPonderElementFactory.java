@@ -212,10 +212,10 @@ final class HeadlessPonderElementFactory implements PonderElementFactory {
         @Override public TextElementBuilder colored(PonderPalette value) { color = value; return this; }
         @Override public TextElementBuilder pointAt(Vec3d value) { target = value; return this; }
         @Override public TextElementBuilder independent(int y) { independent = true; independentY = y; return this; }
-        @Override public TextElementBuilder text(String value) { text = scene.registerText(value); return this; }
-        @Override public TextElementBuilder text(String value, Object... params) { text = scene.registerText(value, params); return this; }
-        @Override public TextElementBuilder sharedText(final ResourceLocation key) { text = () -> PonderIndex.getLangAccess().getShared(key); return this; }
-        @Override public TextElementBuilder sharedText(final ResourceLocation key, final Object... params) { text = () -> PonderIndex.getLangAccess().getShared(key, params); return this; }
+        @Override public TextElementBuilder text(String value) { text = scene.registerText(value);scene.recordNarration(this,duration,text); return this; }
+        @Override public TextElementBuilder text(String value, Object... params) { text = scene.registerText(value, params);scene.recordNarration(this,duration,text); return this; }
+        @Override public TextElementBuilder sharedText(final ResourceLocation key) { text = () -> PonderIndex.getLangAccess().getShared(key);scene.recordNarration(this,duration,text); return this; }
+        @Override public TextElementBuilder sharedText(final ResourceLocation key, final Object... params) { text = () -> PonderIndex.getLangAccess().getShared(key, params);scene.recordNarration(this,duration,text); return this; }
         @Override public TextElementBuilder sharedText(String key) { return sharedText(new ResourceLocation(scene.getNamespace(), key)); }
         @Override public TextElementBuilder sharedText(String key, Object... params) { return sharedText(new ResourceLocation(scene.getNamespace(), key), params); }
         @Override public TextElementBuilder placeNearTarget() { nearTarget = true; return this; }

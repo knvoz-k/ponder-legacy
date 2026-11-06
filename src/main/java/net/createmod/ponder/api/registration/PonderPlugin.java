@@ -6,6 +6,9 @@ import net.minecraft.util.ResourceLocation;
 public interface PonderPlugin {
     String getModId();
 
+    default void registerTutorials(net.createmod.ponder.api.guide.TutorialRegistrationHelper helper) {
+    }
+
     default void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
     }
 

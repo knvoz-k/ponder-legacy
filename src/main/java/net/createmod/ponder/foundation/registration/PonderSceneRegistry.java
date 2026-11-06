@@ -66,6 +66,12 @@ public final class PonderSceneRegistry implements SceneRegistryAccess {
         return entries != null && !entries.isEmpty();
     }
 
+    public synchronized void removeTutorialScene(ResourceLocation component, ResourceLocation sceneId) {
+        if (frozen) throw new IllegalStateException("Ponder scene registration is frozen");
+        List<StoryBoardEntry> entries = scenes.get(component);
+        if (entries != null) entries.removeIf(entry -> sceneId.equals(entry.getDeclaredSceneId()));
+    }
+
     @Override public synchronized Collection<Map.Entry<ResourceLocation, StoryBoardEntry>> getRegisteredEntries() {
         List<Map.Entry<ResourceLocation, StoryBoardEntry>> result =
             new ArrayList<Map.Entry<ResourceLocation, StoryBoardEntry>>();

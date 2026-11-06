@@ -40,7 +40,7 @@ public final class PonderTooltipHandler {
         ResolvedPonderSubject subject = PonderSubjectResolvers.resolve(event.getItemStack());
         if (!subject.isHandled()) return;
         ResourceLocation component = subject.getComponent();
-        boolean scenesExist = PonderIndex.getSceneAccess().doScenesExistForId(component);
+        boolean scenesExist = net.createmod.ponder.client.guide.Tutorials.exists(component);
         if (!scenesExist) {
             if (shouldShowMissingSceneMessage(subject, false))
                 event.getToolTip().add(TextFormatting.GRAY + I18n.format("ponder.ui.no_scenes_configured"));
@@ -104,7 +104,7 @@ public final class PonderTooltipHandler {
             progress = 0;
             clearTrackedSubject();
             try {
-                if (opening != null) ScreenOpener.open(PonderUI.of(opening));
+                if (opening != null) ScreenOpener.open(net.createmod.ponder.client.guide.Tutorials.open(opening));
             } catch (RuntimeException ignored) {
             }
         }

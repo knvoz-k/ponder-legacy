@@ -1,0 +1,165 @@
+Starting Cleanroom 0.4.0 server; installation jars and SRG harness, no userdev
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jline.nativ.JLineNativeLoader in an unnamed module (file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/org/jline/jline/3.30.6/jline-3.30.6.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldOffset has been called by zone.rong.imaginebreaker.ImagineBreaker (file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/zone/rong/imaginebreaker/2.1/imaginebreaker-2.1.jar)
+WARNING: Please consider reporting this to the maintainers of class zone.rong.imaginebreaker.ImagineBreaker
+WARNING: sun.misc.Unsafe::staticFieldOffset will be removed in a future release
+[11:39:19] [main/INFO] [Foundation]: Loading tweak name net.minecraftforge.fml.common.launcher.FMLServerTweaker
+[11:39:19] [main/INFO] [FML.TWEAK]: Initializing Mixins...
+[11:39:19] [main/INFO] [mixin]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/com/cleanroommc/sponge-mixin/0.20.12+mixin.0.8.7/sponge-mixin-0.20.12+mixin.0.8.7.jar!/org/spongepowered/asm/mixin/MixinEnvironment.class Service=LaunchWrapper Env=UNKNOWN
+[11:39:19] [main/INFO] [FML.TWEAK]: Initializing MixinExtras...
+[11:39:20] [main/INFO] [Foundation]: Using primary tweak name net.minecraftforge.fml.common.launcher.FMLServerTweaker
+[11:39:20] [main/INFO] [Foundation]: Loading tweak name org.spongepowered.asm.mixin.EnvironmentStateTweaker
+[11:39:20] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLServerTweaker@4da602fc
+[11:39:20] [main/INFO] [FML.TWEAK]: Jar location: file:/home/yudream/code/mods/.dev/cleanroom-0.4.0-runtime/libraries/com/cleanroommc/cleanroom/0.4.0/cleanroom-0.4.0.jar
+[11:39:20] [main/INFO] [FML]: Forge Mod Loader version 14.23.5.2864 for Minecraft 1.12.2 loading
+[11:39:20] [main/INFO] [FML]: Cleanroom version 0.4.0
+[11:39:20] [main/INFO] [FML]: Java is OpenJDK 64-Bit Server VM, version 25.0.5, running on Linux:amd64:7.0.0-42-generic, installed at /home/yudream/code/mods/.dev/jdk-25.0.5+8
+[11:39:20] [main/INFO] [FML]: Searching /home/yudream/code/mods/1.12.2/ponder/run/cleanroom-0.4.0-crafttweaker/present/mmce-present/server/./mods for mods
+[11:39:20] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in modularmachinery-community-edition-817377-7372951.jar.
+[11:39:20] [main/INFO] [FML]: Found FMLCorePluginContainsFMLMod marker in ponder-legacy-1.5.0.jar.
+[11:39:20] [main/INFO] [Foundation]: Calling tweak org.spongepowered.asm.mixin.EnvironmentStateTweaker@21ec5d87
+[11:39:20] [main/INFO] [Foundation]: Loading tweak name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[11:39:20] [main/INFO] [Foundation]: Loading tweak name org.spongepowered.asm.launch.MixinTweaker
+[11:39:20] [main/INFO] [Foundation]: Loading tweak name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[11:39:20] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker@4940809c
+[11:39:20] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker@4940809c
+[11:39:20] [main/INFO] [Foundation]: Calling tweak FMLCorePlugin
+[11:39:20] [main/INFO] [mixin]: Initialised Mixin FML Remapper Adapter with net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper@523d6bdb
+[11:39:20] [main/INFO] [FML]: FML appears to be missing any signature data. This is expected, don't worry.
+[11:39:20] [main/INFO] [Foundation]: Calling tweak FMLForgePlugin
+[11:39:20] [main/INFO] [Foundation]: Calling tweak MMCEEarlyMixinLoader
+[11:39:20] [main/INFO] [Foundation]: Calling tweak PonderMixinLoader
+[11:39:20] [main/INFO] [Foundation]: Calling tweak org.spongepowered.asm.launch.MixinTweaker@58860997
+[11:39:20] [main/INFO] [Foundation]: Calling tweak MixinBooter
+[11:39:20] [main/INFO] [FML]: Loading early loader net.createmod.ponder.mixin.PonderMixinLoader for its mixins.
+[11:39:20] [main/INFO] [FML]: Adding mixins.ponder.json mixin configuration.
+[33;1m[11:39:20] [main/WARN] [mixin]: The requested compatibility level JAVA_25 is higher than the level supported by the active subsystem 'LaunchWrapper' which supports JAVA_21. This is not a supported configuration and instability may occur.
+[39;0m[11:39:20] [main/INFO] [mixin]: Compatibility level set to JAVA_25
+[11:39:20] [main/INFO] [Foundation]: Calling tweak net.minecraftforge.fml.common.launcher.FMLDeobfTweaker@710d89e2
+[11:39:20] [main/INFO] [STDOUT]: [net.createmod.ponder.compat.cleanroom.Cleanroom040ServerTransformer:transform:35]: [ponder compatibility] Isolated client Kirino discovery from the Cleanroom 0.4.0 dedicated server
+[33;1m[11:39:20] [main/WARN] [Foundation]: Tweak name org.spongepowered.asm.mixin.EnvironmentStateTweaker has already been visited -- skipping
+[39;0m[11:39:20] [main/INFO] [Foundation]: Launching wrapped minecraft net.minecraft.server.MinecraftServer
+[11:39:22] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.12.2
+[11:39:22] [Server thread/INFO] [FML]: Cleanroom v0.4.0 Initialized
+[11:39:22] [Server thread/INFO] [FML]: Starts to replace vanilla recipe ingredients with ore ingredients.
+[11:39:22] [Server thread/INFO] [FML]: Invalid recipe found with multiple oredict ingredients in the same ingredient...
+[11:39:22] [Server thread/INFO] [FML]: Replaced 1227 ore ingredients
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:23] [Server thread/INFO] [FML]: Disabling mod ctgui it is client side only.
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:23] [Server thread/INFO] [FML]: Forge Mod Loader has identified 12 mods to load
+> > > > > > > > > > > > > > > > > > > > > > > > > > >   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for cleanroom: assets/cleanroom/lang/en_us.lang
+[39;0m
+>   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for mixinbooter: assets/mixinbooter/lang/en_us.lang
+[39;0m
+>   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for configanytime: assets/configanytime/lang/en_us.lang
+[39;0m
+>   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for FML: assets/fml/lang/en_us.lang
+[39;0m
+>   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for crafttweakerjei: assets/crafttweakerjei/lang/en_us.lang
+[39;0m
+>   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for ponder-legacy: assets/ponder-legacy/lang/en_us.lang
+[39;0m
+>   [33;1m[11:39:23] [Server thread/WARN] [FML]: Missing English translation for ponder_mmce_harness: assets/ponder_mmce_harness/lang/en_us.lang
+[39;0m
+>   [11:39:23] [Server thread/INFO] [FML]: Instantiating all ILateMixinLoader implemented classes...
+>   [11:39:23] [Server thread/INFO] [FML]: Instantiating class github.kasuminova.mmce.mixin.MMCELateMixinLoader for its mixins.
+>   [11:39:23] [Server thread/INFO] [FML]: Instantiating class net.createmod.ponder.compat.revoui.PonderRevoMixinLoader for its mixins.
+> >   [11:39:23] [Server thread/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, cleanroom, mixinbooter, configanytime, FML, forge, crafttweaker, crafttweakerjei, modularmachinery, ponder-legacy, ponder_mmce_harness] at CLIENT
+>   [11:39:23] [Server thread/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, cleanroom, mixinbooter, configanytime, FML, forge, crafttweaker, crafttweakerjei, modularmachinery, ponder-legacy, ponder_mmce_harness] at SERVER
+> > > > > > > > > > > >   [11:39:24] [Server thread/INFO] [FML]: Processing ObjectHolder annotations
+> > > > > > >   [11:39:24] [Server thread/INFO] [FML]: Found 1168 ObjectHolder annotations
+>   [11:39:24] [Server thread/INFO] [FML]: Identifying ItemStackHolder annotations
+>   [11:39:24] [Server thread/INFO] [FML]: Found 0 ItemStackHolder annotations
+>   [11:39:24] [Server thread/INFO] [FML]: Configured a dormant chunk cache size of 0
+>   [11:39:24] [Cleanroom Version Check/INFO] [forge.VersionCheck]: [crafttweaker] Starting version check at https://updates.blamejared.com/get?n=crafttweaker&gv=1.12.2
+> > > > > > > > > > > > > > > > > > > > > > >   [11:39:24] [Server thread/INFO] [modularmachinery]: [ModularMachinery-CE] Parallel executor is ready (4 Threads), Let's get started!!!
+> > > >   [11:39:24] [Server thread/INFO] [Ponder Legacy]: Starting Ponder Legacy 1.5.0 for Minecraft 1.12.2
+>   [11:39:24] [Server thread/INFO] [Ponder-MMCE]: Enabled optional MMCE structure provider and blueprint resolver
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tilecolorablemachinecomponent`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tilemachinecontroller`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tilefactorycontroller`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tilefluidinputhatch`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tilefluidoutputhatch`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tileitemoutputbus`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tileiteminputbus`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tileenergyinputhatch`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tileenergyoutputhatch`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tilesmartinterface`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tileparallelcontroller`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [FML]: Potentially Dangerous alternative prefix `minecraft` for name `tileupgradebus`, expected `modularmachinery`. This could be a intended override, but in most cases indicates a broken mod.
+[39;0m
+>   [11:39:24] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [11:39:24] [Server thread/INFO] [FML]: Object Holders set.
+>   [11:39:24] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [11:39:24] [Server thread/INFO] [FML]: Object Holders set.
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:24] [Server thread/INFO] [FML]: Setting Object Holders with value...
+> > > > > > > >   [11:39:24] [Server thread/INFO] [FML]: Object Holders set.
+> >   [11:39:24] [Server thread/INFO] [FML]: Setting Object Holders with value...
+> > > > > > > > > [11:39:24] [Server thread/INFO] [FML]: Object Holders set.
+>   [11:39:24] [Server thread/INFO] [FML]: Injecting itemstacks
+>   [11:39:24] [Server thread/INFO] [FML]: Itemstack injection complete
+> >   [11:39:24] [Server thread/INFO] [minecraft/DedicatedServer]: Loading properties
+> > > > > > > > > > > > > > > >   [11:39:24] [Server thread/INFO] [minecraft/DedicatedServer]: Default game type: SURVIVAL
+>   [11:39:24] [Server thread/INFO] [minecraft/DedicatedServer]: Generating keypair
+>   [11:39:24] [Server thread/INFO] [minecraft/DedicatedServer]: Starting Minecraft server on 127.0.0.1:25684
+>   [11:39:24] [Server thread/INFO] [minecraft/NetworkSystem]: Using epoll channel type
+> > > > > > > >   [33;1m[11:39:24] [Server thread/WARN] [minecraft/DedicatedServer]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [minecraft/DedicatedServer]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[39;0m
+>   [33;1m[11:39:24] [Server thread/WARN] [minecraft/DedicatedServer]: To change this, set "online-mode" to "true" in the server.properties file.
+[39;0m
+> > > > > > > > > > > > > > > > > > > > >   [11:39:25] [Server thread/INFO] [FML]: Setting Object Holders with value...
+>   [11:39:25] [Server thread/INFO] [FML]: Object Holders set.
+> >   [11:39:25] [Server thread/INFO] [modularmachinery]: [Modular Machinery] Removing componentType modularmachinery:gas because mekanism is not loaded!
+>   [11:39:25] [Server thread/INFO] [FML]: Injecting itemstacks
+>   [11:39:25] [Server thread/INFO] [FML]: Itemstack injection complete
+>   [11:39:25] [Server thread/INFO] [modularmachinery]: Variables: [0 loaded, 0 failed]
+>   [11:39:25] [Server thread/INFO] [modularmachinery]: Machines: [3 loaded, 0 failed]
+>   [11:39:25] [Server thread/INFO] [modularmachinery]: Load-Phase: [0 recipes loaded, 0 recipes failed]
+>   [11:39:25] [Server thread/INFO] [modularmachinery]: [Unknown Machinery: 0]
+>   [11:39:25] [Server thread/INFO] [modularmachinery]: Load-Phase: [0 adapter-recipes loaded, 0 adapter-recipes failed]
+>   [11:39:25] [Server thread/INFO] [modularmachinery]: [Unknown Machinery: 0]
+>   [11:39:25] [ForkJoinPool.commonPool-worker-4/INFO] [modularmachinery]: Building Machine Structure Cache...
+>   [11:39:25] [ForkJoinPool.commonPool-worker-4/INFO] [modularmachinery]: Build Completed, Used 18ms.
+> >   [11:39:25] [Cleanroom Version Check/INFO] [forge.VersionCheck]: [crafttweaker] Found status: BETA Target: null
+>   [11:39:25] [Cleanroom Version Check/INFO] [forge.VersionCheck]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
+> > >   [11:39:25] [Server thread/INFO] [Ponder Legacy]: Registered 2 Ponder plugin(s) and 2 storyboard(s)
+>   [11:39:25] [Server thread/INFO] [Ponder Legacy]: Registered 2 Ponder plugin(s) and 2 storyboard(s)
+>   [11:39:25] [Server thread/INFO] [Ponder Legacy]: Loaded 0 Ponder JSON pack(s), 0 scene(s), 0 warning(s), 0 error(s)
+> > >   [11:39:25] [Server thread/INFO] [FML]: Forge Mod Loader has successfully loaded 12 mods
+> > > > > > > > > > > > > > >   [11:39:25] [Server thread/INFO] [minecraft/DedicatedServer]: Preparing level "ponder-verification"
+>   [11:39:25] [Server thread/INFO] [FML]: Loading dimension 0 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@24af05c6)
+> > > > > > > > > > > > > >   [11:39:25] [Server thread/INFO] [minecraft/AdvancementList]: Loaded 488 advancements
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:25] [Server thread/INFO] [FML]: Loading dimension -1 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@24af05c6)
+>   [11:39:25] [Server thread/INFO] [FML]: Loading dimension 1 (ponder-verification) (net.minecraft.server.dedicated.DedicatedServer@24af05c6)
+>   [11:39:25] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for level 0
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:26] [Server thread/INFO] [minecraft/DedicatedServer]: Done (0.553s)! For help, type "help" or "?"
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:26] [Server thread/INFO] [FML]: Unloading dimension -1
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >   [11:39:26] [Server thread/INFO] [FML]: Unloading dimension 1
+> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > [11:39:26] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[11:39:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[11:39:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[11:39:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ponder-verification'/overworld
+[11:39:26] [Server thread/INFO] [FML]: Unloading dimension 0
+[11:39:26] [Server Shutdown Thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[11:39:26] [Server Shutdown Thread/INFO] [minecraft/MinecraftServer]: Saving players
+[11:39:26] [Server Shutdown Thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+PASS: /home/yudream/code/mods/1.12.2/ponder/run/cleanroom-0.4.0-crafttweaker/present/mmce-present/server/ponder-mmce-report.json

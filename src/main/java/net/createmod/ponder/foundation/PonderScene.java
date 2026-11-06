@@ -107,6 +107,13 @@ public final class PonderScene {
         transform = new SceneTransform(world == null ? BlockPos.ORIGIN : world.getAnchor());
     }
 
+    private final java.util.Map<Object, Narration> narration = new java.util.LinkedHashMap<>();
+    public record Narration(int tick, int duration, java.util.function.Supplier<String> text) {}
+    public void recordNarration(Object element, int duration, java.util.function.Supplier<String> text) {
+        narration.put(element, new Narration(buildCursor, duration, text));
+    }
+    public java.util.List<Narration> getNarration() { return java.util.List.copyOf(narration.values()); }
+
     public SceneBuilder builder() { return new PonderSceneBuilder(this); }
 
     public SceneBuildingUtil getSceneBuildingUtil() {

@@ -1,0 +1,66 @@
+{
+  "version": "1.5.0",
+  "date": "2026-11-06",
+  "minecraft": "1.12.2",
+  "cleanroom": "0.4.0",
+  "java": "25.0.5",
+  "production_jar": "ponder-legacy-1.5.0.jar",
+  "sha256": "bf668461d714313326ecf095614b58eee5b6fa5e5317c7ee5cb5de3bd92176d6",
+  "fixtures": [
+    {
+      "fixture": "core-client",
+      "result": "PASS",
+      "checks": 166,
+      "report": "core-client/report.json"
+    },
+    {
+      "fixture": "core-server",
+      "result": "PASS",
+      "checks": 10,
+      "report": "core-server/report.json"
+    },
+    {
+      "fixture": "quests-media-client",
+      "result": "PASS",
+      "checks": 168,
+      "report": "quests-media-client/report.json"
+    },
+    {
+      "fixture": "revo-client",
+      "result": "PASS",
+      "checks": 70,
+      "report": "revo-client/report.json"
+    },
+    {
+      "fixture": "crt-server",
+      "result": "PASS",
+      "checks": 11,
+      "report": "crt-server/report.json"
+    },
+    {
+      "fixture": "mmce-client",
+      "result": "PASS",
+      "checks": 34,
+      "report": "mmce-client/report.json"
+    },
+    {
+      "fixture": "mmce-server",
+      "result": "PASS",
+      "checks": 29,
+      "report": "mmce-server/report.json"
+    }
+  ],
+  "unit_tests": {
+    "tests": 300,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "limitations": [
+    "Linux llvmpipe rendering; not every hardware or modpack combination.",
+    "Media API video fixture uses unpacked Linux VLC; native decoder availability is external.",
+    "Targets count main inventory and offhand; container contents and machine NBT are excluded.",
+    "Other mods can render arbitrary overlays; drag material targets to avoid them.",
+    "MMCE 2.3.2 itself requires CraftTweaker."
+  ]
+}

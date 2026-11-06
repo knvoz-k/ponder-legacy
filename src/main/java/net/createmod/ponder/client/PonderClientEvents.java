@@ -36,6 +36,7 @@ public final class PonderClientEvents {
             return;
         }
         PonderClient.onTick();
+        net.createmod.ponder.client.projection.ProjectionService.tick();
         PonderTooltipHandler.tick();
         Minecraft minecraft = Minecraft.getMinecraft();
         if (minecraft.player != null) {
@@ -77,11 +78,13 @@ public final class PonderClientEvents {
             cameraEntity.lastTickPosY + (cameraEntity.posY - cameraEntity.lastTickPosY) * partial,
             cameraEntity.lastTickPosZ + (cameraEntity.posZ - cameraEntity.lastTickPosZ) * partial);
         PonderClient.GHOST_BLOCKS.renderAll(camera);
+        net.createmod.ponder.client.projection.ProjectionService.render(camera,partial);
         net.createmod.catnip.outliner.Outliner.getInstance().renderOutlines(camera, partial);
     }
 
     @SubscribeEvent
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        net.createmod.ponder.client.projection.ProjectionService.clear();
         ScriptSnapshotReceiver.reset();
         ScriptSceneSync.clearServerScenes();
     }

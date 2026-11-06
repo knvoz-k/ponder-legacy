@@ -56,7 +56,8 @@ public final class CleanroomEditorSmoke {
     private EditorScreen editor;
     private net.createmod.ponder.foundation.ui.PonderViewerSmoke viewerSmoke;
     private net.createmod.ponder.foundation.ui.PonderCatalogSmoke catalogSmoke;
-    private boolean viewerComplete;
+    private boolean viewerComplete, catalogComplete;
+    private net.createmod.ponder.client.guide.GuideSmoke guideSmoke;
     private int phase, ticks, waitUntil, exitAt = Integer.MAX_VALUE;
     private String screenshot;
     private CompletableFuture<Void> worldReady;
@@ -70,6 +71,7 @@ public final class CleanroomEditorSmoke {
         if (!Boolean.getBoolean("ponder.dev.smoke")) return;
         output = mc.gameDir.toPath().resolve("ponder-smoke");
         Files.createDirectories(output);
+        net.createmod.ponder.client.guide.Tutorials.setPreferGuide(false);
         mc.gameSettings.pauseOnLostFocus = false;
         mc.gameSettings.guiScale = 2;
         mc.gameSettings.renderDistanceChunks = 2;
@@ -241,7 +243,9 @@ public final class CleanroomEditorSmoke {
                     if (!viewerComplete) { viewerComplete = viewerSmoke.advance(); break; }
                     if (catalogSmoke == null)
                         catalogSmoke = new net.createmod.ponder.foundation.ui.PonderCatalogSmoke(mc, this::require, this::requestScreenshot);
-                    if (catalogSmoke.advance()) { report("PASS", null); exitAt = ticks + 10; }
+                    if (!catalogComplete) { catalogComplete = catalogSmoke.advance(); break; }
+                    if (guideSmoke == null) guideSmoke = new net.createmod.ponder.client.guide.GuideSmoke(mc, this::require, this::requestScreenshot);
+                    if (guideSmoke.advance()) { report("PASS", null); exitAt = ticks + 10; }
             }
         } catch (Throwable failure) {
             Ponder.LOGGER.error("Editor smoke failed at phase " + phase, failure);
@@ -255,6 +259,7 @@ public final class CleanroomEditorSmoke {
             ScreenShotHelper.saveScreenshot(output.toFile(), screenshot, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
             if (viewerSmoke != null) viewerSmoke.verifyFrame(screenshot);
             if (catalogSmoke != null) catalogSmoke.verifyFrame(screenshot);
+            if (guideSmoke != null) guideSmoke.verifyFrame(screenshot);
             require(GL11.glGetError() == GL11.GL_NO_ERROR, "render " + screenshot + " has no OpenGL errors");
         } catch (Throwable failure) {
             report("FAIL", failure); exitAt = ticks + 10;

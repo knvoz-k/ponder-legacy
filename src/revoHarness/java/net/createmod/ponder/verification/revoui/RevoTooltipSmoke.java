@@ -149,6 +149,13 @@ public final class RevoTooltipSmoke {
                     check(viewer.getActiveScene() != null, "tutorial viewer opens with Revo installed or absent");
                     shot = "viewer.png"; wait = 15;
                     break;
+                case 9:
+                    mc.displayGuiScreen(new net.createmod.ponder.client.guide.GuideScreen(
+                        new ResourceLocation("minecraft:compass"), null));
+                    check(mc.currentScreen instanceof net.createmod.ponder.client.guide.GuideScreen,
+                        "static guide reflows using the active native font renderer");
+                    shot = "guide.png"; wait = 15;
+                    break;
                 default:
                     check(PonderIndex.getSceneAccess().getRegisteredEntries().size() == 4,
                         "optional tooltip integration does not inject tutorials");
@@ -177,7 +184,7 @@ public final class RevoTooltipSmoke {
 
     @SubscribeEvent public void render(TickEvent.RenderTickEvent event) {
         if (event.phase != TickEvent.Phase.END || shot == null || wait > 0) return;
-        if (!shot.equals("viewer.png") && mc.currentScreen != screen) {
+        if (shot.startsWith("tooltip") && mc.currentScreen != screen) {
             mc.displayGuiScreen(screen); screen.draws = 0; wait = 5; return;
         }
         // Let the new screen finish its first paint before checking the framebuffer.
@@ -185,7 +192,7 @@ public final class RevoTooltipSmoke {
         String name = shot;
         try {
             ScreenShotHelper.saveScreenshot(output.toFile(), name, mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
-            if (!name.equals("viewer.png")) verifyFrame(name);
+            if (name.startsWith("tooltip")) verifyFrame(name);
             check(GL11.glGetError() == GL11.GL_NO_ERROR, name + ": no OpenGL errors");
         } catch (Throwable failure) { fail(failure); }
         finally { shot = null; }

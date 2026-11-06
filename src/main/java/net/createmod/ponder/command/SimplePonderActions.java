@@ -37,11 +37,11 @@ public final class SimplePonderActions {
             Ponder.LOGGER.error("Invalid Ponder scene id from server: {}", value);
             return;
         }
-        if (!PonderIndex.getSceneAccess().doScenesExistForId(id)) {
+        if (!net.createmod.ponder.client.guide.Tutorials.exists(id)) {
             Ponder.LOGGER.error("Could not find Ponder scenes for {}", id);
             return;
         }
-        ScreenOpener.open(PonderUI.of(id));
+        ScreenOpener.open(net.createmod.ponder.client.guide.Tutorials.open(id));
     }
 
     public static void reloadPonder(String ignored) {

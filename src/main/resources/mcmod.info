@@ -17,7 +17,7 @@
       "required-after:forge@[14.23.5.2847,)",
       "required-after:mixinbooter@${mixinBooterRuntimeRange}",
       "after:crafttweaker@[4.1.20,)",
-      "after:modularmachinery"
+      "after:modularmachinery", "after:ftbquests", "after:media_api@[1.0.2,2.0.0)"
     ],
     "useDependencyInformation": false
   }

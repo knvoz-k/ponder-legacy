@@ -32,6 +32,12 @@ public class PonderButton extends GuiButton {
             "##      ###", "##     ### ", "#########  ", " #######   ", "           ", "           "),
         IDENTIFY("  #####    ", " ##   ##   ", "##     ##  ", "##     ##  ", "##     ##  ",
             " ##   ##   ", "  #####    ", "      ###  ", "       ### ", "        ###", "         ##"),
+        GUIDE("##### #####", "#   # #   #", "# # # # # #", "# # # # # #", "#   # #   #",
+            "# # # # # #", "# # # # # #", "#   # #   #", "##### #####", "    ###    ", "     #     "),
+        STAR("     #     ", "    ###    ", "    ###    ", "###########", " ######### ",
+            "  #######  ", "  #######  ", "  ### ###  ", " ###   ### ", " ##     ## ", " #       # "),
+        PROJECT("    ###    ", "  #######  ", "#### # ####", "##   #   ##", "#### # ####", "## ##### ##", "##   #   ##", "#### # ####", "  #######  ", "    ###    ", "###########"),
+        MATERIALS("  #######  ", "  #     #  ", "###########", "#         #", "# ## #### #", "#         #", "# ## #### #", "#         #", "# ## #### #", "#         #", "###########"),
         SCENES("  #########", "  #       #", "######### #", "#       # #", "# ##### # #",
             "#       # #", "# ##### ###", "#       #  ", "# ##### #  ", "#       #  ", "#########  ");
 
@@ -91,11 +97,13 @@ public class PonderButton extends GuiButton {
             GlStateManager.disableCull();
             int color = enabled ? 0xffe3e8ed : 0xff68727e;
             boolean labelled = !displayString.isEmpty();
-            drawIcon(icon, labelled ? x + 11 : x + width / 2, y + height / 2, color);
+            drawIcon(icon, labelled ? x + 11 : x + width / 2, y + height / 2,
+                Math.min(labelled ? 13 : 16, Math.min(width - 4, height - 4)), color);
             if (labelled) {
-                mc.fontRenderer.drawString(displayString, icon == null
-                    ? x + (width - mc.fontRenderer.getStringWidth(displayString)) / 2 : x + 22, y + (height - 8) / 2, color);
-                if (icon != null) {
+                String label = mc.fontRenderer.trimStringToWidth(displayString, Math.max(0, width - (icon == null ? 8 : 38)));
+                mc.fontRenderer.drawString(label, icon == null
+                    ? x + (width - mc.fontRenderer.getStringWidth(label)) / 2 : x + 22, y + (height - 8) / 2, color);
+                if (icon == Icon.SCENES) {
                     Gui.drawRect(x + width - 11, y + height / 2 - 1, x + width - 6, y + height / 2, color);
                     Gui.drawRect(x + width - 10, y + height / 2, x + width - 7, y + height / 2 + 1, color);
                     Gui.drawRect(x + width - 9, y + height / 2 + 1, x + width - 8, y + height / 2 + 2, color);
@@ -104,15 +112,18 @@ public class PonderButton extends GuiButton {
         }
     }
 
-    private static void drawIcon(Icon icon, int cx, int cy, int color) {
+    public static void drawIcon(Icon icon, int cx, int cy, int size, int color) {
         if (icon == null) return;
+        int left = cx - size / 2, top = cy - size / 2;
+        int grid = icon.pixels.length;
         for (int row = 0; row < icon.pixels.length; row++) {
             String pixels = icon.pixels[row];
             for (int column = 0; column < pixels.length();) {
                 if (pixels.charAt(column) == ' ') { column++; continue; }
                 int start = column++;
                 while (column < pixels.length() && pixels.charAt(column) != ' ') column++;
-                Gui.drawRect(cx - 5 + start, cy - 5 + row, cx - 5 + column, cy - 4 + row, color);
+                Gui.drawRect(left + start * size / grid, top + row * size / grid,
+                    left + column * size / grid, top + (row + 1) * size / grid, color);
             }
         }
     }

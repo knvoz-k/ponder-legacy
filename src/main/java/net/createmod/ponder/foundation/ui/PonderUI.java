@@ -42,6 +42,10 @@ public class PonderUI extends AbstractPonderScreen {
     private static final int IDENTIFY_KEY = Keyboard.KEY_Q;
 
     private final List<PonderScene> scenes;
+    private java.util.function.Supplier<net.minecraft.client.gui.GuiScreen> guideScreen;
+    private net.minecraft.client.gui.GuiScreen returnScreen;
+    public PonderUI withGuide(java.util.function.Supplier<net.minecraft.client.gui.GuiScreen> factory) { guideScreen = factory; return this; }
+    public PonderUI returningTo(net.minecraft.client.gui.GuiScreen screen) { returnScreen = screen; return this; }
     private final PonderSceneMenu sceneMenu;
     private PonderButton sceneMenuButton;
     private final PonderWorldRenderer renderer = new PonderWorldRenderer();
@@ -86,6 +90,16 @@ public class PonderUI extends AbstractPonderScreen {
     public void initGui() {
         int bottom = height - 29;
         buttonList.clear();
+        boolean guideAvailable = guideScreen != null || net.createmod.ponder.client.guide.Tutorials.hasGuide(getActiveScene().getId());
+        addButton(new PonderButton(10, 8, 7, 22, 20, PonderButton.Icon.GUIDE)
+            .enabled(guideAvailable).withTooltip("ponder.guide.guide").withCallback(() ->
+                mc.displayGuiScreen(guideScreen == null ? new net.createmod.ponder.client.guide.GuideScreen(
+                    getActiveScene().getComponent(), getActiveScene().getId()) : guideScreen.get())));
+        addButton(new PonderButton(11, 36, 7, 22, 20, PonderButton.Icon.STAR)
+            .active(!net.createmod.ponder.client.guide.Tutorials.preferGuide())
+            .withTooltip("ponder.guide.default_animation").withCallback(() -> {
+                net.createmod.ponder.client.guide.Tutorials.setPreferGuide(false); initGui();
+            }));
         addButton(new PonderButton(1, 8, bottom, 22, 20, PonderButton.Icon.INDEX)
             .withTooltip("ponder.ui.index_title")
             .withCallback(new Runnable() {
@@ -123,8 +137,12 @@ public class PonderUI extends AbstractPonderScreen {
         addButton(new PonderButton(6, width - 30, bottom, 22, 20, PonderButton.Icon.CLOSE)
             .withTooltip("ponder.ui.close")
             .withCallback(new Runnable() {
-                @Override public void run() { mc.displayGuiScreen(null); }
+                @Override public void run() { mc.displayGuiScreen(returnScreen); }
             }));
+        addButton(new PonderButton(12,width-84,bottom,22,20,PonderButton.Icon.PROJECT).withTooltip("ponder.projection.project_tip")
+            .withCallback(() -> net.createmod.ponder.client.projection.ProjectionService.project(getActiveScene(),this)));
+        addButton(new PonderButton(13,width-58,bottom,22,20,PonderButton.Icon.MATERIALS).withTooltip("ponder.projection.pin_tip")
+            .withCallback(() -> net.createmod.ponder.client.projection.ProjectionService.pin(getActiveScene(),this)));
         progress = addButton(new PonderProgressBar(7, this, 42, height - 17,
             Math.max(12, width / 2 - 138), 4));
         if (sceneMenu != null) {
@@ -169,8 +187,8 @@ public class PonderUI extends AbstractPonderScreen {
         }
         Gui.drawRect(0, 0, width, 34, 0xdd171b20);
         Gui.drawRect(0, height - 38, width, height, 0xff171b20);
-        int titleWidth = (sceneMenuButton == null ? width - 56 : sceneMenuButton.x) - 24;
-        fontRenderer.drawString(fontRenderer.trimStringToWidth(scene.getTitle(), Math.max(0, titleWidth)), 12, 13, 0xffeef2f5);
+        int titleWidth = (sceneMenuButton == null ? width - 56 : sceneMenuButton.x) - 72;
+        fontRenderer.drawString(fontRenderer.trimStringToWidth(scene.getTitle(), Math.max(0, titleWidth)), 68, 13, 0xffeef2f5);
         if (sceneMenu == null) fontRenderer.drawString("1 / 1", width - fontRenderer.getStringWidth("1 / 1") - 12, 13, 0xffaeb8c2);
     }
 
@@ -358,6 +376,7 @@ public class PonderUI extends AbstractPonderScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyCode == Keyboard.KEY_ESCAPE && returnScreen != null) { mc.displayGuiScreen(returnScreen); return; }
         if (sceneMenu != null) {
             if (keyCode == Keyboard.KEY_TAB) {
                 dragging = false;
@@ -380,7 +399,9 @@ public class PonderUI extends AbstractPonderScreen {
             }
         }
         if (net.createmod.ponder.client.editor.EditorClientEvents.isEditorKey(keyCode)) {
-            net.createmod.ponder.client.editor.EditorWorkspace.openScene(getActiveScene().getId());
+            var authored = PonderIndex.getTutorials().get(getActiveScene().getId());
+            if (authored != null) net.createmod.ponder.client.guide.MarkdownEditor.open(authored, this);
+            else net.createmod.ponder.client.editor.EditorWorkspace.openScene(getActiveScene().getId());
             return;
         }
         if (keyCode == IDENTIFY_KEY) {
@@ -443,6 +464,10 @@ public class PonderUI extends AbstractPonderScreen {
 
     private void nextScene() {
         selectScene(sceneIndex + 1);
+    }
+
+    public void selectScene(ResourceLocation id) {
+        for (int i = 0; i < scenes.size(); i++) if (scenes.get(i).getId().equals(id)) { sceneIndex = i; return; }
     }
 
     private void selectScene(int index) {
