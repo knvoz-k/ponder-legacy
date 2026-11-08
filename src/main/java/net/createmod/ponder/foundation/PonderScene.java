@@ -31,6 +31,7 @@ import net.createmod.ponder.api.element.WorldSectionElement;
 import net.createmod.ponder.api.registration.StoryBoardEntry.SceneOrderingEntry;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.createmod.ponder.compat.conduit.ConduitRenderCompat;
 import net.createmod.ponder.foundation.instruction.PonderInstruction;
 import net.createmod.ponder.foundation.registration.PonderLocalization;
 import net.createmod.catnip.data.Pair;
@@ -269,6 +270,8 @@ public final class PonderScene {
             snapshots.put(currentTick, captureSnapshot());
         if (currentTick >= totalTicks && activeInstructions.isEmpty())
             finished = true;
+        if (world != null)
+            ConduitRenderCompat.onWorldTicked(world);
     }
 
     public synchronized void seek(int targetTick) { seekToTime(targetTick); }

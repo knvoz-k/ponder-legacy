@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import net.createmod.ponder.compat.conduit.ConduitRenderCompat;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.createmod.ponder.foundation.PonderWorld;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +24,7 @@ public class PonderLevel extends PonderWorld {
 
     public void createBackup() {
         backup();
+        ConduitRenderCompat.onWorldRestored(this);
     }
 
     public void setStructureGroups(Map<String, List<BlockPos>> groups) {

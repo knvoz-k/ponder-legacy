@@ -18,6 +18,7 @@ import net.createmod.ponder.api.level.PonderLevel;
 import net.createmod.ponder.api.registration.SceneRegistryAccess;
 import net.createmod.ponder.api.registration.StoryBoardEntry;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
+import net.createmod.ponder.compat.conduit.ConduitRenderCompat;
 import net.createmod.ponder.foundation.PonderScene;
 import net.createmod.ponder.foundation.PonderSceneBuildingUtil;
 import net.createmod.ponder.foundation.structure.PonderStructure;
@@ -138,6 +139,7 @@ public final class PonderSceneRegistry implements SceneRegistryAccess {
                 structure.getDiagnostics().size(), structure.getDiagnostics());
         PonderLevel world = new PonderLevel(BlockPos.ORIGIN, null);
         structure.place(world);
+        ConduitRenderCompat.onStructurePlaced(world, structure);
         world.createBackup();
         PonderScene scene = compileScene(localization, entry, world);
         scene.begin();

@@ -44,6 +44,7 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldInfo;
 import net.createmod.ponder.api.scene.Selection;
+import net.createmod.ponder.compat.conduit.ConduitRenderCompat;
 
 /**
  * An entirely in-memory world for scene playback. Coordinates stored by this world are scene-local.
@@ -382,6 +383,7 @@ public class PonderWorld extends World {
                 }
             }
         }
+        ConduitRenderCompat.onWorldRestored(this);
     }
 
     public Snapshot createSnapshot() {
@@ -440,6 +442,7 @@ public class PonderWorld extends World {
         worldInfo.setWorldTotalTime(snapshot.totalWorldTime);
         worldInfo.setWorldTime(snapshot.worldTime);
         stateVersion++;
+        ConduitRenderCompat.onWorldRestored(this);
     }
 
     public void clear() {
