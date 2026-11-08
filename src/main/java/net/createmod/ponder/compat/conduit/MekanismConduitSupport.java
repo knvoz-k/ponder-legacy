@@ -1,6 +1,7 @@
 package net.createmod.ponder.compat.conduit;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ final class MekanismConduitSupport {
         new HashMap<Class<?>, PipeAccess>();
 
     private static boolean failureReported;
+    private static boolean acceptorQueryUnavailable;
 
     private MekanismConduitSupport() {
     }
@@ -37,16 +39,46 @@ final class MekanismConduitSupport {
         if (access == null) {
             return false;
         }
-        byte transmitters = ((Number) access.transmitters.invoke(tile)).byteValue();
-        byte acceptors = ((Number) access.acceptors.invoke(tile)).byteValue();
+        boolean changed = false;
         byte previousTransmitters = access.transmitterField.getByte(tile);
-        byte previousAcceptors = access.acceptorField.getByte(tile);
-        if (transmitters == previousTransmitters && acceptors == previousAcceptors) {
-            return false;
+        try {
+            byte transmitters = ((Number) access.transmitters.invoke(tile)).byteValue();
+            if (transmitters != previousTransmitters) {
+                access.transmitterField.setByte(tile, transmitters);
+                changed = true;
+            }
+        } catch (Throwable unavailable) {
+            // Transmitter connections do not depend on other mods; keep the previous mask.
         }
-        access.transmitterField.setByte(tile, transmitters);
-        access.acceptorField.setByte(tile, acceptors);
-        return true;
+        // With IC2 installed Mekanism's acceptor check reaches IC2's server-only energy net,
+        // which throws on a client. The transmitter mask above is still correct, so only the
+        // acceptor half is skipped instead of losing both.
+        if (!acceptorQueryUnavailable) {
+            byte previousAcceptors = access.acceptorField.getByte(tile);
+            try {
+                byte acceptors = ((Number) access.acceptors.invoke(tile)).byteValue();
+                if (acceptors != previousAcceptors) {
+                    access.acceptorField.setByte(tile, acceptors);
+                    changed = true;
+                }
+            } catch (InvocationTargetException failure) {
+                if (isClientSideUnavailable(failure.getCause())) {
+                    acceptorQueryUnavailable = true;
+                    Ponder.LOGGER.debug(
+                        "Mekanism acceptor connections need a server-side energy net; "
+                            + "Ponder will sync transmitter connections only");
+                }
+            } catch (Throwable unavailable) {
+                // Keep the previous acceptor mask.
+            }
+        }
+        return changed;
+    }
+
+    /** Matches IC2's {@code EnergyNetGlobal#getLocal} rejection on a physical client. */
+    private static boolean isClientSideUnavailable(Throwable cause) {
+        return cause instanceof IllegalStateException
+            && "not applicable clientside".equals(cause.getMessage());
     }
 
     private static synchronized PipeAccess access(Class<?> type) {
